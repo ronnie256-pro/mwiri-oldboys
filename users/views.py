@@ -7,20 +7,37 @@ from django.views.generic import TemplateView
 from django.contrib import messages
 from .forms import RegistrationForm, ProfileForm
 from alumni_sos.forms import SOSRequestForm
+from teaser.forms import TeaserQuestionForm
 from .models import User, Profile
+from teaser.models import TeaserQuestion
 
 def register(request):
+    teaser_questions = TeaserQuestion.objects.all()
     if request.method == 'POST':
         form = RegistrationForm(request.POST)
-        if form.is_valid():
-            user = form.save(commit=False)
-            user.is_active = True  # Activate user immediately
-            user.save()
-            messages.success(request, 'Your account has been created successfully!')
-            return redirect('login')
+        teaser_form = TeaserQuestionForm(request.POST, questions=teaser_questions)
+
+        if form.is_valid() and teaser_form.is_valid():
+            all_correct = True
+            for question in teaser_questions:
+                selected_answer_id = teaser_form.cleaned_data.get(f'question_{question.id}').id
+                correct_answer = question.answers.get(is_correct=True)
+                if selected_answer_id != correct_answer.id:
+                    all_correct = False
+                    break
+            
+            if all_correct:
+                user = form.save(commit=False)
+                user.is_active = True
+                user.save()
+                messages.success(request, 'Your account has been created successfully!')
+                return redirect('my_account')
+            else:
+                messages.error(request, 'You are not a Mwirian')
     else:
         form = RegistrationForm()
-    return render(request, 'users/register.html', {'form': form})
+        teaser_form = TeaserQuestionForm(questions=teaser_questions)
+    return render(request, 'users/register.html', {'form': form, 'teaser_form': teaser_form})
 
 from django.views import View
 

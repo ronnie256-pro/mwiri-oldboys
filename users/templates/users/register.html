@@ -2,106 +2,78 @@
 {% load crispy_forms_tags %}
 
 {% block content %}
-<div class="container-fluid min-vh-100 d-flex align-items-center justify-content-center py-5" style="background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);">
-    <div class="container">
-        <div class="row justify-content-center">
-            <div class="col-lg-10">
-                <div class="card border-0 shadow-lg rounded-5 overflow-hidden">
-                    <div class="row g-0">
-                        
-                        <div class="col-lg-5 d-none d-lg-flex flex-column justify-content-between p-5 text-white" 
-                             style="background: linear-gradient(rgba(15, 23, 42, 0.85), rgba(15, 23, 42, 0.85)), url('https://images.unsplash.com/photo-1511632765486-a01980e01a18?q=80&w=800') no-repeat center center; background-size: cover;">
-                            
-                            <div>
-                                <h2 class="display-5 fw-bold mb-4">Welcome Home, <span class="text-primary">Old Boy.</span></h2>
-                                <p class="lead opacity-75">You are one step away from rejoining the hill. Access the network, support the SOS signals, and grow your business.</p>
-                            </div>
-
-                            <div class="mt-auto">
-                                <div class="d-flex align-items-center mb-3">
-                                    <div class="bg-primary-soft p-2 rounded-circle me-3"><i class="bi bi-check-lg"></i></div>
-                                    <span>Exclusive Marketplace Access</span>
-                                </div>
-                                <div class="d-flex align-items-center mb-3">
-                                    <div class="bg-primary-soft p-2 rounded-circle me-3"><i class="bi bi-check-lg"></i></div>
-                                    <span>Priority SOS Notifications</span>
-                                </div>
-                                <div class="d-flex align-items-center">
-                                    <div class="bg-primary-soft p-2 rounded-circle me-3"><i class="bi bi-check-lg"></i></div>
-                                    <span>Lifetime Brotherhood Network</span>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="col-lg-7 bg-white p-4 p-md-5">
-                            <div class="text-center text-lg-start mb-4">
-                                <h3 class="fw-bold h2 mb-1">Create Your Account</h3>
-                                <p class="text-muted">Fill in your details to join the MOBA movement.</p>
-                            </div>
-
-                            <form method="post" class="modern-form">
-                                {% csrf_token %}
-                                
-                                <div class="form-grid">
-                                    {{ form|crispy }}
-                                </div>
-                                
-                                <div class="mt-4">
-                                    <button type="submit" class="btn btn-primary btn-lg w-100 rounded-pill py-3 fw-bold shadow-sm transition-all">
-                                        Join the Brotherhood
-                                    </button>
-                                </div>
-
-                                <div class="text-center mt-4">
-                                    <p class="small text-muted">Already have an account? <a href="{% url 'login' %}" class="text-primary fw-bold text-decoration-none">Log In</a></p>
-                                </div>
-                            </form>
-                        </div>
-
-                    </div>
+<div class="container mt-5">
+    <div class="row">
+        <div class="col-md-6 offset-md-3">
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="text-center">Join the Brotherhood</h3>
                 </div>
-                
-                <div class="text-center mt-4 opacity-50">
-                    <small><i class="bi bi-shield-lock-fill me-1"></i> Secure 256-bit encrypted registration</small>
+                <div class="card-body">
+                    <form method="post" id="registration-form">
+                        {% csrf_token %}
+                        {{ form|crispy }}
+                        <button type="button" class="btn btn-primary btn-block" data-bs-toggle="modal" data-bs-target="#teaserModal">
+                            Join the Brotherhood
+                        </button>
+                    </form>
                 </div>
             </div>
         </div>
     </div>
 </div>
 
-<style>
-    /* Custom Styling to override default crispy styles */
-    .modern-form .form-control {
-        border-radius: 12px;
-        padding: 12px 15px;
-        border: 1px solid #e2e8f0;
-        background-color: #f8fafc;
-        transition: all 0.3s ease;
+<!-- Teaser Modal -->
+<div class="modal fade" id="teaserModal" tabindex="-1" aria-labelledby="teaserModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="teaserModalLabel">Teaser Questions</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form method="post" id="teaser-form">
+                    {% csrf_token %}
+                    {{ teaser_form|crispy }}
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" onclick="submitForms()">Submit</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+function submitForms() {
+    var registrationForm = document.getElementById('registration-form');
+    var teaserForm = document.getElementById('teaser-form');
+    var formData = new FormData(registrationForm);
+    var teaserData = new FormData(teaserForm);
+    for (var pair of teaserData.entries()) {
+        formData.append(pair[0], pair[1]);
     }
 
-    .modern-form .form-control:focus {
-        background-color: #fff;
-        border-color: #4f46e5;
-        box-shadow: 0 0 0 4px rgba(79, 70, 229, 0.1);
-    }
-
-    .modern-form label {
-        font-weight: 600;
-        color: #475569;
-        margin-bottom: 8px;
-        font-size: 0.9rem;
-    }
-
-    .bg-primary-soft { background-color: rgba(79, 70, 229, 0.2); }
-
-    .transition-all:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 10px 20px rgba(79, 70, 229, 0.2) !important;
-    }
-
-    /* Responsive adjustments */
-    @media (max-width: 991px) {
-        .card { border-radius: 2rem !important; }
-    }
-</style>
+    fetch(registrationForm.action, {
+        method: 'POST',
+        body: formData,
+        headers: {
+            'X-CSRFToken': '{{ csrf_token }}'
+        }
+    }).then(response => {
+        if (response.redirected) {
+            window.location.href = response.url;
+        } else {
+            return response.text();
+        }
+    }).then(html => {
+        if (html) {
+            var newDoc = document.open("text/html", "replace");
+            newDoc.write(html);
+            newDoc.close();
+        }
+    });
+}
+</script>
 {% endblock %}
