@@ -1,0 +1,155 @@
+{% extends "base.html" %}
+
+{% block content %}
+<!-- Hero Section -->
+<div class="hero-section text-center text-white" style="background-image: url('https://via.placeholder.com/1920x600'); background-size: cover; background-position: center; padding: 150px 0;">
+    <div class="container">
+        <h1 class="display-4">Mwiiri</h1>
+        <p class="lead">blah blah blah</p>
+    </div>
+</div>
+
+<!-- Join the MOBA Movement -->
+<div class="container mt-5">
+    <div class="row">
+        <div class="col-md-8 offset-md-2 text-center">
+            <h2>Join the MOBA Movement</h2>
+            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia curae; integer non dui nec mi faucibus bibendum. Maecenas eget arcu ut mauris ultrices posuere. Donec et sapien non metus convallis luctus.</p>
+            <a href="{% url 'register' %}" class="btn btn-primary">Join MOBA</a>
+        </div>
+    </div>
+</div>
+
+<!-- Featured Products section -->
+<div class="container mt-5">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2>Products</h2>
+        <a href="{% url 'products' %}" class="btn btn-outline-primary">View All</a>
+    </div>
+    <div class="row">
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Premium Consulting</h5>
+                    <p class="card-text">High-impact strategy and execution led by experienced Old Boys.</p>
+                    <a href="#" class="btn btn-primary">Explore</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Professional Services</h5>
+                    <p class="card-text">Trusted services across legal, medical, and financial domains.</p>
+                    <a href="#" class="btn btn-primary">Explore</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Training & Workshops</h5>
+                    <p class="card-text">Upskill with workshops facilitated by industry leaders.</p>
+                    <a href="#" class="btn btn-primary">Explore</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Mwiiri League -->
+<div class="container mt-5">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h2>Mwiiri League</h2>
+            <p>Latest fixture and standings preview.</p>
+        </div>
+        <a href="#" class="btn btn-outline-primary">View League</a>
+    </div>
+</div>
+
+<!--This is the featured news section -->
+<div class="container mt-5">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2>Latest News</h2>
+        <a href="{% url 'news' %}" class="btn btn-outline-primary">View All</a>
+    </div>
+    <div class="row">
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Annual General Meeting Highlights</h5>
+                    <p class="card-text">Key decisions and future plans from the recent AGM.</p>
+                    <a href="#" class="btn btn-primary">Read More</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Old Boy Wins National Award</h5>
+                    <p class="card-text">Celebrating the achievements of our distinguished alumni.</p>
+                    <a href="#" class="btn btn-primary">Read More</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">School Expansion Project Update</h5>
+                    <p class="card-text">Progress on the new science block and sports facilities.</p>
+                    <a href="#" class="btn btn-primary">Read More</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Today in History -->
+<div class="container mt-5">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h2>Today in History</h2>
+            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+        </div>
+        <a href="{% url 'history' %}" class="btn btn-outline-primary">Explore History</a>
+    </div>
+</div>
+
+<!-- This is the featured service section -->
+<div class="container mt-5 mb-5">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2>Services</h2>
+        <a href="#" class="btn btn-outline-primary">View All</a>
+    </div>
+    <div class="row">
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Annual General Meeting</h5>
+                    <p class="card-text">12 Jan 2025 - Main Hall</p>
+                    <a href="#" class="btn btn-primary">View Details</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Home Coming</h5>
+                    <p class="card-text">02 Mar 2025 - School Grounds</p>
+                    <a href="#" class="btn btn-primary">View Details</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Mwiiri League Opener</h5>
+                    <p class="card-text">20 Mar 2025 - Sports Complex</p>
+                    <a href="#" class="btn btn-primary">View Details</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

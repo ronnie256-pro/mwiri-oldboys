@@ -1,0 +1,85 @@
+{% extends "base.html" %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="row">
+        <div class="col-md-4">
+            <div class="card text-center shadow-sm">
+                <div class="card-body">
+                    <img src="{% if user.profile.profile_picture %}{{ user.profile.profile_picture.url }}{% else %}https://via.placeholder.com/150{% endif %}" class="rounded-circle mb-3" width="150" height="150" alt="Profile Picture" style="object-fit: cover;">
+                    <h5 class="card-title">{{ user.get_full_name|default:user.username }}</h5>
+                    <p class="text-muted">{{ user.cohort|default:'No cohort specified' }}</p>
+                    <hr>
+                    <form method="post" enctype="multipart/form-data" action="{% url 'my_account' %}">
+                        {% csrf_token %}
+                        <div class="mb-3">
+                            <label for="profile_picture" class="form-label">Update Profile Picture</label>
+                            <input class="form-control form-control-sm" type="file" id="profile_picture" name="profile_picture">
+                        </div>
+                        <button type="submit" name="upload_picture" class="btn btn-primary btn-sm">Upload</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-8">
+            <div class="card shadow-sm">
+                <div class="card-header bg-white">
+                    <h4 class="mb-0">Edit Profile</h4>
+                </div>
+                <div class="card-body">
+                    <form method="post" action="{% url 'my_account' %}">
+                        {% csrf_token %}
+                        {{ form|crispy }}
+                        <button type="submit" name="update_profile" class="btn btn-success">Save Changes</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row mt-5">
+        <div class="col-md-12">
+            <h2 class="mb-4">My Content</h2>
+            <div class="row">
+                <div class="col-md-3 mb-4">
+                    <div class="card h-100 text-center shadow-sm">
+                        <div class="card-body">
+                            <h5 class="card-title">Products</h5>
+                            <p class="card-text">Manage your products</p>
+                            <a href="#" class="btn btn-outline-primary">Add/Edit</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3 mb-4">
+                    <div class="card h-100 text-center shadow-sm">
+                        <div class="card-body">
+                            <h5 class="card-title">Services</h5>
+                            <p class="card-text">Manage your services</p>
+                            <a href="#" class="btn btn-outline-primary">Add/Edit</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3 mb-4">
+                    <div class="card h-100 text-center shadow-sm">
+                        <div class="card-body">
+                            <h5 class="card-title">News</h5>
+                            <p class="card-text">Manage your news articles</p>
+                            <a href="#" class="btn btn-outline-primary">Add/Edit</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3 mb-4">
+                    <div class="card h-100 text-center shadow-sm">
+                        <div class="card-body">
+                            <h5 class="card-title">History</h5>
+                            <p class="card-text">Manage your history entries</p>
+                            <a href="#" class="btn btn-outline-primary">Add/Edit</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

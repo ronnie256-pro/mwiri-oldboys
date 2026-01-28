@@ -1,0 +1,92 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="row">
+        <!-- Filters -->
+        <div class="col-md-3">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Filters</h5>
+                    <hr>
+                    <!-- Search Bar -->
+                    <form class="d-flex mb-3">
+                        <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+                        <button class="btn btn-outline-success" type="submit">Search</button>
+                    </form>
+
+                    <!-- Category Filter -->
+                    <h6>Category</h6>
+                    <ul class="list-unstyled">
+                        <li><a href="#">Category 1</a></li>
+                        <li><a href="#">Category 2</a></li>
+                        <li><a href="#">Category 3</a></li>
+                    </ul>
+                    <hr>
+
+                    <!-- Price Filter -->
+                    <h6>Price</h6>
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="price" id="price_any">
+                        <label class="form-check-label" for="price_any">Any</label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="price" id="price_free">
+                        <label class="form-check-label" for="price_free">Free</label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="price" id="price_paid">
+                        <label class="form-check-label" for="price_paid">Paid</label>
+                    </div>
+                    <hr>
+
+                    <!-- Service/Product Filter -->
+                    <h6>Type</h6>
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="type" id="type_any">
+                        <label class="form-check-label" for="type_any">Any</label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="type" id="type_product">
+                        <label class="form-check-label" for="type_product">Product</label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="type" id="type_service">
+                        <label class="form-check-label" for="type_service">Service</label>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Products and Services -->
+        <div class="col-md-9">
+            <div class="row">
+                <!-- Product Card -->
+                <div class="col-md-4 mb-4">
+                    <div class="card">
+                        <img src="https://via.placeholder.com/300" class="card-img-top" alt="Product Image">
+                        <div class="card-body">
+                            <h5 class="card-title">Product Name</h5>
+                            <p class="card-text">Product description.</p>
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div class="ratings">
+                                    <i class="fa fa-star text-warning"></i>
+                                    <i class="fa fa-star text-warning"></i>
+                                    <i class="fa fa-star text-warning"></i>
+                                    <i class="fa fa-star text-warning"></i>
+                                    <i class="fa fa-star text-secondary"></i>
+                                </div>
+                                <span class="text-muted">$99.99</span>
+                            </div>
+                            <hr>
+                            <p class="card-text"><small class="text-muted">Contact: 123-456-7890</small></p>
+                            <p class="card-text"><small class="text-muted">Owner: John Doe</small></p>
+                        </div>
+                    </div>
+                </div>
+                <!-- Add more product cards here -->
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

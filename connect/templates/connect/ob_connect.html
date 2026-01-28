@@ -1,0 +1,31 @@
+
+{% extends "base.html" %}
+
+{% block content %}
+    <div class="container">
+        <h1 class="my-4">OB Connect</h1>
+        <div class="row">
+            <div class="col-md-12">
+                <form class="form-inline mb-4">
+                    <input class="form-control mr-sm-2" type="search" placeholder="Search by Cohort or Profession" aria-label="Search">
+                    <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+                </form>
+            </div>
+        </div>
+        <div class="row">
+            {% for user in users %}
+                <div class="col-md-4 mb-4">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">{{ user.get_full_name }}</h5>
+                            <p class="card-text">Cohort: {{ user.cohort }}</p>
+                            <p class="card-text">Profession: {{ user.profession }}</p>
+                            <a href="{{ user.linkedin_profile }}" class="btn btn-primary" target="_blank">LinkedIn</a>
+                            <a href="{{ user.website }}" class="btn btn-secondary" target="_blank">Website</a>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+{% endblock %}
