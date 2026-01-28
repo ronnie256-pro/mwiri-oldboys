@@ -1,23 +1,90 @@
-({% extends "base.html" %}
+{% extends "base.html" %}
 {% load crispy_forms_tags %}
 
 {% block content %}
-<div class="container mt-5">
-    <div class="row">
-        <div class="col-md-6 offset-md-3">
-            <div class="card">
-                <div class="card-header">
-                    <h3 class="text-center">Login</h3>
+<div class="container-fluid min-vh-100 d-flex align-items-center justify-content-center py-5" style="background: linear-gradient(135deg, #f1f5f9 0%, #cbd5e1 100%);">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-6 col-lg-5 col-xl-4">
+                
+                <div class="text-center mb-4">
+                    <div class="bg-primary d-inline-block p-3 rounded-circle shadow-lg mb-3">
+                        <i class="bi bi-shield-lock text-white fs-2"></i>
+                    </div>
+                    <h2 class="fw-bold">Member <span class="text-primary">Login</span></h2>
+                    <p class="text-muted small">Welcome back to the Hill. Please sign in to your MOBA account.</p>
                 </div>
-                <div class="card-body">
-                    <form method="post">
-                        {% csrf_token %}
-                        {{ form|crispy }}
-                        <button type="submit" class="btn btn-primary btn-block">Login</button>
-                    </form>
+
+                <div class="card border-0 shadow-lg rounded-5 overflow-hidden">
+                    <div class="card-body p-4 p-md-5 bg-white">
+                        <form method="post" class="modern-login-form">
+                            {% csrf_token %}
+                            
+                            <div class="mb-3">
+                                {{ form|crispy }}
+                            </div>
+
+                            <div class="d-flex justify-content-between align-items-center mb-4">
+                                <div class="form-check small">
+                                    <input class="form-check-input" type="checkbox" id="rememberMe">
+                                    <label class="form-check-label text-muted" for="rememberMe">Remember me</label>
+                                </div>
+                                <a href="#" class="small text-primary text-decoration-none fw-bold">Forgot Password?</a>
+                            </div>
+
+                            <button type="submit" class="btn btn-primary btn-lg w-100 rounded-pill py-3 fw-bold shadow-sm transition-all mb-3">
+                                Sign In
+                            </button>
+
+                            <div class="text-center mt-3">
+                                <p class="small text-muted mb-0">Don't have an account yet?</p>
+                                <a href="{% url 'register' %}" class="text-dark fw-bold text-decoration-none">Join the Movement</a>
+                            </div>
+                        </form>
+                    </div>
                 </div>
+
+                <div class="text-center mt-5 opacity-50">
+                    <div class="d-flex justify-content-center gap-3 small">
+                        <a href="{% url 'home' %}" class="text-dark text-decoration-none">Home</a>
+                        <span>•</span>
+                        <a href="#" class="text-dark text-decoration-none">Help Center</a>
+                        <span>•</span>
+                        <a href="#" class="text-dark text-decoration-none">Privacy</a>
+                    </div>
+                </div>
+
             </div>
         </div>
     </div>
 </div>
+
+<style>
+    /* Styling to match the Join MOBA theme */
+    .modern-login-form .form-control {
+        border-radius: 12px;
+        padding: 12px 15px;
+        border: 1px solid #e2e8f0;
+        background-color: #f8fafc;
+        transition: all 0.3s ease;
+    }
+
+    .modern-login-form .form-control:focus {
+        background-color: #fff;
+        border-color: #4f46e5;
+        box-shadow: 0 0 0 4px rgba(79, 70, 229, 0.1);
+    }
+
+    .modern-login-form label {
+        font-weight: 600;
+        color: #475569;
+        margin-bottom: 8px;
+        font-size: 0.9rem;
+    }
+
+    .transition-all:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 20px rgba(79, 70, 229, 0.2) !important;
+    }
+</style>
 {% endblock %}

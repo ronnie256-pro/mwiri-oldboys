@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth import login as auth_login
 from django.contrib.auth.views import LoginView
+from django.contrib.auth import logout
 from django.contrib.auth.decorators import login_required
 from django.views.generic import TemplateView
 from django.contrib import messages
@@ -63,14 +64,9 @@ class CustomLoginView(LoginView):
     template_name = 'users/login.html'
     def form_valid(self, form):
         auth_login(self.request, form.get_user())
-        if self.request.user.role == User.Role.ADMIN:
-            return redirect('admin_redirect')
-        else:
-            return redirect('my_account')
+        return redirect('my_account')
 
-@login_required
-def admin_redirect_view(request):
-    return redirect('custom_admin')
+def logout_view(request):
+    logout(request)
+    return redirect('home')
 
-class AdminView(TemplateView):
-    template_name = 'users/admin.html'

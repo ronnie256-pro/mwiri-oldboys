@@ -1,6 +1,96 @@
+<footer class="bg-dark text-white pt-5 pb-3 mt-5 shadow-lg" style="border-top: 4px solid #4f46e5;">
+    <div class="container py-4">
+        <div class="row g-4">
+            
+            <div class="col-lg-3 col-md-6">
+                <h5 class="fw-bold mb-4 text-primary">The Hill</h5>
+                <p class="small opacity-75 mb-4">
+                    Busoga College Mwiiri is more than a school; it's a cradle of leadership. Founded in 1911, we continue to build legends.
+                </p>
+                <div class="d-flex gap-3">
+                    <a href="#" class="text-white opacity-50 hover-opacity-100"><i class="bi bi-facebook fs-5"></i></a>
+                    <a href="#" class="text-white opacity-50 hover-opacity-100"><i class="bi bi-twitter-x fs-5"></i></a>
+                    <a href="#" class="text-white opacity-50 hover-opacity-100"><i class="bi bi-linkedin fs-5"></i></a>
+                    <a href="#" class="text-white opacity-50 hover-opacity-100"><i class="bi bi-youtube fs-5"></i></a>
+                </div>
+            </div>
 
-<footer class="bg-dark text-white text-center py-3 mt-5">
-    <div class="container">
-        <p>&copy; {% now "Y" %} MOBA. All Rights Reserved.</p>
+            <div class="col-lg-3 col-md-6 ps-lg-5">
+                <h5 class="fw-bold mb-4 text-white">Alumni Hub</h5>
+                <ul class="list-unstyled small">
+                    <li class="mb-2"><a href="{% url 'ob_connect' %}" class="text-decoration-none text-white opacity-75 hover-link">OB Connect</a></li>
+                    <li class="mb-2"><a href="{% url 'products' %}" class="text-decoration-none text-white opacity-75 hover-link">Marketplace</a></li>
+                    <li class="mb-2"><a href="{% url 'alumni_sos' %}" class="text-decoration-none text-white opacity-75 hover-link">Alumni SOS</a></li>
+                    <li class="mb-2"><a href="{% url 'history' %}" class="text-decoration-none text-white opacity-75 hover-link">Today in History</a></li>
+                    <li class="mb-2"><a href="#" class="text-decoration-none text-white opacity-75 hover-link">MOBA Constitution</a></li>
+                </ul>
+            </div>
+
+            <div class="col-lg-3 col-md-6">
+                <h5 class="fw-bold mb-4 text-white">Resources</h5>
+                <ul class="list-unstyled small">
+                    <li class="mb-2">
+                        <a href="https://mwiri.sc.ug/" target="_blank" class="text-decoration-none text-white opacity-75 hover-link">
+                            <i class="bi bi-arrow-up-right-circle me-1"></i> Main School Website
+                        </a>
+                    </li>
+                    <li class="mb-2">
+                        <a href="https://www.education.go.ug/" target="_blank" class="text-decoration-none text-white opacity-75 hover-link">
+                            Ministry of Education & Sports
+                        </a>
+                    </li>
+                    <li class="mb-2">
+                        <a href="#" class="text-decoration-none text-white opacity-75 hover-link">UNEB Portal</a>
+                    </li>
+                    <li class="mb-2">
+                        <a href="#" class="text-decoration-none text-white opacity-75 hover-link">Old Boys Endowment Fund</a>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="col-lg-3 col-md-6">
+                <h5 class="fw-bold mb-4 text-white">Stay Updated</h5>
+                <p class="small opacity-75">Get news from the Hill directly in your inbox.</p>
+                <div class="input-group mb-3">
+                    <input type="email" class="form-control bg-secondary border-0 text-white small rounded-start-pill px-3" placeholder="Email address" style="background: rgba(255,255,255,0.1) !important;">
+                    <button class="btn btn-primary rounded-end-pill px-3" type="button">Join</button>
+                </div>
+                <div class="small opacity-50 mt-4">
+                    <i class="bi bi-geo-alt me-2"></i> Mwiiri Hill, Jinja, Uganda
+                </div>
+            </div>
+
+        </div>
+
+        <hr class="my-5 opacity-10">
+
+        <div class="row align-items-center">
+            <div class="col-md-6 text-center text-md-start">
+                <p class="small mb-0 opacity-50">&copy; {% now "Y" %} Mwiiri Old Boys Association (MOBA). All Rights Reserved.</p>
+            </div>
+            <div class="col-md-6 text-center text-md-end mt-3 mt-md-0">
+                <p class="small mb-0 opacity-50">Developed with <i class="bi bi-heart-fill text-danger mx-1"></i> for the Brotherhood.</p>
+            </div>
+        </div>
     </div>
 </footer>
+
+<style>
+    /* Footer Special Touches */
+    .hover-link {
+        transition: 0.3s;
+    }
+    .hover-link:hover {
+        opacity: 1 !important;
+        color: #6366f1 !important;
+        padding-left: 5px;
+    }
+    .hover-opacity-100:hover {
+        opacity: 1 !important;
+    }
+    footer {
+        letter-spacing: 0.5px;
+    }
+    /* Smooth transitions for links */
+    a { transition: all 0.3s ease; }
+</style>
