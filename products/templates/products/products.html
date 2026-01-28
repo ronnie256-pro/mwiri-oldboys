@@ -1,92 +1,116 @@
 {% extends "base.html" %}
 
 {% block content %}
-<div class="container mt-5">
-    <div class="row">
-        <!-- Filters -->
-        <div class="col-md-3">
-            <div class="card">
-                <div class="card-body">
-                    <h5 class="card-title">Filters</h5>
-                    <hr>
-                    <!-- Search Bar -->
-                    <form class="d-flex mb-3">
-                        <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
-                        <button class="btn btn-outline-success" type="submit">Search</button>
+<div class="container-fluid py-5 px-lg-5" style="background-color: #f8fafc; min-height: 100vh;">
+    <div class="mb-5 text-center">
+        <h1 class="fw-bold display-5">The <span class="text-primary">Marketplace</span></h1>
+        <p class="text-muted">Exclusive products and services from the Mwiiri Alumni Network.</p>
+    </div>
+
+    <div class="row g-4">
+        <div class="col-lg-3">
+            <div class="card border-0 shadow-sm sticky-top" style="border-radius: 20px; top: 100px;">
+                <div class="card-body p-4">
+                    <h5 class="fw-bold mb-4">Refine Search</h5>
+                    
+                    <form class="mb-4">
+                        <div class="input-group bg-light rounded-pill px-3 py-1">
+                            <span class="input-group-text bg-transparent border-0"><i class="bi bi-search"></i></span>
+                            <input type="text" class="form-control bg-transparent border-0 shadow-none" placeholder="Find a product...">
+                        </div>
                     </form>
 
-                    <!-- Category Filter -->
-                    <h6>Category</h6>
-                    <ul class="list-unstyled">
-                        <li><a href="#">Category 1</a></li>
-                        <li><a href="#">Category 2</a></li>
-                        <li><a href="#">Category 3</a></li>
-                    </ul>
-                    <hr>
+                    <hr class="opacity-10">
 
-                    <!-- Price Filter -->
-                    <h6>Price</h6>
-                    <div class="form-check">
-                        <input class="form-check-input" type="radio" name="price" id="price_any">
-                        <label class="form-check-label" for="price_any">Any</label>
+                    <h6 class="fw-bold small text-uppercase text-muted mb-3">Categories</h6>
+                    <div class="d-flex flex-wrap gap-2 mb-4">
+                        <a href="#" class="badge rounded-pill bg-primary-soft text-primary text-decoration-none px-3 py-2">Consulting</a>
+                        <a href="#" class="badge rounded-pill bg-light text-dark text-decoration-none px-3 py-2">Hardware</a>
+                        <a href="#" class="badge rounded-pill bg-light text-dark text-decoration-none px-3 py-2">Agribusiness</a>
                     </div>
-                    <div class="form-check">
-                        <input class="form-check-input" type="radio" name="price" id="price_free">
-                        <label class="form-check-label" for="price_free">Free</label>
-                    </div>
-                    <div class="form-check">
-                        <input class="form-check-input" type="radio" name="price" id="price_paid">
-                        <label class="form-check-label" for="price_paid">Paid</label>
-                    </div>
-                    <hr>
 
-                    <!-- Service/Product Filter -->
-                    <h6>Type</h6>
-                    <div class="form-check">
-                        <input class="form-check-input" type="radio" name="type" id="type_any">
-                        <label class="form-check-label" for="type_any">Any</label>
+                    <h6 class="fw-bold small text-uppercase text-muted mb-3">Filter by Price</h6>
+                    <div class="form-check mb-2">
+                        <input class="form-check-input" type="radio" name="price" id="p1" checked>
+                        <label class="form-check-label small" for="p1">All Prices</label>
                     </div>
-                    <div class="form-check">
-                        <input class="form-check-input" type="radio" name="type" id="type_product">
-                        <label class="form-check-label" for="type_product">Product</label>
+                    <div class="form-check mb-4">
+                        <input class="form-check-input" type="radio" name="price" id="p2">
+                        <label class="form-check-label small" for="p2">Under UGX 500k</label>
                     </div>
-                    <div class="form-check">
-                        <input class="form-check-input" type="radio" name="type" id="type_service">
-                        <label class="form-check-label" for="type_service">Service</label>
-                    </div>
+
+                    <button class="btn btn-primary w-100 rounded-pill fw-bold py-2 shadow-sm">Apply Filters</button>
                 </div>
             </div>
         </div>
 
-        <!-- Products and Services -->
-        <div class="col-md-9">
-            <div class="row">
-                <!-- Product Card -->
-                <div class="col-md-4 mb-4">
-                    <div class="card">
-                        <img src="https://via.placeholder.com/300" class="card-img-top" alt="Product Image">
-                        <div class="card-body">
-                            <h5 class="card-title">Product Name</h5>
-                            <p class="card-text">Product description.</p>
-                            <div class="d-flex justify-content-between align-items-center">
-                                <div class="ratings">
-                                    <i class="fa fa-star text-warning"></i>
-                                    <i class="fa fa-star text-warning"></i>
-                                    <i class="fa fa-star text-warning"></i>
-                                    <i class="fa fa-star text-warning"></i>
-                                    <i class="fa fa-star text-secondary"></i>
-                                </div>
-                                <span class="text-muted">$99.99</span>
+        <div class="col-lg-9">
+            <div class="row g-4">
+                {% for product in products %}
+                <div class="col-md-6 col-xl-4">
+                    <div class="card border-0 shadow-sm h-100 product-card" style="border-radius: 20px; overflow: hidden; transition: 0.3s;">
+                        <div class="position-relative">
+                            <img src="{% if product.image %}{{ product.image.url }}{% else %}https://via.placeholder.com/400x300{% endif %}" 
+                                 class="card-img-top w-100" alt="{{ product.name }}" style="height: 220px; object-fit: cover;">
+                            <span class="position-absolute top-0 end-0 m-3 badge bg-dark text-white rounded-pill px-3 py-2 shadow">
+                                UGX {{ product.price }}
+                            </span>
+                        </div>
+
+                        <div class="card-body p-4 d-flex flex-column">
+                            <div class="d-flex justify-content-between align-items-start mb-2">
+                                <span class="text-primary small fw-bold text-uppercase">{{ product.category }}</span>
+                                <span class="badge bg-success-soft text-success rounded-pill px-2 py-1 small">
+                                    <i class="bi bi-patch-check-fill"></i> Verified
+                                </span>
                             </div>
-                            <hr>
-                            <p class="card-text"><small class="text-muted">Contact: 123-456-7890</small></p>
-                            <p class="card-text"><small class="text-muted">Owner: John Doe</small></p>
+
+                            <h5 class="fw-bold mb-1">{{ product.name }}</h5>
+                            
+                            <div class="d-flex align-items-center mb-3">
+                                <div class="bg-light rounded-circle me-2 d-flex align-items-center justify-content-center" style="width: 32px; height: 32px;">
+                                    <i class="bi bi-person text-muted"></i>
+                                </div>
+                                <span class="small text-muted">Sold by <strong class="text-dark">{{ product.owner_name }}</strong> <span class="text-primary">({{ product.cohort }})</span></span>
+                            </div>
+
+                            <p class="text-muted small line-clamp-2 mb-4">
+                                {{ product.description|truncatewords:15 }}
+                            </p>
+
+                            <div class="mt-auto d-grid gap-2">
+                                <a href="{% url 'product_detail' product.id %}" class="btn btn-outline-primary rounded-pill fw-bold">View Details</a>
+                                <a href="https://wa.me/{{ product.phone }}" class="btn btn-success rounded-pill fw-bold">
+                                    <i class="bi bi-whatsapp me-2"></i>Inquire via WhatsApp
+                                </a>
+                            </div>
                         </div>
                     </div>
                 </div>
-                <!-- Add more product cards here -->
+                {% empty %}
+                <div class="col-12 text-center py-5">
+                    <p class="text-muted">No products listed yet. Be the first to list yours!</p>
+                </div>
+                {% endfor %}
             </div>
         </div>
     </div>
 </div>
+
+<style>
+    .bg-primary-soft { background-color: #eef2ff; color: #4f46e5; }
+    .bg-success-soft { background-color: #f0fdf4; color: #16a34a; }
+    .line-clamp-2 {
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;  
+        overflow: hidden;
+    }
+    .product-card:hover {
+        transform: translateY(-8px);
+        box-shadow: 0 1rem 3rem rgba(0,0,0,.1) !important;
+    }
+    .btn-success { background-color: #25d366; border-color: #25d366; }
+    .btn-success:hover { background-color: #128c7e; border-color: #128c7e; }
+</style>
 {% endblock %}

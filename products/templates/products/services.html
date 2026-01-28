@@ -1,85 +1,98 @@
 {% extends "base.html" %}
 
 {% block content %}
-<div class="container mt-5">
-    <h1 class="text-center mb-4">Services</h1>
-    <div class="row">
-        <!-- Service Card 1 -->
-        <div class="col-md-3 mb-4">
-            <div class="card">
-                <img src="https://via.placeholder.com/300" class="card-img-top" alt="Service Image">
-                <div class="card-body">
-                    <h5 class="card-title">Service Name 1</h5>
-                    <p class="card-text">Service description.</p>
-                    <div class="d-flex justify-content-between align-items-center">
-                        <div class="ratings">
-                            <i class="fa fa-star text-warning"></i>
-                            <i class="fa fa-star text-warning"></i>
-                            <i class="fa fa-star text-warning"></i>
-                            <i class="fa fa-star text-warning"></i>
-                            <i class="fa fa-star text-secondary"></i>
-                        </div>
-                    </div>
-                </div>
-            </div>
+<div class="container-fluid py-5 px-lg-5" style="background: linear-gradient(180deg, #ffffff 0%, #f1f5f9 100%); min-height: 100vh;">
+    
+    <div class="text-center mb-5">
+        <span class="badge bg-primary-soft text-primary px-3 py-2 rounded-pill mb-3 fw-bold">PROFESSIONAL NETWORK</span>
+        <h1 class="fw-bold display-4">Expert <span class="text-primary">Services</span></h1>
+        <p class="text-muted mx-auto" style="max-width: 600px;">Connect with qualified Mwiiri professionals across various industries worldwide.</p>
+    </div>
+
+    <div class="container mb-5">
+        <div class="d-flex flex-wrap justify-content-center gap-2">
+            <button class="btn btn-dark rounded-pill px-4">All Services</button>
+            <button class="btn btn-outline-dark rounded-pill px-4">Medical</button>
+            <button class="btn btn-outline-dark rounded-pill px-4">Legal</button>
+            <button class="btn btn-outline-dark rounded-pill px-4">Engineering</button>
+            <button class="btn btn-outline-dark rounded-pill px-4">ICT</button>
         </div>
-        <!-- Service Card 2 -->
-        <div class="col-md-3 mb-4">
-            <div class="card">
-                <img src="https://via.placeholder.com/300" class="card-img-top" alt="Service Image">
-                <div class="card-body">
-                    <h5 class="card-title">Service Name 2</h5>
-                    <p class="card-text">Service description.</p>
-                    <div class="d-flex justify-content-between align-items-center">
-                        <div class="ratings">
-                            <i class="fa fa-star text-warning"></i>
-                            <i class="fa fa-star text-warning"></i>
-                            <i class="fa fa-star text-warning"></i>
-                            <i class="fa fa-star text-secondary"></i>
-                            <i class="fa fa-star text-secondary"></i>
+    </div>
+
+    <div class="container">
+        <div class="row g-4">
+            {% for service in services %}
+            <div class="col-md-6 col-lg-4 col-xl-3">
+                <div class="card border-0 shadow-sm h-100 service-card overflow-hidden" style="border-radius: 24px; transition: 0.4s ease;">
+                    
+                    <div class="position-relative">
+                        <img src="{% if service.image %}{{ service.image.url }}{% else %}https://via.placeholder.com/400x250{% endif %}" 
+                             class="card-img-top" alt="{{ service.name }}" style="height: 200px; object-fit: cover;">
+                        <div class="position-absolute bottom-0 start-0 m-3">
+                            <span class="badge bg-white text-dark shadow-sm px-3 py-2 rounded-pill small">
+                                <i class="bi bi-geo-alt-fill text-danger me-1"></i>{{ service.location|default:"Kampala" }}
+                            </span>
+                        </div>
+                    </div>
+
+                    <div class="card-body p-4">
+                        <div class="d-flex justify-content-between align-items-center mb-2">
+                            <span class="text-primary fw-bold small text-uppercase" style="letter-spacing: 1px;">{{ service.category }}</span>
+                            <div class="text-warning small">
+                                <i class="bi bi-star-fill"></i>
+                                <i class="bi bi-star-fill"></i>
+                                <i class="bi bi-star-fill"></i>
+                                <i class="bi bi-star-fill"></i>
+                                <i class="bi bi-star-half"></i>
+                            </div>
+                        </div>
+
+                        <h5 class="fw-bold mb-3">{{ service.name }}</h5>
+                        
+                        <div class="d-flex align-items-center mb-4 p-2 bg-light rounded-3">
+                            <img src="https://ui-avatars.com/api/?name={{ service.provider_name }}&background=random" class="rounded-circle me-2" width="30" height="30">
+                            <div class="lh-1">
+                                <p class="mb-0 small fw-bold text-dark">{{ service.provider_name }}</p>
+                                <small class="text-muted" style="font-size: 0.7rem;">Class of {{ service.cohort }}</small>
+                            </div>
+                        </div>
+
+                        <p class="text-muted small mb-4 line-clamp-3">
+                            {{ service.description|default:"Specialized professional services tailored to meet your requirements with the Mwiiri standard of excellence." }}
+                        </p>
+
+                        <div class="d-grid gap-2">
+                            <a href="#" class="btn btn-primary rounded-pill fw-bold py-2">Book Consultation</a>
+                            <a href="mailto:{{ service.email }}" class="btn btn-link btn-sm text-decoration-none text-muted">Request a Quote</a>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
-        <!-- Service Card 3 -->
-        <div class="col-md-3 mb-4">
-            <div class="card">
-                <img src="https://via.placeholder.com/300" class="card-img-top" alt="Service Image">
-                <div class="card-body">
-                    <h5 class="card-title">Service Name 3</h5>
-                    <p class="card-text">Service description.</p>
-                    <div class="d-flex justify-content-between align-items-center">
-                        <div class="ratings">
-                            <i class="fa fa-star text-warning"></i>
-                            <i class="fa fa-star text-warning"></i>
-                            <i class="fa fa-star text-warning"></i>
-                            <i class="fa fa-star text-warning"></i>
-                            <i class="fa fa-star text-warning"></i>
-                        </div>
-                    </div>
-                </div>
+            {% empty %}
+            <div class="col-12 text-center py-5">
+                <i class="bi bi-journal-x display-1 text-light"></i>
+                <p class="text-muted mt-3">No services listed in this directory yet.</p>
             </div>
-        </div>
-        <!-- Service Card 4 -->
-        <div class="col-md-3 mb-4">
-            <div class="card">
-                <img src="https://via.placeholder.com/300" class="card-img-top" alt="Service Image">
-                <div class="card-body">
-                    <h5 class="card-title">Service Name 4</h5>
-                    <p class="card-text">Service description.</p>
-                    <div class="d-flex justify-content-between align-items-center">
-                        <div class="ratings">
-                            <i class="fa fa-star text-warning"></i>
-                            <i class="fa fa-star text-warning"></i>
-                            <i class="fa fa-star text-secondary"></i>
-                            <i class="fa fa-star text-secondary"></i>
-                            <i class="fa fa-star text-secondary"></i>
-                        </div>
-                    </div>
-                </div>
-            </div>
+            {% endfor %}
         </div>
     </div>
 </div>
+
+<style>
+    .bg-primary-soft { background-color: #eef2ff; color: #4f46e5; }
+    .service-card:hover {
+        transform: translateY(-12px);
+        box-shadow: 0 20px 40px rgba(0,0,0,0.08) !important;
+    }
+    .service-card:hover .btn-primary {
+        background-color: #312e81;
+        border-color: #312e81;
+    }
+    .line-clamp-3 {
+        display: -webkit-box;
+        -webkit-line-clamp: 3;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+    }
+</style>
 {% endblock %}
