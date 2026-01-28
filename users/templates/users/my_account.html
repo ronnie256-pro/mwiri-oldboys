@@ -4,7 +4,8 @@
 {% block content %}
 <div class="container-fluid py-5 px-lg-5" style="background: #f8fafc; min-height: 100vh;">
     <div class="row g-4">
-        
+
+        <!-- TThis is the profile picture section -->
         <div class="col-lg-3">
             <div class="card border-0 shadow-sm overflow-hidden" style="border-radius: 20px; background: rgba(255, 255, 255, 0.7); backdrop-filter: blur(10px);">
                 <div class="card-body text-center p-4">
@@ -33,6 +34,17 @@
                 <div class="list-group list-group-flush border-top bg-transparent">
                     <a href="#overview" class="list-group-item list-group-item-action border-0 px-4 py-3 active"><i class="bi bi-grid-1x2 me-3"></i>Overview</a>
                     <a href="#settings" class="list-group-item list-group-item-action border-0 px-4 py-3"><i class="bi bi-person-gear me-3"></i>Settings</a>
+                </div>
+            </div>
+
+            <div class="card border-0 shadow-sm mt-4" style="border-radius: 20px;">
+                <div class="card-body p-4">
+                    <h5 class="fw-bold mb-4">Alumni SOS</h5>
+                    <form method="post" action="{% url 'alumni_sos' %}">
+                        {% csrf_token %}
+                        {{ sos_form|crispy }}
+                        <button type="submit" name="submit_sos" class="btn btn-warning w-100 rounded-pill">Post SOS</button>
+                    </form>
                 </div>
             </div>
         </div>

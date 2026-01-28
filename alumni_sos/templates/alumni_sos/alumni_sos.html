@@ -1,0 +1,115 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container-fluid py-5 px-lg-5" style="background-color: #fcfcfd; min-height: 100vh;">
+    
+    <div class="row mb-5 justify-content-center">
+        <div class="col-lg-8 text-center">
+            <div class="sos-pulse-container mb-4">
+                <div class="pulse-ring"></div>
+                <i class="bi bi-broadcast text-danger fs-1"></i>
+            </div>
+            <h1 class="fw-bold display-4">Alumni <span class="text-danger">SOS</span></h1>
+                <strong>Respond to a brother today.</strong>
+        </div>
+    </div>
+
+    <div class="container" id="active-signals">
+        <div class="row g-4">
+            {% for sos_request in sos_requests %}
+            <div class="col-lg-6">
+                <div class="card border-0 shadow-sm rounded-5 overflow-hidden transition-all sos-card bg-white h-100">
+                    <div class="card-body p-4 p-md-5">
+                        <div class="d-flex justify-content-between align-items-start mb-4">
+                            <span class="badge bg-danger-soft text-danger px-3 py-2 rounded-pill fw-bold">
+                                <i class="bi bi-exclamation-triangle-fill me-2"></i>URGENT ASSIST
+                            </span>
+                            <span class="text-muted small fw-bold">ID: #M-{{ sos_request.id }}</span>
+                        </div>
+
+                        <h3 class="fw-bold mb-3" style="color: #0f172a;">{{ sos_request.title }}</h3>
+                        <p class="text-muted fs-5 mb-4 lh-base">{{ sos_request.description }}</p>
+
+                        <div class="p-3 rounded-4 bg-light d-flex align-items-center mb-4">
+                            <div class="avatar-box bg-dark text-white rounded-circle d-flex align-items-center justify-content-center me-3" style="width: 50px; height: 50px;">
+                                <span class="fw-bold">{{ sos_request.requester.username|slice:":1"|upper }}</span>
+                            </div>
+                            <div>
+                                <h6 class="mb-0 fw-bold">{{ sos_request.requester.get_full_name|default:sos_request.requester.username }}</h6>
+                                <p class="mb-0 text-primary small fw-bold">Class of {{ sos_request.requester.cohort|default:"N/A" }}</p>
+                            </div>
+                            <div class="ms-auto text-end">
+                                <small class="text-muted d-block">Contact</small>
+                                <span class="fw-bold text-dark">{{ sos_request.requester.phone_number|default:'123-456-7890' }}</span>
+                            </div>
+                        </div>
+
+                        <div class="d-flex align-items-center justify-content-between pt-3 border-top">
+                            <div class="d-flex gap-2">
+                                <span class="text-success small fw-bold"><i class="bi bi-people-fill"></i> 3 Brothers Responding</span>
+                            </div>
+                            <a href="https://wa.me/{{ sos_request.requester.phone_number }}" class="btn btn-danger rounded-pill px-4 fw-bold shadow-sm">
+                                Respond to Signal
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% empty %}
+            <div class="col-12 text-center py-5">
+                <div class="opacity-25 mb-4">
+                    <i class="bi bi-shield-check display-1"></i>
+                </div>
+                <h3 class="text-muted">All clear! No active SOS signals at the moment.</h3>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+
+<style>
+    /* SOS Pulse Animation */
+    .sos-pulse-container {
+        position: relative;
+        display: inline-block;
+        z-index: 1;
+    }
+    .pulse-ring {
+        content: '';
+        width: 100px;
+        height: 100px;
+        background: rgba(220, 53, 69, 0.2);
+        border-radius: 50%;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        animation: pulse 2s infinite;
+        z-index: -1;
+    }
+
+    @keyframes pulse {
+        0% { transform: translate(-50%, -50%) scale(0.5); opacity: 1; }
+        100% { transform: translate(-50%, -50%) scale(2.5); opacity: 0; }
+    }
+
+    /* Card Styling */
+    .sos-card {
+        border: 1px solid #f1f5f9 !important;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    .sos-card:hover {
+        transform: translateY(-8px);
+        box-shadow: 0 25px 50px -12px rgba(220, 53, 69, 0.15) !important;
+        border-color: rgba(220, 53, 69, 0.2) !important;
+    }
+
+    .bg-danger-soft { background-color: #fff1f2; color: #e11d48; }
+    
+    .btn-danger { background-color: #e11d48; border: none; }
+    .btn-danger:hover { background-color: #be123c; transform: translateY(-2px); }
+
+    .sos-card h3 { transition: color 0.3s; }
+    .sos-card:hover h3 { color: #e11d48; }
+</style>
+{% endblock %}

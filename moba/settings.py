@@ -52,6 +52,7 @@ INSTALLED_APPS = [
     'custom_admin.apps.CustomAdminConfig',
     'teaser.apps.TeaserConfig',
     'organisation.apps.OrganisationConfig',
+    'alumni_sos.apps.AlumniSosConfig',
 ]
 
 MIDDLEWARE = [

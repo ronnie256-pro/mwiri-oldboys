@@ -26,4 +26,5 @@ urlpatterns = [
     path('', include('pages.urls')),
     path('', include('products.urls')),
     path('', include('custom_admin.urls')),
+    path('', include('alumni_sos.urls')),
 ]

@@ -5,6 +5,7 @@ from django.contrib.auth.decorators import login_required
 from django.views.generic import TemplateView
 from django.contrib import messages
 from .forms import RegistrationForm, ProfileForm
+from alumni_sos.forms import SOSRequestForm
 from .models import User, Profile
 
 def register(request):
@@ -28,11 +29,13 @@ class MyAccountView(View):
     def get(self, request, *args, **kwargs):
         if request.user.is_authenticated:
             form = ProfileForm(instance=request.user)
+            sos_form = SOSRequestForm()
         else:
             form = None
+            sos_form = None
         
         content_types = ["Products", "Services", "News", "History"]
-        return render(request, self.template_name, {'form': form, 'content_types': content_types})
+        return render(request, self.template_name, {'form': form, 'sos_form': sos_form, 'content_types': content_types})
 
     def post(self, request, *args, **kwargs):
         if not request.user.is_authenticated:
