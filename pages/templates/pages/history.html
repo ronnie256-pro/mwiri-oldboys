@@ -1,49 +1,106 @@
 {% extends "base.html" %}
 
 {% block content %}
-<div class="container mt-5">
-    <h1 class="text-center mb-4">History</h1>
-    <div class="row">
-        <!-- History Card 1 -->
-        <div class="col-md-3 mb-4">
-            <div class="card">
-                <img src="https://via.placeholder.com/300" class="card-img-top" alt="History Image">
-                <div class="card-body">
-                    <h5 class="card-title">Historical Event 1</h5>
-                    <p class="card-text">Event summary.</p>
-                </div>
-            </div>
-        </div>
-        <!-- History Card 2 -->
-        <div class="col-md-3 mb-4">
-            <div class="card">
-                <img src="https://via.placeholder.com/300" class="card-img-top" alt="History Image">
-                <div class="card-body">
-                    <h5 class="card-title">Historical Event 2</h5>
-                    <p class="card-text">Event summary.</p>
-                </div>
-            </div>
-        </div>
-        <!-- History Card 3 -->
-        <div class="col-md-3 mb-4">
-            <div class="card">
-                <img src="https://via.placeholder.com/300" class="card-img-top" alt="History Image">
-                <div class="card-body">
-                    <h5 class="card-title">Historical Event 3</h5>
-                    <p class="card-text">Event summary.</p>
-                </div>
-            </div>
-        </div>
-        <!-- History Card 4 -->
-        <div class="col-md-3 mb-4">
-            <div class="card">
-                <img src="https://via.placeholder.com/300" class="card-img-top" alt="History Image">
-                <div class="card-body">
-                    <h5 class="card-title">Historical Event 4</h5>
-                    <p class="card-text">Event summary.</p>
+<div class="container-fluid py-5 px-lg-5" style="background-color: #0f172a; min-height: 100vh; color: #f8fafc;">
+    
+    <div class="text-center mb-5">
+        <span class="badge bg-primary-soft text-primary px-3 py-2 rounded-pill mb-3 fw-bold">THE ARCHIVES</span>
+        <h1 class="display-4 fw-bold">The <span class="text-warning">Mwiiri</span> Chronicles</h1>
+        <p class="text-muted mx-auto" style="max-width: 700px;">A collection of stories, memories, and historical milestones documented by the generations of Old Boys who lived them.</p>
+    </div>
+
+    {% if featured_history %}
+    <div class="row mb-5">
+        <div class="col-12">
+            <div class="card border-0 bg-dark text-white rounded-5 overflow-hidden shadow-lg position-relative" style="min-height: 400px;">
+                <div class="row g-0 h-100">
+                    <div class="col-lg-6 h-100">
+                        <img src="{{ featured_history.image.url }}" class="img-fluid w-100 h-100 object-fit-cover" alt="Featured Story">
+                    </div>
+                    <div class="col-lg-6 p-4 p-md-5 d-flex flex-column justify-content-center">
+                        <div class="mb-2"><span class="badge bg-warning text-dark">FEATURED MEMOIR</span></div>
+                        <h2 class="display-5 fw-bold mb-3">{{ featured_history.title }}</h2>
+                        <p class="opacity-75 fs-5 mb-4">{{ featured_history.content|truncatewords:40 }}</p>
+                        <div class="d-flex align-items-center mb-4">
+                            <img src="https://ui-avatars.com/api/?name={{ featured_history.author }}&background=EAB308&color=000" class="rounded-circle me-3" width="50">
+                            <div>
+                                <h6 class="mb-0 fw-bold">{{ featured_history.author }}</h6>
+                                <small class="text-warning">Class of {{ featured_history.cohort }}</small>
+                            </div>
+                        </div>
+                        <a href="#" class="btn btn-warning rounded-pill px-5 fw-bold w-fit">Read Full Article</a>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
+    {% endif %}
+
+    <div class="row g-4">
+        {% for article in history_list %}
+        <div class="col-md-6 col-lg-4">
+            <div class="card h-100 border-0 bg-glass text-white rounded-4 overflow-hidden transition-all history-card">
+                <div class="position-relative">
+                    <img src="{% if article.image %}{{ article.image.url }}{% else %}https://via.placeholder.com/400x300/1e293b/ffffff?text=Mwiiri+History{% endif %}" 
+                         class="card-img-top" alt="{{ article.title }}" style="height: 250px; object-fit: cover;">
+                    <div class="position-absolute top-0 start-0 m-3">
+                        <span class="badge bg-primary rounded-pill px-3">{{ article.year }}</span>
+                    </div>
+                </div>
+
+                <div class="card-body p-4 d-flex flex-column">
+                    <h4 class="fw-bold mb-3">{{ article.title }}</h4>
+                    <p class="opacity-50 small line-clamp-3 mb-4">
+                        {{ article.content|truncatewords:25 }}
+                    </p>
+                    
+                    <div class="mt-auto pt-3 border-top border-secondary d-flex align-items-center justify-content-between">
+                        <div class="d-flex align-items-center">
+                            <div class="small-avatar me-2 bg-primary rounded-circle d-flex align-items-center justify-content-center fw-bold" style="width: 30px; height: 30px; font-size: 0.7rem;">
+                                {{ article.author|slice:":1" }}
+                            </div>
+                            <div class="lh-1">
+                                <p class="mb-0 small fw-bold text-white">{{ article.author }}</p>
+                                <small class="text-muted" style="font-size: 0.65rem;">Class of {{ article.cohort }}</small>
+                            </div>
+                        </div>
+                        <a href="#" class="btn btn-sm btn-outline-warning rounded-pill px-3">Read</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
 </div>
+
+<style>
+    /* 2026 Dark Aesthetic */
+    .bg-glass {
+        background: rgba(30, 41, 59, 0.7);
+        backdrop-filter: blur(12px);
+        border: 1px solid rgba(255, 255, 255, 0.1) !important;
+    }
+    
+    .history-card:hover {
+        transform: translateY(-10px);
+        border-color: #eab308 !important; /* Gold border on hover */
+        box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+    }
+
+    .bg-primary-soft { background-color: rgba(79, 70, 229, 0.15); color: #818cf8; }
+    .text-warning { color: #eab308 !important; }
+    .btn-warning { background-color: #eab308; border: none; color: #000; }
+    
+    .line-clamp-3 {
+        display: -webkit-box;
+        -webkit-line-clamp: 3;
+        -webkit-box-orient: vertical;  
+        overflow: hidden;
+    }
+
+    .w-fit { width: fit-content; }
+
+    /* Transitions */
+    .transition-all { transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1); }
+</style>
 {% endblock %}
