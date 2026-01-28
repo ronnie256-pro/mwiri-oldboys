@@ -30,7 +30,9 @@ class MyAccountView(View):
             form = ProfileForm(instance=request.user)
         else:
             form = None
-        return render(request, self.template_name, {'form': form})
+        
+        content_types = ["Products", "Services", "News", "History"]
+        return render(request, self.template_name, {'form': form, 'content_types': content_types})
 
     def post(self, request, *args, **kwargs):
         if not request.user.is_authenticated:

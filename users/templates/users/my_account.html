@@ -2,84 +2,97 @@
 {% load crispy_forms_tags %}
 
 {% block content %}
-<div class="container mt-5">
-    <div class="row">
-        <div class="col-md-4">
-            <div class="card text-center shadow-sm">
-                <div class="card-body">
-                    <img src="{% if user.profile.profile_picture %}{{ user.profile.profile_picture.url }}{% else %}https://via.placeholder.com/150{% endif %}" class="rounded-circle mb-3" width="150" height="150" alt="Profile Picture" style="object-fit: cover;">
-                    <h5 class="card-title">{{ user.get_full_name|default:user.username }}</h5>
-                    <p class="text-muted">{{ user.cohort|default:'No cohort specified' }}</p>
-                    <hr>
-                    <form method="post" enctype="multipart/form-data" action="{% url 'my_account' %}">
-                        {% csrf_token %}
-                        <div class="mb-3">
-                            <label for="profile_picture" class="form-label">Update Profile Picture</label>
-                            <input class="form-control form-control-sm" type="file" id="profile_picture" name="profile_picture">
-                        </div>
-                        <button type="submit" name="upload_picture" class="btn btn-primary btn-sm">Upload</button>
-                    </form>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-8">
-            <div class="card shadow-sm">
-                <div class="card-header bg-white">
-                    <h4 class="mb-0">Edit Profile</h4>
-                </div>
-                <div class="card-body">
-                    <form method="post" action="{% url 'my_account' %}">
-                        {% csrf_token %}
-                        {{ form|crispy }}
-                        <button type="submit" name="update_profile" class="btn btn-success">Save Changes</button>
-                    </form>
-                </div>
-            </div>
-        </div>
-    </div>
+<div class="container-fluid py-5 px-lg-5" style="background: #f8fafc; min-height: 100vh;">
+    <div class="row g-4">
+        
+        <div class="col-lg-3">
+            <div class="card border-0 shadow-sm overflow-hidden" style="border-radius: 20px; background: rgba(255, 255, 255, 0.7); backdrop-filter: blur(10px);">
+                <div class="card-body text-center p-4">
+                    <div class="position-relative d-inline-block mb-4">
+                        <img src="{% if user.profile.profile_picture %}{{ user.profile.profile_picture.url }}{% else %}https://ui-avatars.com/api/?name={{ user.username }}&background=0D6EFD&color=fff&size=150{% endif %}" 
+                             class="rounded-circle border border-4 border-white shadow-sm" 
+                             width="140" height="140" alt="Avatar" style="object-fit: cover;">
+                        <span class="position-absolute bottom-0 end-0 bg-success border border-white rounded-circle p-2" title="Member Approved"></span>
+                    </div>
+                    
+                    <h4 class="fw-bold mb-1">{{ user.get_full_name|default:user.username }}</h4>
+                    <p class="badge bg-primary-soft text-primary px-3 py-2 rounded-pill mb-4" style="background: #eef2ff;">
+                        Class of {{ user.profile.cohort|default:'N/A' }}
+                    </p>
 
-    <div class="row mt-5">
-        <div class="col-md-12">
-            <h2 class="mb-4">My Content</h2>
-            <div class="row">
-                <div class="col-md-3 mb-4">
-                    <div class="card h-100 text-center shadow-sm">
-                        <div class="card-body">
-                            <h5 class="card-title">Products</h5>
-                            <p class="card-text">Manage your products</p>
-                            <a href="#" class="btn btn-outline-primary">Add/Edit</a>
+                    <div class="d-grid gap-2">
+                        <form method="post" enctype="multipart/form-data" action="{% url 'my_account' %}" id="pfp-form">
+                            {% csrf_token %}
+                            <input type="file" id="profile_picture" name="profile_picture" hidden onchange="document.getElementById('pfp-form').submit();">
+                            <button type="button" onclick="document.getElementById('profile_picture').click();" class="btn btn-outline-dark btn-sm w-100 rounded-pill">
+                                <i class="bi bi-camera me-2"></i>Change Photo
+                            </button>
+                        </form>
+                    </div>
+                </div>
+                <div class="list-group list-group-flush border-top bg-transparent">
+                    <a href="#overview" class="list-group-item list-group-item-action border-0 px-4 py-3 active"><i class="bi bi-grid-1x2 me-3"></i>Overview</a>
+                    <a href="#settings" class="list-group-item list-group-item-action border-0 px-4 py-3"><i class="bi bi-person-gear me-3"></i>Settings</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-9">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <span class="text-muted">Welcome back, {{ user.first_name }}</span>
+            </div>
+
+            <div class="card border-0 shadow-sm mb-5" style="border-radius: 20px;">
+                <div class="card-body p-4 p-md-5">
+                    <h5 class="fw-bold mb-4">Personal Details</h5>
+                    <form method="post" action="{% url 'my_account' %}" class="row g-3">
+                        {% csrf_token %}
+                        <div class="col-12">
+                            {{ form|crispy }}
+                        </div>
+                        <div class="col-12 mt-4 text-end">
+                            <button type="submit" name="update_profile" class="btn btn-primary px-5 py-2 rounded-pill shadow-sm">
+                                Save Profile Changes
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <h5 class="fw-bold mb-4">My Contributions</h5>
+            <div class="row g-3">
+                {% for item in content_types %}
+                <div class="col-md-6 col-xl-3">
+                    <div class="card border-0 shadow-sm h-100 bento-card" style="border-radius: 20px; transition: transform 0.2s;">
+                        <div class="card-body p-4 d-flex flex-column">
+                            <div class="icon-shape bg-light text-primary rounded-3 mb-3 d-flex align-items-center justify-content-center" style="width: 48px; height: 48px;">
+                                {% if item == "Products" %}<i class="bi bi-box-seam fs-4"></i>
+                                {% elif item == "Services" %}<i class="bi bi-briefcase fs-4"></i>
+                                {% elif item == "News" %}<i class="bi bi-newspaper fs-4"></i>
+                                {% else %}<i class="bi bi-clock-history fs-4"></i>{% endif %}
+                            </div>
+                            <h6 class="fw-bold">{{ item }}</h6>
+                            <p class="text-muted small">Manage your shared {{ item|lower }} entries.</p>
+                            <div class="mt-auto">
+                                <a href="#" class="btn btn-light btn-sm w-100 rounded-pill fw-semibold">Manage</a>
+                            </div>
                         </div>
                     </div>
                 </div>
-                <div class="col-md-3 mb-4">
-                    <div class="card h-100 text-center shadow-sm">
-                        <div class="card-body">
-                            <h5 class="card-title">Services</h5>
-                            <p class="card-text">Manage your services</p>
-                            <a href="#" class="btn btn-outline-primary">Add/Edit</a>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-3 mb-4">
-                    <div class="card h-100 text-center shadow-sm">
-                        <div class="card-body">
-                            <h5 class="card-title">News</h5>
-                            <p class="card-text">Manage your news articles</p>
-                            <a href="#" class="btn btn-outline-primary">Add/Edit</a>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-3 mb-4">
-                    <div class="card h-100 text-center shadow-sm">
-                        <div class="card-body">
-                            <h5 class="card-title">History</h5>
-                            <p class="card-text">Manage your history entries</p>
-                            <a href="#" class="btn btn-outline-primary">Add/Edit</a>
-                        </div>
-                    </div>
-                </div>
+                {% endfor %}
             </div>
         </div>
     </div>
 </div>
+
+<style>
+    .bento-card:hover {
+        transform: translateY(-5px);
+        background-color: #ffffff;
+        box-shadow: 0 1rem 3rem rgba(0,0,0,.1) !important;
+    }
+    .bg-primary-soft { background-color: #eef2ff; color: #4f46e5; }
+    .btn-primary { background: #4f46e5; border: none; }
+    .btn-primary:hover { background: #4338ca; }
+</style>
 {% endblock %}
