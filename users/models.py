@@ -19,6 +19,7 @@ class User(AbstractUser):
     professions = models.ManyToManyField('organisation.Profession', blank=True)
     whatsapp_contact = models.CharField(max_length=20, blank=True)
     biography = models.TextField(max_length=150, blank=True)
+    side_hustle = models.TextField(blank=True)
 
     def save(self, *args, **kwargs):
         if not self.pk:
