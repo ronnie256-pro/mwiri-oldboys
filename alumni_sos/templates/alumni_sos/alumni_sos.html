@@ -29,6 +29,7 @@
                                 <h5 class="fw-bold">{{ sos_request.title }}</h5>
                                 <p>{{ sos_request.description }}</p>
                                 <a href="{% url 'view_ob' sos_request.requester.id %}" class="btn btn-primary">Connect</a>
+                                <div class="countdown" data-deadline="{{ sos_request.deadline.isoformat }}"></div>
                             </div>
                         </div>
                     </div>
@@ -91,4 +92,28 @@
     .sos-card h3 { transition: color 0.3s; }
     .sos-card:hover h3 { color: #e11d48; }
 </style>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const countdowns = document.querySelectorAll('.countdown');
+        countdowns.forEach(countdown => {
+            const deadline = new Date(countdown.dataset.deadline).getTime();
+            const x = setInterval(function() {
+                const now = new Date().getTime();
+                const distance = deadline - now;
+                const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+                const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+                const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+                countdown.innerHTML = days + "d " + hours + "h " + minutes + "m " + seconds + "s ";
+                if (distance < 0) {
+                    clearInterval(x);
+                    countdown.innerHTML = "EXPIRED";
+                }
+            }, 1000);
+        });
+    });
+</script>
 {% endblock %}

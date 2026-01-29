@@ -4,4 +4,7 @@ from .models import SOSRequest
 class SOSRequestForm(forms.ModelForm):
     class Meta:
         model = SOSRequest
-        fields = ('title', 'description')
+        fields = ('title', 'description', 'deadline')
+        widgets = {
+            'deadline': forms.DateTimeInput(attrs={'type': 'datetime-local'}),
+        }
