@@ -14,12 +14,12 @@ class RegistrationForm(UserCreationForm):
 from organisation.models import Profession
 
 class ProfileForm(forms.ModelForm):
-    professions = forms.ModelMultipleChoiceField(
+    profession = forms.ModelChoiceField(
         queryset=Profession.objects.all(),
-        widget=forms.SelectMultiple(attrs={'class': 'form-select'}),
+        widget=forms.Select(attrs={'class': 'form-select'}),
         required=False
     )
 
     class Meta:
         model = User
-        fields = ('professions', 'whatsapp_contact', 'email', 'biography', 'address', 'linkedin_profile', 'website', 'cohort', 'side_hustle')
+        fields = ('profession', 'whatsapp_contact', 'email', 'biography', 'address', 'linkedin_profile', 'website', 'cohort', 'side_hustle')

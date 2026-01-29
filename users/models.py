@@ -16,7 +16,7 @@ class User(AbstractUser):
     linkedin_profile = models.URLField(blank=True)
     website = models.URLField(blank=True)
     address = models.CharField(max_length=255, blank=True)
-    professions = models.ManyToManyField('organisation.Profession', blank=True)
+    profession = models.ForeignKey('organisation.Profession', on_delete=models.SET_NULL, null=True, blank=True)
     whatsapp_contact = models.CharField(max_length=20, blank=True)
     biography = models.TextField(max_length=150, blank=True)
     side_hustle = models.TextField(blank=True)

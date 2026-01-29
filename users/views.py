@@ -59,7 +59,10 @@ class MyAccountView(View):
         if not request.user.is_authenticated:
             return redirect('login')
 
-        if 'upload_picture' in request.POST:
+        form = ProfileForm(instance=request.user)
+        sos_form = SOSRequestForm()
+
+        if 'profile_picture' in request.FILES:
             profile, created = Profile.objects.get_or_create(user=request.user)
             profile.profile_picture = request.FILES.get('profile_picture')
             profile.save()
@@ -72,10 +75,18 @@ class MyAccountView(View):
                 form.save()
                 messages.success(request, 'Profile updated successfully!')
                 return redirect('my_account')
-        else:
-            form = ProfileForm(instance=request.user)
 
-        return render(request, self.template_name, {'form': form})
+        if 'submit_sos' in request.POST:
+            sos_form = SOSRequestForm(request.POST)
+            if sos_form.is_valid():
+                sos_request = sos_form.save(commit=False)
+                sos_request.user = request.user
+                sos_request.save()
+                messages.success(request, 'SOS request submitted successfully!')
+                return redirect('alumni_sos')
+
+        content_types = ["Products", "Services", "News", "History"]
+        return render(request, self.template_name, {'form': form, 'sos_form': sos_form, 'content_types': content_types})
 
 class CustomLoginView(LoginView):
     template_name = 'users/login.html'
