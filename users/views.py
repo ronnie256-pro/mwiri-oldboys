@@ -77,13 +77,7 @@ class MyAccountView(View):
                 return redirect('my_account')
 
         if 'submit_sos' in request.POST:
-            sos_form = SOSRequestForm(request.POST)
-            if sos_form.is_valid():
-                sos_request = sos_form.save(commit=False)
-                sos_request.user = request.user
-                sos_request.save()
-                messages.success(request, 'SOS request submitted successfully!')
-                return redirect('alumni_sos')
+            return redirect('alumni_sos')
 
         content_types = ["Products", "Services", "News", "History"]
         return render(request, self.template_name, {'form': form, 'sos_form': sos_form, 'content_types': content_types})
