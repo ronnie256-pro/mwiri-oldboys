@@ -2,88 +2,124 @@
 {% load crispy_forms_tags %}
 
 {% block content %}
-<div class="container-fluid py-5 px-lg-5" style="background: #f8fafc; min-height: 100vh;">
-    <div class="row g-4">
+<div class="container-fluid py-5 px-lg-5" style="background: linear-gradient(180deg, #f8fafc 0%, #f1f5f9 100%); min-height: 100vh;">
+    
+    <div class="row mb-4">
+        <div class="col-12 px-4">
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb mb-2">
+                    <li class="breadcrumb-item"><a href="/" class="text-decoration-none text-muted small">Home</a></li>
+                    <li class="breadcrumb-item active small" aria-current="page">My Account</li>
+                </ol>
+            </nav>
+            <h2 class="fw-bold text-dark">Welcome back, <span class="text-primary">{{ user.first_name|default:user.username }}</span></h2>
+            <p class="text-muted small">Manage your profile, contributions, and SOS signals from one place.</p>
+        </div>
+    </div>
 
-        <!-- TThis is the profile picture section -->
-        <div class="col-lg-3">
-            <div class="card border-0 shadow-sm overflow-hidden" style="border-radius: 20px; background: rgba(255, 255, 255, 0.7); backdrop-filter: blur(10px);">
+    <div class="row g-4">
+        <div class="col-lg-4 col-xl-3">
+            
+            <div class="card border-0 shadow-sm overflow-hidden mb-4" style="border-radius: 24px; background: #ffffff;">
                 <div class="card-body text-center p-4">
                     <div class="position-relative d-inline-block mb-4">
-                        <img src="{% if user.profile.profile_picture %}{{ user.profile.profile_picture.url }}{% else %}https://ui-avatars.com/api/?name={{ user.username }}&background=0D6EFD&color=fff&size=150{% endif %}" 
+                        <img src="{% if user.profile.profile_picture %}{{ user.profile.profile_picture.url }}{% else %}https://ui-avatars.com/api/?name={{ user.username }}&background=4f46e5&color=fff&size=150{% endif %}" 
                              class="rounded-circle border border-4 border-white shadow-sm" 
-                             width="140" height="140" alt="Avatar" style="object-fit: cover;">
-                        <span class="position-absolute bottom-0 end-0 bg-success border border-white rounded-circle p-2" title="Member Approved"></span>
-                    </div>
-                    
-                    <h4 class="fw-bold mb-1">{{ user.get_full_name|default:user.username }}</h4>
-                    <p class="badge bg-primary-soft text-primary px-3 py-2 rounded-pill mb-4" style="background: #eef2ff;">
-                        Class of {{ user.profile.cohort|default:'N/A' }}
-                    </p>
-
-                    <div class="d-grid gap-2">
+                             width="130" height="130" alt="Avatar" style="object-fit: cover;">
+                        
                         <form method="post" enctype="multipart/form-data" action="{% url 'my_account' %}" id="pfp-form">
                             {% csrf_token %}
                             <input type="file" id="profile_picture" name="profile_picture" hidden onchange="document.getElementById('pfp-form').submit();">
-                            <button type="button" onclick="document.getElementById('profile_picture').click();" class="btn btn-outline-dark btn-sm w-100 rounded-pill">
-                                <i class="bi bi-camera me-2"></i>Change Photo
+                            <button type="button" onclick="document.getElementById('profile_picture').click();" 
+                                    class="position-absolute bottom-0 end-0 bg-dark text-white border border-2 border-white rounded-circle p-2 shadow" 
+                                    style="width: 38px; height: 38px;" title="Change Photo">
+                                <i class="bi bi-camera-fill small"></i>
                             </button>
                         </form>
                     </div>
+                    
+                    <h4 class="fw-bold mb-1 text-dark">{{ user.get_full_name|default:user.username }}</h4>
+                    <span class="badge bg-primary-soft text-primary px-3 py-2 rounded-pill mb-4 fw-bold">
+                        Class of {{ user.profile.cohort|default:'N/A' }}
+                    </span>
+
+                    <div class="p-3 bg-light rounded-4 text-start">
+                        <div class="d-flex align-items-center mb-2">
+                            <i class="bi bi-shield-check text-success me-2"></i>
+                            <small class="fw-bold">Member Status: Verified</small>
+                        </div>
+                        <div class="d-flex align-items-center">
+                            <i class="bi bi-house-door text-muted me-2"></i>
+                            <small class="text-muted">{{ user.profile.house|default:'No House' }}</small>
+                        </div>
+                    </div>
                 </div>
-                
             </div>
 
-            <div class="card border-0 shadow-sm mt-4" style="border-radius: 20px;">
+            <div class="card border-0 shadow-sm" style="border-radius: 24px; background: #ffffff;">
                 <div class="card-body p-4">
-                    <h5 class="fw-bold mb-4">Alumni SOS</h5>
+                    <div class="d-flex align-items-center mb-3">
+                        <div class="bg-danger-soft p-2 rounded-3 me-3">
+                            <i class="bi bi-broadcast text-danger"></i>
+                        </div>
+                        <h5 class="fw-bold mb-0">Alumni SOS</h5>
+                    </div>
+                    <p class="small text-muted mb-4">Broadcast a signal to the brotherhood if you need urgent support.</p>
                     <form method="post" action="{% url 'alumni_sos' %}">
                         {% csrf_token %}
-                        {{ sos_form|crispy }}
-                        <button type="submit" name="submit_sos" class="btn btn-warning w-100 rounded-pill">Post SOS</button>
+                        <div class="sos-form-sm">
+                            {{ sos_form|crispy }}
+                        </div>
+                        <button type="submit" name="submit_sos" class="btn btn-danger w-100 rounded-pill py-2 fw-bold shadow-sm mt-2">
+                            Post SOS Signal
+                        </button>
                     </form>
                 </div>
             </div>
         </div>
 
-        <div class="col-lg-9">
-            <div class="d-flex justify-content-between align-items-center mb-4">
-                <span class="text-muted">Welcome back, {{ user.first_name }}</span>
-            </div>
-
-            <div class="card border-0 shadow-sm mb-5" style="border-radius: 20px;">
+        <div class="col-lg-8 col-xl-9">
+            
+            <div class="card border-0 shadow-sm mb-4" style="border-radius: 24px; background: #ffffff;">
+                <div class="card-header bg-white border-0 pt-4 px-4 pb-0">
+                    <h5 class="fw-bold mb-0">
+                        <i class="bi bi-person-gear me-2 text-primary"></i>Profile Settings
+                    </h5>
+                </div>
                 <div class="card-body p-4 p-md-5">
-                    <h5 class="fw-bold mb-4">Personal Details</h5>
                     <form method="post" action="{% url 'my_account' %}" class="row g-3">
                         {% csrf_token %}
-                        <div class="col-12">
+                        <div class="col-12 modern-crispy">
                             {{ form|crispy }}
                         </div>
                         <div class="col-12 mt-4 text-end">
-                            <button type="submit" name="update_profile" class="btn btn-primary px-5 py-2 rounded-pill shadow-sm">
-                                Save Profile Changes
+                            <button type="submit" name="update_profile" class="btn btn-primary px-5 py-2 rounded-pill shadow-md fw-bold">
+                                Save All Changes
                             </button>
                         </div>
                     </form>
                 </div>
             </div>
 
-            <h5 class="fw-bold mb-4">My Contributions</h5>
+            <h5 class="fw-bold mb-4 px-2">Management Hub</h5>
             <div class="row g-3">
                 {% for item in content_types %}
-                <div class="col-md-6 col-xl-3">
-                    <div class="card border-0 shadow-sm h-100 bento-card" style="border-radius: 20px; transition: transform 0.2s;">
-                        <div class="card-body p-4 d-flex flex-column">
-                            <div class="icon-shape bg-light text-primary rounded-3 mb-3 d-flex align-items-center justify-content-center" style="width: 48px; height: 48px;">
-                                {% if item == "Products" %}<i class="bi bi-box-seam fs-4"></i>
-                                {% elif item == "Services" %}<i class="bi bi-briefcase fs-4"></i>
-                                {% elif item == "News" %}<i class="bi bi-newspaper fs-4"></i>
-                                {% else %}<i class="bi bi-clock-history fs-4"></i>{% endif %}
+                <div class="col-sm-6 col-md-6 col-xl-3">
+                    <div class="card border-0 shadow-sm h-100 bento-card overflow-hidden">
+                        <div class="card-body p-4 d-flex flex-column position-relative" style="z-index: 2;">
+                            <div class="icon-shape mb-3 d-flex align-items-center justify-content-center">
+                                {% if item == "Products" %}<i class="bi bi-box-seam fs-3 text-primary"></i>
+                                {% elif item == "Services" %}<i class="bi bi-briefcase fs-3 text-success"></i>
+                                {% elif item == "News" %}<i class="bi bi-newspaper fs-3 text-info"></i>
+                                {% else %}<i class="bi bi-clock-history fs-3 text-warning"></i>{% endif %}
                             </div>
-                            <h6 class="fw-bold">{{ item }}</h6>
-                            <p class="text-muted small">Manage your shared {{ item|lower }} entries.</p>
+                            <h6 class="fw-bold text-dark mb-1">{{ item }}</h6>
+                            <p class="text-muted small mb-4">Edit or add new entries to the platform.</p>
                             <div class="mt-auto">
-                                <a href="{% if item == 'Products' %}{% url 'product_add' %}{% elif item == 'Services' %}{% url 'service_add' %}{% elif item == 'News' %}{% url 'news_add' %}{% else %}#{% endif %}" class="btn btn-light btn-sm w-100 rounded-pill fw-semibold">Manage</a>
+                                <a href="{% if item == 'Products' %}{% url 'product_add' %}{% elif item == 'Services' %}{% url 'service_add' %}{% elif item == 'News' %}{% url 'news_add' %}{% else %}#{% endif %}" 
+                                   class="btn btn-outline-dark btn-sm w-100 rounded-pill fw-bold border-2">
+                                    Manage
+                                </a>
                             </div>
                         </div>
                     </div>
@@ -95,13 +131,32 @@
 </div>
 
 <style>
+    /* Professional Styling Tweaks */
+    .bento-card {
+        border-radius: 24px;
+        transition: all 0.3s cubic-bezier(0.165, 0.84, 0.44, 1);
+        background: #ffffff;
+    }
     .bento-card:hover {
-        transform: translateY(-5px);
-        background-color: #ffffff;
-        box-shadow: 0 1rem 3rem rgba(0,0,0,.1) !important;
+        transform: translateY(-8px);
+        box-shadow: 0 20px 40px rgba(0,0,0,0.08) !important;
     }
     .bg-primary-soft { background-color: #eef2ff; color: #4f46e5; }
+    .bg-danger-soft { background-color: #fff1f2; }
+    
     .btn-primary { background: #4f46e5; border: none; }
-    .btn-primary:hover { background: #4338ca; }
+    .btn-primary:hover { background: #4338ca; transform: translateY(-1px); }
+    
+    .modern-crispy label { font-weight: 700; font-size: 0.85rem; color: #64748b; text-transform: uppercase; margin-bottom: 5px; }
+    .modern-crispy input, .modern-crispy select, .modern-crispy textarea { 
+        border-radius: 12px; border: 1px solid #e2e8f0; padding: 12px; background-color: #f8fafc;
+    }
+    .modern-crispy input:focus { background-color: #fff; box-shadow: 0 0 0 4px rgba(79, 70, 229, 0.1); border-color: #4f46e5; }
+
+    /* SOS specific compacting */
+    .sos-form-sm label { font-size: 0.75rem; }
+    .sos-form-sm .form-control { font-size: 0.85rem; border-radius: 10px; }
+
+    .shadow-md { box-shadow: 0 4px 12px rgba(79, 70, 229, 0.2); }
 </style>
 {% endblock %}
