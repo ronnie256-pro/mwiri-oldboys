@@ -1,35 +1,60 @@
 {% extends "base.html" %}
 
 {% block content %}
-<div class="container-fluid py-5 px-lg-5" style="background-color: #fcfcfd; min-height: 100vh;">
+<div class="container-fluid py-5 px-lg-5" style="background-color: #fefeff; min-height: 100vh;">
     
     <div class="row mb-5 justify-content-center">
         <div class="col-lg-8 text-center">
             <div class="sos-pulse-container mb-4">
                 <div class="pulse-ring"></div>
-                <i class="bi bi-broadcast text-danger fs-1"></i>
+                <div class="sos-icon-circle bg-danger text-white">
+                    <i class="bi bi-broadcast fs-2"></i>
+                </div>
             </div>
             <h1 class="fw-bold display-4">Alumni <span class="text-danger">SOS</span></h1>
-                <strong>Respond to a brother today.</strong>
+            <p class="text-muted fs-5">When a brother calls, the Hill responds. Your support can change a life today.</p>
+            <hr class="w-25 mx-auto opacity-10">
         </div>
     </div>
 
     <div class="container" id="active-signals">
-        <div class="row g-4">
+        <div class="row g-4 justify-content-center">
             {% for sos_request in sos_requests %}
-            <div class="col-12">
-                <div class="card shadow-sm border-0 rounded-4">
-                    <div class="card-body">
-                        <div class="row">
-                            <div class="col-md-2 text-center">
-                                <img src="{% if sos_request.requester.profile.profile_picture %}{{ sos_request.requester.profile.profile_picture.url }}{% else %}https://ui-avatars.com/api/?name={{ sos_request.requester.username }}&background=0D6EFD&color=fff&size=150{% endif %}" class="rounded-circle" width="80" height="80" alt="Avatar">
-                                <h6 class="mt-3 mb-0 fw-bold">{{ sos_request.requester.get_full_name|default:sos_request.requester.username }}</h6>
+            <div class="col-xl-10">
+                <div class="card sos-card shadow-sm rounded-5 overflow-hidden">
+                    <div class="card-body p-4 p-md-5">
+                        <div class="row align-items-start">
+                            <div class="col-md-3 col-lg-2 text-center border-end-md pe-md-4">
+                                <div class="position-relative d-inline-block mb-3">
+                                    <img src="{% if sos_request.requester.profile.profile_picture %}{{ sos_request.requester.profile.profile_picture.url }}{% else %}https://ui-avatars.com/api/?name={{ sos_request.requester.username }}&background=dc3545&color=fff&size=120{% endif %}" 
+                                         class="rounded-circle border border-4 border-white shadow-sm" width="100" height="100" alt="Avatar">
+                                    <span class="position-absolute top-0 end-0 p-2 bg-danger border border-2 border-white rounded-circle" title="Urgent Signal"></span>
+                                </div>
+                                <h6 class="fw-bold mb-1">{{ sos_request.requester.get_full_name|default:sos_request.requester.username }}</h6>
+                                <p class="small text-primary fw-bold mb-0"> {{ sos_request.requester.cohort.name|default:"N/A" }}</p>
                             </div>
-                            <div class="col-md-10">
-                                <h5 class="fw-bold">{{ sos_request.title }}</h5>
-                                <p>{{ sos_request.description }}</p>
-                                <a href="{% url 'view_ob' sos_request.requester.id %}" class="btn btn-primary">Connect</a>
-                                <div class="countdown" data-deadline="{{ sos_request.deadline.isoformat }}"></div>
+
+                            <div class="col-md-9 col-lg-10 ps-md-5 mt-4 mt-md-0">
+                                <div class="d-flex flex-wrap justify-content-between align-items-start mb-3">
+                                    <h3 class="fw-bold text-dark mb-2">{{ sos_request.title }}</h3>
+                                    <div class="badge bg-danger-soft text-danger rounded-pill px-3 py-2 fw-bold">
+                                        <i class="bi bi-clock-history me-2"></i>Deadline: 
+                                        <span class="countdown text-uppercase" data-deadline="{{ sos_request.deadline.isoformat }}"></span>
+                                    </div>
+                                </div>
+                                
+                                <p class="text-muted fs-5 mb-4 lh-lg">
+                                    {{ sos_request.description }}
+                                </p>
+
+                                <div class="d-flex gap-3">
+                                    <a href="{% url 'view_ob' sos_request.requester.id %}" class="btn btn-danger btn-lg rounded-pill px-5 fw-bold shadow-sm transition-all">
+                                        Connect
+                                    </a>
+                                    <button class="btn btn-outline-secondary btn-lg rounded-pill px-4 fw-bold" onclick="copySOSLink('{{ sos_request.id }}')">
+                                        <i class="bi bi-share"></i>
+                                    </button>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -37,10 +62,11 @@
             </div>
             {% empty %}
             <div class="col-12 text-center py-5">
-                <div class="opacity-25 mb-4">
-                    <i class="bi bi-shield-check display-1"></i>
+                <div class="opacity-10 mb-4">
+                    <i class="bi bi-shield-check" style="font-size: 8rem;"></i>
                 </div>
-                <h3 class="text-muted">All clear! No active SOS signals at the moment.</h3>
+                <h2 class="text-muted fw-bold">All clear!</h2>
+                <p class="text-muted">No active SOS signals are currently broadcast.</p>
             </div>
             {% endfor %}
         </div>
@@ -48,49 +74,62 @@
 </div>
 
 <style>
-    /* SOS Pulse Animation */
+    /* SOS Pulse Design */
     .sos-pulse-container {
         position: relative;
         display: inline-block;
-        z-index: 1;
+    }
+    .sos-icon-circle {
+        width: 80px;
+        height: 80px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        position: relative;
+        z-index: 2;
     }
     .pulse-ring {
         content: '';
-        width: 100px;
-        height: 100px;
-        background: rgba(220, 53, 69, 0.2);
+        width: 80px;
+        height: 80px;
+        background: rgba(220, 53, 69, 0.3);
         border-radius: 50%;
         position: absolute;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
+        top: 0;
+        left: 0;
         animation: pulse 2s infinite;
-        z-index: -1;
+        z-index: 1;
     }
 
     @keyframes pulse {
-        0% { transform: translate(-50%, -50%) scale(0.5); opacity: 1; }
-        100% { transform: translate(-50%, -50%) scale(2.5); opacity: 0; }
+        0% { transform: scale(1); opacity: 1; }
+        100% { transform: scale(2.5); opacity: 0; }
     }
 
-    /* Card Styling */
+    /* Card Enhancements */
     .sos-card {
-        border: 1px solid #f1f5f9 !important;
-        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        background: #ffffff;
+        border: 1px solid rgba(0,0,0,0.05) !important;
+        transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
     }
     .sos-card:hover {
-        transform: translateY(-8px);
-        box-shadow: 0 25px 50px -12px rgba(220, 53, 69, 0.15) !important;
-        border-color: rgba(220, 53, 69, 0.2) !important;
+        transform: translateY(-5px);
+        box-shadow: 0 30px 60px -12px rgba(220, 53, 69, 0.12) !important;
     }
 
-    .bg-danger-soft { background-color: #fff1f2; color: #e11d48; }
+    .bg-danger-soft { background-color: #fff1f2; }
     
-    .btn-danger { background-color: #e11d48; border: none; }
-    .btn-danger:hover { background-color: #be123c; transform: translateY(-2px); }
+    .border-end-md {
+        @media (min-width: 768px) {
+            border-right: 1px solid #f1f5f9;
+        }
+    }
 
-    .sos-card h3 { transition: color 0.3s; }
-    .sos-card:hover h3 { color: #e11d48; }
+    .transition-all:hover {
+        transform: translateY(-2px);
+        filter: brightness(1.1);
+    }
 </style>
 {% endblock %}
 
@@ -103,17 +142,28 @@
             const x = setInterval(function() {
                 const now = new Date().getTime();
                 const distance = deadline - now;
+                
                 const days = Math.floor(distance / (1000 * 60 * 60 * 24));
                 const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
                 const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
                 const seconds = Math.floor((distance % (1000 * 60)) / 1000);
-                countdown.innerHTML = days + "d " + hours + "h " + minutes + "m " + seconds + "s ";
+                
+                countdown.innerHTML = `${days}d ${hours}h ${minutes}m ${seconds}s`;
+                
                 if (distance < 0) {
                     clearInterval(x);
-                    countdown.innerHTML = "EXPIRED";
+                    countdown.innerHTML = "SIGNAL EXPIRED";
+                    countdown.parentElement.classList.replace('bg-danger-soft', 'bg-secondary-soft');
+                    countdown.parentElement.classList.replace('text-danger', 'text-muted');
                 }
             }, 1000);
         });
     });
+
+    function copySOSLink(id) {
+        const url = window.location.origin + "/sos/view/" + id; // Adjust based on your actual URL pattern
+        navigator.clipboard.writeText(url);
+        alert("SOS signal link copied to clipboard!");
+    }
 </script>
 {% endblock %}
