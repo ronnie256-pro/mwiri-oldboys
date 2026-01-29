@@ -1,44 +1,142 @@
 {% extends "base.html" %}
 
 {% block content %}
-<div class="container-fluid py-5 px-lg-5" style="background-color: #f8fafc; min-height: 100vh;">
+<div class="container-fluid py-5 px-lg-5" style="background: #f1f5f9; min-height: 100vh;">
     <div class="row justify-content-center">
-        <div class="col-lg-8">
-            <div class="card shadow-sm border-0 rounded-4">
-                <div class="card-body p-4 p-md-5">
-                    <div class="text-center mb-5">
-                        <img src="{% if user.profile.profile_picture %}{{ user.profile.profile_picture.url }}{% else %}https://ui-avatars.com/api/?name={{ user.username }}&background=0D6EFD&color=fff&size=150{% endif %}" class="rounded-circle border border-4 border-white shadow-sm" width="150" height="150" alt="Avatar">
-                        <h2 class="fw-bold mt-4">{{ user.get_full_name|default:user.username }}</h2>
-                        <p class="text-muted">Class of {{ user.cohort.name|default:"N/A" }}</p>
+        <div class="col-xl-9">
+            
+            <nav aria-label="breadcrumb" class="mb-4">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="{% url 'ob_connect' %}" class="text-decoration-none text-primary fw-bold">OB Connect</a></li>
+                    <li class="breadcrumb-item active text-muted" aria-current="page">{{ user.get_full_name|default:user.username }}</li>
+                </ol>
+            </nav>
+
+            <div class="card shadow-lg border-0 rounded-5 overflow-hidden">
+                <div class="profile-header-bg" style="height: 180px; background: linear-gradient(135deg, #0f172a 0%, #2563eb 100%); position: relative;">
+                    </div>
+                
+                <div class="card-body p-4 p-md-5 pt-0">
+                    <div class="text-center position-relative" style="margin-top: -90px;">
+                        <img src="{% if user.profile.profile_picture %}{{ user.profile.profile_picture.url }}{% else %}https://ui-avatars.com/api/?name={{ user.username }}&background=4f46e5&color=fff&size=180{% endif %}" 
+                             class="rounded-circle border border-5 border-white shadow-lg mb-3" 
+                             width="180" height="180" alt="Avatar">
+                        
+                        <h1 class="fw-bold mb-1 mt-2 text-dark">{{ user.get_full_name|default:user.username }}</h1>
+                        <div class="d-flex justify-content-center gap-2 mb-4">
+                            <span class="badge bg-primary-soft text-primary px-3 py-2 rounded-pill fw-bold">
+                                <i class="bi bi-mortarboard-fill me-1"></i> Class of {{ user.cohort.name|default:"N/A" }}
+                            </span>
+                            <span class="badge bg-secondary-soft text-dark px-3 py-2 rounded-pill fw-bold border">
+                                <i class="bi bi-house-door-fill me-1"></i> {{ user.house.name|default:"N/A" }}
+                            </span>
+                        </div>
+                        
+                        <div class="d-flex justify-content-center gap-3 mb-5">
+                            <a href="mailto:{{ user.email }}" class="btn btn-dark rounded-pill px-4 py-2 shadow-sm fw-bold transition-all">
+                                <i class="bi bi-envelope-fill me-2"></i>Send Email
+                            </a>
+                            <a href="https://wa.me/{{ user.phone_number }}" target="_blank" class="btn btn-success rounded-pill px-4 py-2 shadow-sm fw-bold transition-all">
+                                <i class="bi bi-whatsapp me-2"></i>Message
+                            </a>
+                        </div>
                     </div>
 
-                    <div class="row">
-                        <div class="col-md-6">
-                            <h5 class="fw-bold">Personal Details</h5>
-                            <ul class="list-group list-group-flush">
-                                <li class="list-group-item"><strong>House:</strong> {{ user.house.name|default:"N/A" }}</li>
-                                <li class="list-group-item"><strong>Profession:</strong> {{ user.profession.name|default:"N/A" }}</li>
-                                <li class="list-group-item"><strong>Email:</strong> {{ user.email }}</li>
-                                <li class="list-group-item"><strong>Phone:</strong> {{ user.phone_number }}</li>
-                            </ul>
-                        </div>
-                        <div class="col-md-6">
-                            <h5 class="fw-bold">Professional Details</h5>
-                            <ul class="list-group list-group-flush">
-                                <li class="list-group-item"><strong>LinkedIn:</strong> <a href="{{ user.linkedin_profile }}">{{ user.linkedin_profile }}</a></li>
-                                <li class="list-group-item"><strong>Website:</strong> <a href="{{ user.website }}">{{ user.website }}</a></li>
-                                <li class="list-group-item"><strong>Side Hustle:</strong> {{ user.side_hustle }}</li>
-                            </ul>
-                        </div>
-                    </div>
+                    <div class="row g-5">
+                        <div class="col-lg-7">
+                            <div class="mb-5">
+                                <h5 class="fw-bold mb-3 d-flex align-items-center">
+                                    <span class="bg-primary p-1 rounded-3 me-2" style="width: 8px; height: 24px; display: inline-block;"></span>
+                                    Biography
+                                </h5>
+                                <div class="text-muted fs-6 lh-lg">
+                                    {{ user.biography|default:"This brother hasn't shared a bio yet. Reach out to connect!" }}
+                                </div>
+                            </div>
 
-                    <div class="mt-5">
-                        <h5 class="fw-bold">Biography</h5>
-                        <p>{{ user.biography }}</p>
+                            <div>
+                                <h5 class="fw-bold mb-3 d-flex align-items-center">
+                                    <span class="bg-warning p-1 rounded-3 me-2" style="width: 8px; height: 24px; display: inline-block;"></span>
+                                    The Side Hustle
+                                </h5>
+                                <div class="p-4 bg-light rounded-4 border">
+                                    <p class="mb-0 text-dark fw-bold">{{ user.side_hustle|default:"No side hustle listed." }}</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-lg-5">
+                            <div class="card border-0 bg-light rounded-4">
+                                <div class="card-body p-4">
+                                    <h6 class="text-uppercase small fw-bold text-muted mb-4 tracking-wider">Professional Profile</h6>
+                                    
+                                    <div class="d-flex align-items-center mb-4">
+                                        <div class="bg-white p-2 rounded-3 shadow-sm me-3 text-primary"><i class="bi bi-briefcase fs-5"></i></div>
+                                        <div>
+                                            <small class="text-muted d-block lh-1 mb-1">Profession</small>
+                                            <span class="fw-bold">{{ user.profession.name|default:"N/A" }}</span>
+                                        </div>
+                                    </div>
+
+                                    <div class="d-flex align-items-center mb-4">
+                                        <div class="bg-white p-2 rounded-3 shadow-sm me-3 text-primary"><i class="bi bi-phone fs-5"></i></div>
+                                        <div>
+                                            <small class="text-muted d-block lh-1 mb-1">Contact Phone</small>
+                                            <span class="fw-bold">{{ user.phone_number|default:"Not Shared" }}</span>
+                                        </div>
+                                    </div>
+
+                                    <hr class="my-4 opacity-10">
+
+                                    <div class="d-grid gap-2">
+                                        {% if user.linkedin_profile %}
+                                        <a href="{{ user.linkedin_profile }}" target="_blank" class="btn btn-white border rounded-pill text-start px-3 py-2 btn-sm fw-bold shadow-xs">
+                                            <i class="bi bi-linkedin text-primary me-2"></i> LinkedIn Profile
+                                        </a>
+                                        {% endif %}
+                                        
+                                        {% if user.website %}
+                                        <a href="{{ user.website }}" target="_blank" class="btn btn-white border rounded-pill text-start px-3 py-2 btn-sm fw-bold shadow-xs">
+                                            <i class="bi bi-globe text-success me-2"></i> Personal Website
+                                        </a>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="mt-4 text-center">
+                                <div class="d-inline-flex align-items-center bg-white border px-3 py-2 rounded-pill shadow-sm">
+                                    <i class="bi bi-patch-check-fill text-primary me-2"></i>
+                                    <span class="small fw-bold">Verified MOBA Member</span>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 </div>
+
+<style>
+    .bg-primary-soft { background-color: rgba(37, 99, 235, 0.1); }
+    .bg-secondary-soft { background-color: #f8fafc; }
+    .shadow-xs { box-shadow: 0 1px 2px rgba(0,0,0,0.05); }
+    .tracking-wider { letter-spacing: 0.05em; }
+    
+    .btn-white { background: #fff; }
+    .btn-white:hover { background: #f8fafc; }
+    
+    .transition-all:hover {
+        transform: translateY(-2px);
+        filter: brightness(110%);
+    }
+
+    /* Animation */
+    .card { animation: slideUp 0.5s ease-out; }
+    @keyframes slideUp {
+        from { opacity: 0; transform: translateY(30px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+</style>
 {% endblock %}
