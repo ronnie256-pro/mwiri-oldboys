@@ -6,7 +6,7 @@ from organisation.models import Cohort, Profession, House
 
 @login_required
 def ob_connect(request):
-    users = User.objects.filter(role=User.Role.SUBSCRIBER)
+    users = User.objects.all()
     cohorts = Cohort.objects.all()
     professions = Profession.objects.all()
     houses = House.objects.all()

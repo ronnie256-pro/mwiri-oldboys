@@ -31,7 +31,7 @@ def register(request):
                 user.is_active = True
                 user.save()
                 messages.success(request, 'Your account has been created successfully!')
-                return redirect('my_account')
+                return redirect('login')
             else:
                 messages.error(request, 'You are not a Mwirian')
     else:
