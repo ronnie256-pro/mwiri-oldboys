@@ -1,45 +1,57 @@
 {% extends "base.html" %}
 
 {% block content %}
-<div class="container-fluid py-5 px-lg-5" style="background-color: #f8fafc; min-height: 100vh;">
+<div class="container-fluid py-5 px-lg-5" style="background: linear-gradient(180deg, #f8fafc 0%, #f1f5f9 100%); min-height: 100vh;">
+    
     <div class="mb-5 text-center">
-        <h1 class="fw-bold display-5">The <span class="text-primary">Marketplace</span></h1>
-        <p class="text-muted">Exclusive products and services from the Mwiiri Alumni Network.</p>
+        <span class="badge bg-primary-soft text-primary px-3 py-2 rounded-pill mb-3 fw-bold">MOBA ECONOMY</span>
+        <h1 class="fw-bold display-4 text-dark">The <span class="text-primary">Marketplace</span></h1>
+        <p class="text-muted mx-auto" style="max-width: 600px;">Support brother-owned businesses. Quality products and services vetted by the Mwiri Alumni Network.</p>
     </div>
 
     <div class="row g-4">
         <div class="col-lg-3">
-            <div class="card border-0 shadow-sm sticky-top" style="border-radius: 20px; top: 100px;">
+            <div class="card border-0 shadow-lg sticky-top" style="border-radius: 24px; top: 100px; z-index: 10;">
                 <div class="card-body p-4">
-                    <h5 class="fw-bold mb-4">Refine Search</h5>
+                    <h5 class="fw-bold mb-4 d-flex align-items-center">
+                        <i class="bi bi-sliders2-vertical me-2 text-primary"></i> Filter
+                    </h5>
                     
-                    <form class="mb-4">
-                        <div class="input-group bg-light rounded-pill px-3 py-1">
-                            <span class="input-group-text bg-transparent border-0"><i class="bi bi-search"></i></span>
-                            <input type="text" class="form-control bg-transparent border-0 shadow-none" placeholder="Find a product...">
+                    <form method="get" action="." class="mb-4">
+                        <div class="input-group bg-light rounded-pill px-3 py-2 border">
+                            <span class="input-group-text bg-transparent border-0"><i class="bi bi-search text-muted"></i></span>
+                            <input type="text" name="search" class="form-control bg-transparent border-0 shadow-none small" placeholder="Search keywords..." value="{{ request.GET.search }}">
                         </div>
                     </form>
 
-                    <hr class="opacity-10">
+                    <hr class="my-4 opacity-10">
 
-                    <h6 class="fw-bold small text-uppercase text-muted mb-3">Categories</h6>
+                    <h6 class="fw-bold small text-uppercase text-muted mb-3 tracking-wider">Categories</h6>
                     <div class="d-flex flex-wrap gap-2 mb-4">
-                        <a href="#" class="badge rounded-pill bg-primary-soft text-primary text-decoration-none px-3 py-2">Consulting</a>
-                        <a href="#" class="badge rounded-pill bg-light text-dark text-decoration-none px-3 py-2">Hardware</a>
-                        <a href="#" class="badge rounded-pill bg-light text-dark text-decoration-none px-3 py-2">Agribusiness</a>
+                        <a href="?" class="btn btn-sm {% if not request.GET.category %}btn-primary{% else %}btn-light{% endif %} rounded-pill px-3">All</a>
+                        {% for cat in categories %}
+                        <a href="?category={{ cat.id }}" class="btn btn-sm {% if request.GET.category == cat.id|stringformat:'i' %}btn-primary{% else %}btn-light{% endif %} rounded-pill px-3">
+                            {{ cat.name }}
+                        </a>
+                        {% endfor %}
                     </div>
 
-                    <h6 class="fw-bold small text-uppercase text-muted mb-3">Filter by Price</h6>
-                    <div class="form-check mb-2">
-                        <input class="form-check-input" type="radio" name="price" id="p1" checked>
-                        <label class="form-check-label small" for="p1">All Prices</label>
-                    </div>
-                    <div class="form-check mb-4">
-                        <input class="form-check-input" type="radio" name="price" id="p2">
-                        <label class="form-check-label small" for="p2">Under UGX 500k</label>
+                    <h6 class="fw-bold small text-uppercase text-muted mb-3 tracking-wider">Price Range</h6>
+                    <div class="list-group list-group-flush mb-4">
+                        <label class="list-group-item border-0 bg-transparent px-0">
+                            <input class="form-check-input me-2" type="radio" name="price" value="all" checked> <span class="small">All Prices</span>
+                        </label>
+                        <label class="list-group-item border-0 bg-transparent px-0">
+                            <input class="form-check-input me-2" type="radio" name="price" value="under500"> <span class="small">Under UGX 500k</span>
+                        </label>
+                        <label class="list-group-item border-0 bg-transparent px-0">
+                            <input class="form-check-input me-2" type="radio" name="price" value="over500"> <span class="small">Over UGX 500k</span>
+                        </label>
                     </div>
 
-                    <button class="btn btn-primary w-100 rounded-pill fw-bold py-2 shadow-sm">Apply Filters</button>
+                    <button class="btn btn-dark w-100 rounded-pill fw-bold py-2 shadow-sm transition-lift">
+                        Search
+                    </button>
                 </div>
             </div>
         </div>
@@ -48,40 +60,41 @@
             <div class="row g-4">
                 {% for product in products %}
                 <div class="col-md-6 col-xl-4">
-                    <div class="card border-0 shadow-sm h-100 product-card" style="border-radius: 20px; overflow: hidden; transition: 0.3s;">
-                        <div class="position-relative">
-                            <img src="{% if product.image %}{{ product.image.url }}{% else %}https://via.placeholder.com/400x300{% endif %}" 
-                                 class="card-img-top w-100" alt="{{ product.name }}" style="height: 220px; object-fit: cover;">
-                            <span class="position-absolute top-0 end-0 m-3 badge bg-dark text-white rounded-pill px-3 py-2 shadow">
-                                UGX {{ product.price }}
-                            </span>
+                    <div class="card border-0 shadow-sm h-100 product-card overflow-hidden">
+                        <div class="position-relative overflow-hidden" style="height: 240px;">
+                            <img src="{{ product.hero_image.url }}" class="card-img-top w-100 h-100" alt="{{ product.name }}" style="object-fit: cover;">
+                            <div class="card-img-overlay d-flex flex-column justify-content-between p-3">
+                                <div>
+                                    <span class="badge bg-blur text-white rounded-pill px-3 py-2 small fw-bold">
+                                        {{ product.category.name }}
+                                    </span>
+                                </div>
+                                <div class="text-end">
+                                    <span class="badge bg-success-soft text-success rounded-pill px-2 py-1 small fw-bold">
+                                        <i class="bi bi-patch-check-fill me-1"></i>Verified
+                                    </span>
+                                </div>
+                            </div>
                         </div>
 
                         <div class="card-body p-4 d-flex flex-column">
-                            <div class="d-flex justify-content-between align-items-start mb-2">
-                                <span class="text-primary small fw-bold text-uppercase">{{ product.category }}</span>
-                                <span class="badge bg-success-soft text-success rounded-pill px-2 py-1 small">
-                                    <i class="bi bi-patch-check-fill"></i> Verified
-                                </span>
+                            <div class="mb-3">
+                                <h5 class="fw-bold text-dark mb-1 h5-title">{{ product.name }}</h5>
+                                <h4 class="fw-bold text-primary mb-0">UGX {{ product.price }}</h4>
                             </div>
 
-                            <h5 class="fw-bold mb-1">{{ product.name }}</h5>
-                            
-                            <div class="d-flex align-items-center mb-3">
-                                <div class="bg-light rounded-circle me-2 d-flex align-items-center justify-content-center" style="width: 32px; height: 32px;">
-                                    <i class="bi bi-person text-muted"></i>
+                            <div class="d-flex align-items-center p-2 bg-light rounded-3 mb-4">
+                                <img src="{% if product.owner.profile.profile_picture %}{{ product.owner.profile.profile_picture.url }}{% else %}https://ui-avatars.com/api/?name={{ product.owner.username }}&background=4f46e5&color=fff{% endif %}" 
+                                     class="rounded-circle border border-2 border-white shadow-sm me-2" width="35" height="35" alt="OB">
+                                <div class="overflow-hidden">
+                                    <p class="small text-dark fw-bold mb-0 text-truncate">OB {{ product.owner.get_full_name|default:product.owner.username }}</p>
+                                    <p class="small text-muted mb-0" style="font-size: 0.7rem;">Class of {{ product.owner.profile.cohort|default:'N/A' }}</p>
                                 </div>
-                                <span class="small text-muted">Sold by <strong class="text-dark">{{ product.owner_name }}</strong> <span class="text-primary">({{ product.cohort }})</span></span>
                             </div>
 
-                            <p class="text-muted small line-clamp-2 mb-4">
-                                {{ product.description|truncatewords:15 }}
-                            </p>
-
-                            <div class="mt-auto d-grid gap-2">
-                                <a href="{% url 'product_detail' product.id %}" class="btn btn-outline-primary rounded-pill fw-bold">View Details</a>
-                                <a href="https://wa.me/{{ product.phone }}" class="btn btn-success rounded-pill fw-bold">
-                                    <i class="bi bi-whatsapp me-2"></i>Inquire via WhatsApp
+                            <div class="d-grid gap-2">
+                                <a href="{% url 'product_detail' product.id %}" class="btn btn-primary rounded-pill fw-bold py-2 shadow-sm transition-lift">
+                                    View Details
                                 </a>
                             </div>
                         </div>
@@ -89,28 +102,59 @@
                 </div>
                 {% empty %}
                 <div class="col-12 text-center py-5">
-                    <p class="text-muted">No products listed yet. Be the first to list yours!</p>
+                    <div class="opacity-25 mb-3">
+                        <i class="bi bi-cart-x display-1"></i>
+                    </div>
+                    <h4 class="text-muted">The marketplace is empty right now.</h4>
+                    <p class="text-muted">Be the first brother to list a product!</p>
                 </div>
                 {% endfor %}
             </div>
-        </div>
+
+            </div>
     </div>
 </div>
 
 <style>
-    .bg-primary-soft { background-color: #eef2ff; color: #4f46e5; }
-    .bg-success-soft { background-color: #f0fdf4; color: #16a34a; }
-    .line-clamp-2 {
+    .product-card {
+        border-radius: 28px;
+        background: #ffffff;
+        transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+    }
+    
+    .product-card:hover {
+        transform: translateY(-10px);
+        box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.12) !important;
+    }
+
+    .bg-primary-soft { background-color: rgba(79, 70, 229, 0.1); color: #4f46e5; }
+    .bg-success-soft { background-color: rgba(22, 163, 74, 0.1); color: #16a34a; }
+    
+    /* Glassmorphism Badge */
+    .bg-blur {
+        background: rgba(15, 23, 42, 0.6);
+        backdrop-filter: blur(8px);
+        -webkit-backdrop-filter: blur(8px);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+
+    .h5-title {
         display: -webkit-box;
-        -webkit-line-clamp: 2;
-        -webkit-box-orient: vertical;  
+        -webkit-line-clamp: 1;
+        -webkit-box-orient: vertical;
         overflow: hidden;
     }
-    .product-card:hover {
-        transform: translateY(-8px);
-        box-shadow: 0 1rem 3rem rgba(0,0,0,.1) !important;
+
+    .transition-lift {
+        transition: all 0.2s ease;
     }
-    .btn-success { background-color: #25d366; border-color: #25d366; }
-    .btn-success:hover { background-color: #128c7e; border-color: #128c7e; }
+    .transition-lift:hover {
+        transform: translateY(-2px);
+        filter: brightness(1.1);
+    }
+
+    .tracking-wider { letter-spacing: 0.05em; }
+
+    .sticky-top { transition: all 0.3s ease; }
 </style>
 {% endblock %}
