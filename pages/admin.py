@@ -1,3 +1,6 @@
 from django.contrib import admin
+from .models import LegacyPhoto
 
-# Register your models here.
+@admin.register(LegacyPhoto)
+class LegacyPhotoAdmin(admin.ModelAdmin):
+    list_display = ('caption',)
