@@ -35,14 +35,6 @@
     }
     .glass-card:hover { transform: translateY(-5px); box-shadow: 0 20px 40px rgba(0,33,71,0.1) !important; }
 
-    /* Flip Card Modernization */
-    .flip-card { height: 300px; perspective: 1000px; }
-    .flip-card-inner { position: relative; width: 100%; height: 100%; transition: transform 0.6s; transform-style: preserve-3d; border-radius: 16px; overflow: hidden; }
-    .flip-card:hover .flip-card-inner { transform: rotateY(180deg); }
-    .flip-card-front, .flip-card-back { position: absolute; width: 100%; height: 100%; backface-visibility: hidden; border-radius: 16px; }
-    .flip-card-back { background: var(--mwiiri-navy); color: white; transform: rotateY(180deg); display: flex; align-items: center; justify-content: center; flex-direction: column; padding: 20px; }
-    .flip-card-front img { object-fit: cover; height: 100%; width: 100%; }
-
     /* League Fixture Style */
     .fixture-badge { background: var(--mwiiri-gold-soft); color: var(--mwiiri-gold); font-weight: 800; padding: 4px 12px; border-radius: 6px; }
 </style>
@@ -80,71 +72,55 @@
         <h2 class="fw-bold m-0" style="color: var(--mwiiri-navy);">All Inside <span style="color: var(--mwiiri-gold);">.</span></h2>
         <a href="{% url 'products' %}" class="btn btn-sm btn-outline-navy fw-bold rounded-pill">Explore Hub <i class="bi bi-arrow-right"></i></a>
     </div>
-    <!--This is the latest news card-->
     <div class="row g-3">
         <div class="col-md-4">
-            <div class="flip-card">
-                <div class="flip-card-inner shadow-sm">
-                    <div class="flip-card-front">
-                        <div id="newsCarousel" class="carousel slide h-100" data-bs-ride="carousel">
-                            <div class="carousel-inner h-100">
-                                {% for news_item in latest_news %}
-                                <div class="carousel-item h-100 {% if forloop.first %}active{% endif %}">
-                                    <img src="{{ news_item.hero_image.url }}" alt="{{ news_item.title }}">
-                                    <div class="carousel-caption"><h5>{{ news_item.title }}</h5></div>
-                                </div>
-                                {% endfor %}
+            <div id="newsCarousel" class="carousel slide h-100" data-bs-ride="carousel" data-bs-interval="2000">
+                <div class="carousel-inner h-100">
+                    {% for news_item in latest_news %}
+                    <div class="carousel-item h-100 {% if forloop.first %}active{% endif %}">
+                        <div class="card h-100 border-0 shadow-sm rounded-4 overflow-hidden">
+                            <img src="{{ news_item.hero_image.url }}" class="card-img-top" alt="{{ news_item.title }}" style="height: 200px; object-fit: cover;">
+                            <div class="card-body">
+                                <h5 class="card-title">{{ news_item.title }}</h5>
+                                <a href="{% url 'news_detail' pk=news_item.pk %}" class="btn btn-primary btn-sm">Read More</a>
                             </div>
                         </div>
                     </div>
-                    <div class="flip-card-back">
-                        <i class="bi bi-newspaper display-4 mb-3 text-warning"></i>
-                        <h4 class="fw-bold">Latest News</h4>
-                        <a href="{% url 'news' %}" class="btn btn-gold rounded-pill btn-sm px-4">Read Updates</a>
-                    </div>
+                    {% endfor %}
                 </div>
             </div>
         </div>
-        <!--This is the products card-->
         <div class="col-md-4">
-            <div class="flip-card">
-                <div class="flip-card-inner shadow-sm">
-                    <div class="flip-card-front">
-                        <div id="productCarousel" class="carousel slide h-100" data-bs-ride="carousel">
-                            <div class="carousel-inner h-100">
-                                {% for product in latest_products %}
-                                <div class="carousel-item h-100 {% if forloop.first %}active{% endif %}">
-                                    <img src="{{ product.hero_image.url }}" alt="{{ product.name }}">
-                                    <div class="carousel-caption"><h5>{{ product.name }}</h5></div>
-                                </div>
-                                {% endfor %}
+            <div id="productCarousel" class="carousel slide h-100" data-bs-ride="carousel" data-bs-interval="2000">
+                <div class="carousel-inner h-100">
+                    {% for product in latest_products %}
+                    <div class="carousel-item h-100 {% if forloop.first %}active{% endif %}">
+                        <div class="card h-100 border-0 shadow-sm rounded-4 overflow-hidden">
+                            <img src="{{ product.hero_image.url }}" class="card-img-top" alt="{{ product.name }}" style="height: 200px; object-fit: cover;">
+                            <div class="card-body">
+                                <h5 class="card-title">{{ product.name }}</h5>
+                                <a href="{% url 'product_detail' product.id %}" class="btn btn-primary btn-sm">Shop</a>
                             </div>
                         </div>
                     </div>
-                    <div class="flip-card-back">
-                        <i class="bi bi-shop display-4 mb-3 text-warning"></i>
-                        <h4 class="fw-bold">Marketplace</h4>
-                        <a href="{% url 'products' %}" class="btn btn-gold rounded-pill btn-sm px-4">Shop Now</a>
-                    </div>
+                    {% endfor %}
                 </div>
             </div>
         </div>
-        <!--This is the man of the hour card-->
         <div class="col-md-4">
-            <div class="flip-card">
-                <div class="flip-card-inner shadow-sm">
-                    <div class="flip-card-front">
-                        {% for item in man_of_the_hour %}
-                        <img src="{{ item.hero_image.url }}" alt="{{ item.title }}">
-                        {% endfor %}
+            <div id="manOfTheHourCarousel" class="carousel slide h-100" data-bs-ride="carousel" data-bs-interval="2000">
+                <div class="carousel-inner h-100">
+                    {% for item in man_of_the_hour %}
+                    <div class="carousel-item h-100 {% if forloop.first %}active{% endif %}">
+                        <div class="card h-100 border-0 shadow-sm rounded-4 overflow-hidden">
+                            <img src="{{ item.hero_image.url }}" class="card-img-top" alt="{{ item.title }}" style="height: 200px; object-fit: cover;">
+                            <div class="card-body">
+                                <h5 class="card-title">{{ item.title }}</h5>
+                                <a href="{{ item.youtube_link }}" class="btn btn-primary btn-sm" target="_blank">Watch</a>
+                            </div>
+                        </div>
                     </div>
-                    <div class="flip-card-back">
-                        <i class="bi bi-person-video3 display-4 mb-3 text-warning"></i>
-                        <h4 class="fw-bold">Man of the Hour</h4>
-                        {% for item in man_of_the_hour %}
-                        <a href="{{ item.youtube_link }}" class="btn btn-gold rounded-pill btn-sm px-4" target="_blank">Watch Video</a>
-                        {% endfor %}
-                    </div>
+                    {% endfor %}
                 </div>
             </div>
         </div>
