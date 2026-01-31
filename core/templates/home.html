@@ -29,34 +29,74 @@
     </div>
 </div>
 
-<!--Old boys marketplace section-->
+<!-- Blue Ribbon -->
+<div class="bg-primary py-3">
+    <div class="container text-center text-white">
+        <p class="mb-0 fw-bold">Mwiri Old Boys Association.</p>
+    </div>
+</div>
+
+<!--All inside section with 3 cards-->
 <div class="container py-5 my-5">
     <div class="d-flex justify-content-between align-items-end mb-5">
         <div>
-            <h2 class="fw-bold h1">Old Boy Marketplace</h2>
-            <p class="text-muted">Support businesses and services owned by Mwiirians.</p>
+            <h2 class="fw-bold h1">All Inside</h2>
         </div>
         <a href="{% url 'products' %}" class="text-primary fw-bold text-decoration-none">Explore All <i class="bi bi-arrow-right"></i></a>
     </div>
     
     <div class="row g-4">
         <div class="col-md-4">
-            <div class="card h-100 border-0 shadow-sm rounded-4 bento-card p-3">
-                <div class="card-body">
-                    <div class="icon-square bg-primary-soft text-primary rounded-3 mb-3"><i class="bi bi-briefcase fs-3"></i></div> <!--professional consulting icon-->
-                    <h4 class="fw-bold">Professional Consulting</h4>
-                    <p class="text-muted">Legal, Medical, and Financial expertise from trusted seniors.</p>
-                    <a href="#" class="btn btn-link text-primary p-0 fw-bold">Learn more</a> <!--This links to the OB connect page -->
+            <div class="flip-card h-100">
+                <div class="flip-card-inner">
+                    <div class="flip-card-front">
+                        <div id="newsCarousel" class="carousel slide" data-bs-ride="carousel">
+                            <div class="carousel-inner">
+                                {% for news_item in latest_news %}
+                                <div class="carousel-item {% if forloop.first %}active{% endif %}">
+                                    <img src="{{ news_item.hero_image.url }}" class="d-block w-100" alt="{{ news_item.title }}">
+                                    <div class="carousel-caption d-none d-md-block">
+                                        <h5>{{ news_item.title }}</h5>
+                                    </div>
+                                </div>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="flip-card-back">
+                        <div class="card-body">
+                            <h4 class="fw-bold">Latest News</h4>
+                            <p class="text-muted">Stay updated with the latest news and events from the Mwiri community.</p>
+                            <a href="{% url 'news' %}" class="btn btn-link text-primary p-0 fw-bold">Read more</a>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
         <div class="col-md-4">
-            <div class="card h-100 border-0 shadow-sm rounded-4 bento-card p-3">
-                <div class="card-body">
-                    <div class="icon-square bg-success-soft text-success rounded-3 mb-3"><i class="bi bi-shop fs-3"></i></div><!--premium products icon-->
-                    <h4 class="fw-bold">Premium Products</h4>
-                    <p class="text-muted">Exclusive items and hardware supplied by alumni businesses.</p>
-                    <a href="{% url 'products' %}" class="btn btn-link text-success p-0 fw-bold">Shop now</a>
+            <div class="flip-card h-100">
+                <div class="flip-card-inner">
+                    <div class="flip-card-front">
+                        <div id="productCarousel" class="carousel slide" data-bs-ride="carousel">
+                            <div class="carousel-inner">
+                                {% for product in latest_products %}
+                                <div class="carousel-item {% if forloop.first %}active{% endif %}">
+                                    <img src="{{ product.hero_image.url }}" class="d-block w-100" alt="{{ product.name }}">
+                                    <div class="carousel-caption d-none d-md-block">
+                                        <h5>{{ product.name }}</h5>
+                                    </div>
+                                </div>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="flip-card-back">
+                        <div class="card-body">
+                            <h4 class="fw-bold">Premium Products</h4>
+                            <p class="text-muted">Exclusive items and hardware supplied by alumni businesses.</p>
+                            <a href="{% url 'products' %}" class="btn btn-link text-success p-0 fw-bold">Shop now</a>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -173,5 +213,43 @@
     .icon-square { width: 56px; height: 56px; display: flex; align-items: center; justify-content: center; }
     .bento-card:hover { transform: translateY(-8px); transition: 0.3s; }
     .blur-3xl { filter: blur(100px); }
+
+    .flip-card {
+        background-color: transparent;
+        perspective: 1000px;
+    }
+
+    .flip-card-inner {
+        position: relative;
+        width: 100%;
+        height: 100%;
+        text-align: center;
+        transition: transform 0.6s;
+        transform-style: preserve-3d;
+        box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+    }
+
+    .flip-card:hover .flip-card-inner {
+        transform: rotateY(180deg);
+    }
+
+    .flip-card-front, .flip-card-back {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        -webkit-backface-visibility: hidden;
+        backface-visibility: hidden;
+    }
+
+    .flip-card-front {
+        background-color: #bbb;
+        color: black;
+    }
+
+    .flip-card-back {
+        background-color: #2980b9;
+        color: white;
+        transform: rotateY(180deg);
+    }
 </style>
 {% endblock %}
