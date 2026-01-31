@@ -147,20 +147,20 @@
                 </div>
             </div>
         </div>
-        <!--Did you know? Section-->
+        <!--Man of the Hour? Section-->
         <div class="col-lg-4">
             <div class="card border-0 bg-dark text-white p-4 rounded-4 h-100">
-                <h3 class="fw-bold mb-3">Did you know?</h3>
+                <h4 class="fw-bold mb-3">Man of the Hour</h4>
                 {% for fact in did_you_know_facts %}
                 <div class="opacity-75 mb-4">
                     <!--Date of event-->
-                    <h2 class="display-4 fw-bold">{{ fact.date_of_event|date:"Y" }}</h2>
+                    <h3 class="display-4 fw-bold">Dr. Ruhakana Rugunda</h3>
                     <!--Description of event-->
                     <p>{{ fact.description_of_event }}</p>
                 </div>
                 {% endfor %}
-                <p class="small opacity-50">Stay updated with our latest news and events.</p>
-                <a href="{% url 'news' %}" class="btn btn-outline-light rounded-pill mt-auto">Open News</a>
+                <p class="small opacity-50">Stay updated on the latest OB broadcasts.</p>
+                <a href="{% url 'news' %}" class="btn btn-outline-light rounded-pill mt-auto">Open Broadcasts</a>
             </div>
         </div>
     </div>

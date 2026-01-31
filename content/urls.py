@@ -6,4 +6,5 @@ urlpatterns = [
     path('news/', views.news_list, name='news'),
     path('news/add/', views.news_form, name='news_add'),
     path('news/<int:pk>/', views.NewsView.as_view(), name='news_detail'),
+    path('history/', views.history_list, name='history'),
 ]

@@ -22,3 +22,12 @@ class ProductImage(models.Model):
 
     def __str__(self):
         return self.product.name
+
+class Service(models.Model):
+    name = models.CharField(max_length=255)
+    description = models.TextField()
+    owner = models.ForeignKey(User, on_delete=models.CASCADE, related_name='services')
+    category = models.ForeignKey(Category, on_delete=models.CASCADE, related_name='services')
+
+    def __str__(self):
+        return self.name

@@ -20,5 +20,9 @@ def news_form(request):
         form = NewsForm()
     return render(request, 'content/news_form.html', {'form': form})
 
+def history_list(request):
+    history = History.objects.all().order_by('-created_at')
+    return render(request, 'content/history_list.html', {'history': history})
+
 class NewsView(TemplateView):
     template_name = "content/news.html"

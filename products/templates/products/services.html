@@ -1,98 +1,131 @@
+
 {% extends "base.html" %}
 
 {% block content %}
-<div class="container-fluid py-5 px-lg-5" style="background: linear-gradient(180deg, #ffffff 0%, #f1f5f9 100%); min-height: 100vh;">
+<div class="container-fluid py-5 px-lg-5" style="background: linear-gradient(180deg, #f8fafc 0%, #f1f5f9 100%); min-height: 100vh;">
     
-    <div class="text-center mb-5">
-        <span class="badge bg-primary-soft text-primary px-3 py-2 rounded-pill mb-3 fw-bold">PROFESSIONAL NETWORK</span>
-        <h1 class="fw-bold display-4">Expert <span class="text-primary">Services</span></h1>
-        <p class="text-muted mx-auto" style="max-width: 600px;">Connect with qualified Mwiiri professionals across various industries worldwide.</p>
+    <div class="mb-5 text-center">
+        <span class="badge bg-primary-soft text-primary px-3 py-2 rounded-pill mb-3 fw-bold">MOBA ECONOMY</span>
+        <h1 class="fw-bold display-4 text-dark">The <span class="text-primary">Services</span></h1>
+        <p class="text-muted mx-auto" style="max-width: 600px;">Support brother-owned businesses. Quality services vetted by the Mwiri Alumni Network.</p>
     </div>
 
-    <div class="container mb-5">
-        <div class="d-flex flex-wrap justify-content-center gap-2">
-            <button class="btn btn-dark rounded-pill px-4">All Services</button>
-            <button class="btn btn-outline-dark rounded-pill px-4">Medical</button>
-            <button class="btn btn-outline-dark rounded-pill px-4">Legal</button>
-            <button class="btn btn-outline-dark rounded-pill px-4">Engineering</button>
-            <button class="btn btn-outline-dark rounded-pill px-4">ICT</button>
-        </div>
-    </div>
-
-    <div class="container">
-        <div class="row g-4">
-            {% for service in services %}
-            <div class="col-md-6 col-lg-4 col-xl-3">
-                <div class="card border-0 shadow-sm h-100 service-card overflow-hidden" style="border-radius: 24px; transition: 0.4s ease;">
+    <div class="row g-4">
+        <div class="col-lg-3">
+            <div class="card border-0 shadow-lg sticky-top" style="border-radius: 24px; top: 100px; z-index: 10;">
+                <div class="card-body p-4">
+                    <h5 class="fw-bold mb-4 d-flex align-items-center">
+                        <i class="bi bi-sliders2-vertical me-2 text-primary"></i> Filter
+                    </h5>
                     
-                    <div class="position-relative">
-                        <img src="{% if service.image %}{{ service.image.url }}{% else %}https://via.placeholder.com/400x250{% endif %}" 
-                             class="card-img-top" alt="{{ service.name }}" style="height: 200px; object-fit: cover;">
-                        <div class="position-absolute bottom-0 start-0 m-3">
-                            <span class="badge bg-white text-dark shadow-sm px-3 py-2 rounded-pill small">
-                                <i class="bi bi-geo-alt-fill text-danger me-1"></i>{{ service.location|default:"Kampala" }}
-                            </span>
+                    <form method="get" action="." class="mb-4">
+                        <div class="input-group bg-light rounded-pill px-3 py-2 border">
+                            <span class="input-group-text bg-transparent border-0"><i class="bi bi-search text-muted"></i></span>
+                            <input type="text" name="search" class="form-control bg-transparent border-0 shadow-none small" placeholder="Search keywords..." value="{{ request.GET.search }}">
                         </div>
+                    </form>
+
+                    <hr class="my-4 opacity-10">
+
+                    <h6 class="fw-bold small text-uppercase text-muted mb-3 tracking-wider">Categories</h6>
+                    <div class="d-flex flex-wrap gap-2 mb-4">
+                        <a href="?" class="btn btn-sm {% if not request.GET.category %}btn-primary{% else %}btn-light{% endif %} rounded-pill px-3">All</a>
+                        {% for cat in categories %}
+                        <a href="?category={{ cat.id }}" class="btn btn-sm {% if request.GET.category == cat.id|stringformat:'i' %}btn-primary{% else %}btn-light{% endif %} rounded-pill px-3">
+                            {{ cat.name }}
+                        </a>
+                        {% endfor %}
                     </div>
 
-                    <div class="card-body p-4">
-                        <div class="d-flex justify-content-between align-items-center mb-2">
-                            <span class="text-primary fw-bold small text-uppercase" style="letter-spacing: 1px;">{{ service.category }}</span>
-                            <div class="text-warning small">
-                                <i class="bi bi-star-fill"></i>
-                                <i class="bi bi-star-fill"></i>
-                                <i class="bi bi-star-fill"></i>
-                                <i class="bi bi-star-fill"></i>
-                                <i class="bi bi-star-half"></i>
+                    <button class="btn btn-dark w-100 rounded-pill fw-bold py-2 shadow-sm transition-lift">
+                        Search
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-9">
+            <div class="row g-4">
+                {% for service in services %}
+                <div class="col-md-6 col-xl-4">
+                    <div class="card border-0 shadow-sm h-100 product-card overflow-hidden">
+                        <div class="card-body p-4 d-flex flex-column">
+                            <div class="mb-3">
+                                <h5 class="fw-bold text-dark mb-1 h5-title">{{ service.name }}</h5>
                             </div>
-                        </div>
 
-                        <h5 class="fw-bold mb-3">{{ service.name }}</h5>
-                        
-                        <div class="d-flex align-items-center mb-4 p-2 bg-light rounded-3">
-                            <img src="https://ui-avatars.com/api/?name={{ service.provider_name }}&background=random" class="rounded-circle me-2" width="30" height="30">
-                            <div class="lh-1">
-                                <p class="mb-0 small fw-bold text-dark">{{ service.provider_name }}</p>
-                                <small class="text-muted" style="font-size: 0.7rem;">Class of {{ service.cohort }}</small>
+                            <div class="d-flex align-items-center p-2 bg-light rounded-3 mb-4">
+                                <img src="{% if service.owner.profile.profile_picture %}{{ service.owner.profile.profile_picture.url }}{% else %}https://ui-avatars.com/api/?name={{ service.owner.username }}&background=4f46e5&color=fff{% endif %}" 
+                                     class="rounded-circle border border-2 border-white shadow-sm me-2" width="35" height="35" alt="OB">
+                                <div class="overflow-hidden">
+                                    <p class="small text-dark fw-bold mb-0 text-truncate">OB {{ service.owner.get_full_name|default:service.owner.username }}</p>
+                                    <p class="small text-muted mb-0" style="font-size: 0.7rem;">Class of {{ service.owner.profile.cohort|default:'N/A' }}</p>
+                                </div>
                             </div>
-                        </div>
 
-                        <p class="text-muted small mb-4 line-clamp-3">
-                            {{ service.description|default:"Specialized professional services tailored to meet your requirements with the Mwiiri standard of excellence." }}
-                        </p>
-
-                        <div class="d-grid gap-2">
-                            <a href="#" class="btn btn-primary rounded-pill fw-bold py-2">Book Consultation</a>
-                            <a href="mailto:{{ service.email }}" class="btn btn-link btn-sm text-decoration-none text-muted">Request a Quote</a>
+                            <div class="d-grid gap-2">
+                                <a href="#" class="btn btn-primary rounded-pill fw-bold py-2 shadow-sm transition-lift">
+                                    View Details
+                                </a>
+                            </div>
                         </div>
                     </div>
                 </div>
+                {% empty %}
+                <div class="col-12 text-center py-5">
+                    <div class="opacity-25 mb-3">
+                        <i class="bi bi-cart-x display-1"></i>
+                    </div>
+                    <h4 class="text-muted">The marketplace is empty right now.</h4>
+                    <p class="text-muted">Be the first brother to list a service!</p>
+                </div>
+                {% endfor %}
             </div>
-            {% empty %}
-            <div class="col-12 text-center py-5">
-                <i class="bi bi-journal-x display-1 text-light"></i>
-                <p class="text-muted mt-3">No services listed in this directory yet.</p>
+
             </div>
-            {% endfor %}
-        </div>
     </div>
 </div>
 
 <style>
-    .bg-primary-soft { background-color: #eef2ff; color: #4f46e5; }
-    .service-card:hover {
-        transform: translateY(-12px);
-        box-shadow: 0 20px 40px rgba(0,0,0,0.08) !important;
+    .product-card {
+        border-radius: 28px;
+        background: #ffffff;
+        transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
     }
-    .service-card:hover .btn-primary {
-        background-color: #312e81;
-        border-color: #312e81;
+    
+    .product-card:hover {
+        transform: translateY(-10px);
+        box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.12) !important;
     }
-    .line-clamp-3 {
+
+    .bg-primary-soft { background-color: rgba(79, 70, 229, 0.1); color: #4f46e5; }
+    .bg-success-soft { background-color: rgba(22, 163, 74, 0.1); color: #16a34a; }
+    
+    /* Glassmorphism Badge */
+    .bg-blur {
+        background: rgba(15, 23, 42, 0.6);
+        backdrop-filter: blur(8px);
+        -webkit-backdrop-filter: blur(8px);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+
+    .h5-title {
         display: -webkit-box;
-        -webkit-line-clamp: 3;
+        -webkit-line-clamp: 1;
         -webkit-box-orient: vertical;
         overflow: hidden;
     }
+
+    .transition-lift {
+        transition: all 0.2s ease;
+    }
+    .transition-lift:hover {
+        transform: translateY(-2px);
+        filter: brightness(1.1);
+    }
+
+    .tracking-wider { letter-spacing: 0.05em; }
+
+    .sticky-top { transition: all 0.3s ease; }
 </style>
 {% endblock %}
