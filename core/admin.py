@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import HeroSlider, Fixture, DidYouKnow
+from .models import HeroSlider, Fixture, ManOfTheHour
 
 @admin.register(HeroSlider)
 class HeroSliderAdmin(admin.ModelAdmin):
@@ -9,6 +9,6 @@ class HeroSliderAdmin(admin.ModelAdmin):
 class FixtureAdmin(admin.ModelAdmin):
     list_display = ('cohort_1_name', 'cohort_2_name', 'date', 'location')
 
-@admin.register(DidYouKnow)
-class DidYouKnowAdmin(admin.ModelAdmin):
-    list_display = ('date_of_event', 'description_of_event')
+@admin.register(ManOfTheHour)
+class ManOfTheHourAdmin(admin.ModelAdmin):
+    list_display = ('title',)

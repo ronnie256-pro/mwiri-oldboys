@@ -19,9 +19,10 @@ class Fixture(models.Model):
     def __str__(self):
         return f'{self.cohort_1_name} vs {self.cohort_2_name}'
 
-class DidYouKnow(models.Model):
-    date_of_event = models.DateField()
-    description_of_event = models.TextField()
+class ManOfTheHour(models.Model):
+    title = models.CharField(max_length=255)
+    hero_image = models.ImageField(upload_to='man_of_the_hour/')
+    youtube_link = models.URLField()
 
     def __str__(self):
-        return self.description_of_event[:50]
+        return self.title
