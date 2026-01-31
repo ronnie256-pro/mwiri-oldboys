@@ -18,8 +18,10 @@ class User(AbstractUser):
     address = models.CharField(max_length=255, blank=True)
     profession = models.ForeignKey('organisation.Profession', on_delete=models.SET_NULL, null=True, blank=True)
     whatsapp_contact = models.CharField(max_length=20, blank=True)
-    biography = models.TextField(max_length=150, blank=True)
-    side_hustle = models.TextField(blank=True)
+    x_account = models.URLField(blank=True)
+    tiktok_account = models.URLField(blank=True)
+    youtube_account = models.URLField(blank=True)
+    facebook_account = models.URLField(blank=True)
 
     def save(self, *args, **kwargs):
         if not self.pk:
