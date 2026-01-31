@@ -39,37 +39,13 @@
                 
                 <div class="d-flex align-items-center mb-4">
                     <h2 class="fw-bold text-primary mb-0">UGX {{ product.price }}</h2>
-                    <span class="text-muted ms-3 small">Negotiable</span>
-                </div>
-
-                <hr class="my-4 opacity-10">
-
-                <h5 class="fw-bold mb-3">Description</h5>
-                <p class="text-muted lh-lg mb-5">
-                    {{ product.description|linebreaks }}
-                </p>
-
-                <div class="card border-0 bg-white shadow-sm rounded-4 mb-4 p-3">
-                    <div class="d-flex align-items-center">
-                        <img src="{% if product.owner.profile.profile_picture %}{{ product.owner.profile.profile_picture.url }}{% else %}https://ui-avatars.com/api/?name={{ product.owner.username }}&background=0D6EFD&color=fff{% endif %}" 
-                             class="rounded-circle me-3" width="50" height="50" style="object-fit: cover;">
-                        <div>
-                            <small class="text-muted d-block">Listed by</small>
-                            <h6 class="fw-bold mb-0">{{ product.owner.get_full_name|default:product.owner.username }}</h6>
-                            <small class="text-primary">Class of {{ product.owner.profile.cohort|default:'N/A' }}</small>
-                        </div>
-                    </div>
                 </div>
 
                 <div class="d-grid gap-3">
-                    <a href="https://wa.me/{{ product.owner.phone_number }}?text=Hello%20Brother,%20I'm%20interested%20in%20your%20product:%20{{ product.name }}" 
+                    <a href="" 
                        target="_blank" 
                        class="btn btn-success btn-lg rounded-pill fw-bold py-3 shadow-sm d-flex align-items-center justify-content-center transition-lift">
-                        <i class="bi bi-whatsapp fs-4 me-2"></i> Inquire via WhatsApp
-                    </a>
-                    
-                    <a href="tel:{{ product.owner.phone_number }}" class="btn btn-outline-dark btn-lg rounded-pill fw-bold py-3">
-                        <i class="bi bi-telephone me-2"></i> Call Seller
+             Add to Cart
                     </a>
                 </div>
                 

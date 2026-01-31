@@ -82,7 +82,7 @@
                                 <h5 class="fw-bold text-dark mb-1 h5-title">{{ product.name }}</h5>
                                 <h4 class="fw-bold text-primary mb-0">UGX {{ product.price }}</h4>
                             </div>
-
+                    <!-- This is the code that displays the owner of the product.
                             <div class="d-flex align-items-center p-2 bg-light rounded-3 mb-4">
                                 <img src="{% if product.owner.profile.profile_picture %}{{ product.owner.profile.profile_picture.url }}{% else %}https://ui-avatars.com/api/?name={{ product.owner.username }}&background=4f46e5&color=fff{% endif %}" 
                                      class="rounded-circle border border-2 border-white shadow-sm me-2" width="35" height="35" alt="OB">
@@ -91,7 +91,7 @@
                                     <p class="small text-muted mb-0" style="font-size: 0.7rem;">Class of {{ product.owner.profile.cohort|default:'N/A' }}</p>
                                 </div>
                             </div>
-
+                        -->
                             <div class="d-grid gap-2">
                                 <a href="{% url 'product_detail' product.id %}" class="btn btn-primary rounded-pill fw-bold py-2 shadow-sm transition-lift">
                                     View Details
