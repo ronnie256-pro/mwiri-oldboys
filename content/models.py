@@ -12,7 +12,7 @@ class Category(models.Model):
 class News(models.Model):
     title = models.CharField(max_length=200)
     slug = models.SlugField(unique=True)
-    image = models.ImageField(upload_to='news_images/', blank=True, null=True)
+    hero_image = models.ImageField(upload_to='news_images/', blank=True, null=True)
     content = models.TextField()
     author = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     category = models.ForeignKey(Category, on_delete=models.SET_NULL, null=True, blank=True, related_name='news')
@@ -22,6 +22,13 @@ class News(models.Model):
 
     def __str__(self):
         return self.title
+
+class NewsImage(models.Model):
+    news = models.ForeignKey(News, on_delete=models.CASCADE, related_name='extra_images')
+    image = models.ImageField(upload_to='news_images/')
+
+    def __str__(self):
+        return self.news.title
 
 class Event(models.Model):
     title = models.CharField(max_length=200)
@@ -59,9 +66,17 @@ class Gallery(models.Model):
 
 class History(models.Model):
     title = models.CharField(max_length=200)
+    hero_image = models.ImageField(upload_to='history_images/', blank=True, null=True)
     content = models.TextField()
     category = models.ForeignKey(Category, on_delete=models.SET_NULL, null=True, blank=True, related_name='history_entries')
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
         return self.title
+
+class HistoryImage(models.Model):
+    history = models.ForeignKey(History, on_delete=models.CASCADE, related_name='extra_images')
+    image = models.ImageField(upload_to='history_images/')
+
+    def __str__(self):
+        return self.history.title

@@ -1,6 +1,15 @@
 
 from django.contrib import admin
-from .models import Category, News, Event, Product, Gallery, History
+from .models import Category, News, NewsImage, History, HistoryImage
+from products.models import Product
+
+class NewsImageInline(admin.TabularInline):
+    model = NewsImage
+    extra = 1
+
+class HistoryImageInline(admin.TabularInline):
+    model = HistoryImage
+    extra = 1
 
 @admin.register(Category)
 class CategoryAdmin(admin.ModelAdmin):
@@ -13,29 +22,17 @@ class NewsAdmin(admin.ModelAdmin):
     list_filter = ('is_featured', 'category', 'author')
     search_fields = ('title', 'content')
     prepopulated_fields = {'slug': ('title',)}
-
-@admin.register(Event)
-class EventAdmin(admin.ModelAdmin):
-    list_display = ('title', 'date', 'location', 'is_featured')
-    list_filter = ('is_featured', 'date')
-    search_fields = ('title', 'description', 'location')
-    prepopulated_fields = {'slug': ('title',)}
-
-@admin.register(Product)
-class ProductAdmin(admin.ModelAdmin):
-    list_display = ('name', 'seller', 'price', 'category', 'is_featured')
-    list_filter = ('is_featured', 'category', 'seller')
-    search_fields = ('name', 'description')
-    prepopulated_fields = {'slug': ('name',)}
-
-@admin.register(Gallery)
-class GalleryAdmin(admin.ModelAdmin):
-    list_display = ('title', 'category', 'created_at')
-    list_filter = ('category',)
-    search_fields = ('title',)
+    inlines = [NewsImageInline]
 
 @admin.register(History)
 class HistoryAdmin(admin.ModelAdmin):
     list_display = ('title', 'category', 'created_at')
     list_filter = ('category',)
     search_fields = ('title', 'content')
+    inlines = [HistoryImageInline]
+
+@admin.register(Product)
+class ProductAdmin(admin.ModelAdmin):
+    list_display = ('name', 'category', 'price')
+    list_filter = ('category',)
+    search_fields = ('name', 'description')
