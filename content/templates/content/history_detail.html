@@ -1,0 +1,17 @@
+
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container">
+    <h1 class="my-4">{{ history.title }}</h1>
+    <img src="{{ history.hero_image.url }}" class="img-fluid" alt="{{ history.title }}">
+    <p class="mt-4">{{ history.content }}</p>
+    <div class="row">
+        {% for image in history.extra_images.all %}
+        <div class="col-md-4 mb-4">
+            <img src="{{ image.image.url }}" class="img-fluid" alt="{{ history.title }}">
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

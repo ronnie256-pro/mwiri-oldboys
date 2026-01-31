@@ -1,0 +1,17 @@
+
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container">
+    <h1 class="my-4">{{ news.title }}</h1>
+    <img src="{{ news.hero_image.url }}" class="img-fluid" alt="{{ news.title }}">
+    <p class="mt-4">{{ news.content }}</p>
+    <div class="row">
+        {% for image in news.extra_images.all %}
+        <div class="col-md-4 mb-4">
+            <img src="{{ image.image.url }}" class="img-fluid" alt="{{ news.title }}">
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

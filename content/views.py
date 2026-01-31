@@ -1,15 +1,13 @@
 
 from django.shortcuts import render, redirect
 from django.views.generic import TemplateView
-from .models import News
-from .forms import NewsForm
+from .models import News, NewsImage, History, HistoryImage
+from .forms import NewsForm, HistoryForm
 
 def news_list(request):
     news = News.objects.all().order_by('-created_at')
     return render(request, 'content/news_list.html', {'news': news})
 
-from .models import News, NewsImage, History, HistoryImage
-from .forms import NewsForm, HistoryForm
 
 def news_form(request):
     if request.method == 'POST':
@@ -43,5 +41,12 @@ def history_list(request):
     history = History.objects.all().order_by('-created_at')
     return render(request, 'content/history_list.html', {'history': history})
 
-class NewsView(TemplateView):
-    template_name = "content/news.html"
+from django.shortcuts import get_object_or_404
+
+def news_detail(request, pk):
+    news = get_object_or_404(News, pk=pk)
+    return render(request, 'content/news_detail.html', {'news': news})
+
+def history_detail(request, pk):
+    history = get_object_or_404(History, pk=pk)
+    return render(request, 'content/history_detail.html', {'history': history})
