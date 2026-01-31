@@ -6,6 +6,7 @@
         --mwiiri-navy: #002147;
         --mwiiri-gold: #C5A021;
         --mwiiri-gold-soft: rgba(197, 160, 33, 0.1);
+        --mwiiri-navy-deep: #001630;
     }
 
     /* Tightening White Spaces */
@@ -26,6 +27,25 @@
     .btn-outline-gold { border: 2px solid var(--mwiiri-gold); color: var(--mwiiri-gold); }
     .btn-outline-gold:hover { background: var(--mwiiri-gold); color: white; }
 
+    /* Inside Section Button Style */
+    .btn-action-sm {
+        background-color: var(--mwiiri-navy);
+        color: white;
+        border: none;
+        padding: 8px 20px;
+        font-size: 0.8rem;
+        font-weight: 700;
+        letter-spacing: 0.5px;
+        border-radius: 8px;
+        transition: all 0.3s ease;
+        text-transform: uppercase;
+    }
+    .btn-action-sm:hover {
+        background-color: var(--mwiiri-gold);
+        color: white;
+        transform: scale(1.05);
+    }
+
     /* Polished Cards */
     .glass-card {
         background: white;
@@ -35,7 +55,26 @@
     }
     .glass-card:hover { transform: translateY(-5px); box-shadow: 0 20px 40px rgba(0,33,71,0.1) !important; }
 
-    /* League Fixture Style */
+    /* League Section Background & Overlay */
+    .league-bg {
+        position: relative;
+        /* Using a high-quality stadium background from Unsplash */
+        background-image: url('https://images.unsplash.com/photo-1574629810360-7efbbe195018?q=80&w=2000&auto=format&fit=crop');
+        background-size: cover;
+        background-position: center;
+        background-attachment: fixed; /* Parallax effect for a pro feel */
+        border-radius: 50px;
+        overflow: hidden;
+    }
+    .league-overlay {
+        position: absolute;
+        top: 0; left: 0; width: 100%; height: 100%;
+        background: var(--mwiiri-navy);
+        opacity: 0.88; /* Minimal but deep enough to read white text easily */
+        z-index: 1;
+    }
+    .league-content { position: relative; z-index: 2; }
+
     .fixture-badge { background: var(--mwiiri-gold-soft); color: var(--mwiiri-gold); font-weight: 800; padding: 4px 12px; border-radius: 6px; }
 </style>
 
@@ -68,21 +107,21 @@
 </div>
 
 <section class="section-spacing container">
-    <div class="d-flex justify-content-between align-items-center mb-4">
+    <div class="d-flex justify-content-between align-items-center mb-4 px-2">
         <h2 class="fw-bold m-0" style="color: var(--mwiiri-navy);">All Inside <span style="color: var(--mwiiri-gold);">.</span></h2>
         <a href="{% url 'products' %}" class="btn btn-sm btn-outline-navy fw-bold rounded-pill">Explore Hub <i class="bi bi-arrow-right"></i></a>
     </div>
     <div class="row g-3">
         <div class="col-md-4">
-            <div id="newsCarousel" class="carousel slide h-100" data-bs-ride="carousel" data-bs-interval="2000">
+            <div id="newsCarousel" class="carousel slide h-100 shadow-sm rounded-4 overflow-hidden" data-bs-ride="carousel" data-bs-interval="2500">
                 <div class="carousel-inner h-100">
                     {% for news_item in latest_news %}
                     <div class="carousel-item h-100 {% if forloop.first %}active{% endif %}">
-                        <div class="card h-100 border-0 shadow-sm rounded-4 overflow-hidden">
-                            <img src="{{ news_item.hero_image.url }}" class="card-img-top" alt="{{ news_item.title }}" style="height: 200px; object-fit: cover;">
-                            <div class="card-body">
-                                <h5 class="card-title">{{ news_item.title }}</h5>
-                                <a href="{% url 'news_detail' pk=news_item.pk %}" class="btn btn-primary btn-sm">Read More</a>
+                        <div class="card h-100 border-0">
+                            <img src="{{ news_item.hero_image.url }}" class="card-img-top" alt="{{ news_item.title }}" style="height: 220px; object-fit: cover;">
+                            <div class="card-body bg-white text-center">
+                                <h6 class="fw-bold mb-3 text-dark text-truncate">{{ news_item.title }}</h6>
+                                <a href="{% url 'news_detail' pk=news_item.pk %}" class="btn btn-action-sm">Read More</a>
                             </div>
                         </div>
                     </div>
@@ -91,15 +130,15 @@
             </div>
         </div>
         <div class="col-md-4">
-            <div id="productCarousel" class="carousel slide h-100" data-bs-ride="carousel" data-bs-interval="2000">
+            <div id="productCarousel" class="carousel slide h-100 shadow-sm rounded-4 overflow-hidden" data-bs-ride="carousel" data-bs-interval="2800">
                 <div class="carousel-inner h-100">
                     {% for product in latest_products %}
                     <div class="carousel-item h-100 {% if forloop.first %}active{% endif %}">
-                        <div class="card h-100 border-0 shadow-sm rounded-4 overflow-hidden">
-                            <img src="{{ product.hero_image.url }}" class="card-img-top" alt="{{ product.name }}" style="height: 200px; object-fit: cover;">
-                            <div class="card-body">
-                                <h5 class="card-title">{{ product.name }}</h5>
-                                <a href="{% url 'product_detail' product.id %}" class="btn btn-primary btn-sm">Shop</a>
+                        <div class="card h-100 border-0">
+                            <img src="{{ product.hero_image.url }}" class="card-img-top" alt="{{ product.name }}" style="height: 220px; object-fit: cover;">
+                            <div class="card-body bg-white text-center">
+                                <h6 class="fw-bold mb-3 text-dark text-truncate">{{ product.name }}</h6>
+                                <a href="{% url 'product_detail' product.id %}" class="btn btn-action-sm px-4">Shop Now</a>
                             </div>
                         </div>
                     </div>
@@ -108,15 +147,15 @@
             </div>
         </div>
         <div class="col-md-4">
-            <div id="manOfTheHourCarousel" class="carousel slide h-100" data-bs-ride="carousel" data-bs-interval="2000">
+            <div id="manOfTheHourCarousel" class="carousel slide h-100 shadow-sm rounded-4 overflow-hidden" data-bs-ride="carousel" data-bs-interval="3100">
                 <div class="carousel-inner h-100">
                     {% for item in man_of_the_hour %}
                     <div class="carousel-item h-100 {% if forloop.first %}active{% endif %}">
-                        <div class="card h-100 border-0 shadow-sm rounded-4 overflow-hidden">
-                            <img src="{{ item.hero_image.url }}" class="card-img-top" alt="{{ item.title }}" style="height: 200px; object-fit: cover;">
-                            <div class="card-body">
-                                <h5 class="card-title">{{ item.title }}</h5>
-                                <a href="{{ item.youtube_link }}" class="btn btn-primary btn-sm" target="_blank">Watch</a>
+                        <div class="card h-100 border-0">
+                            <img src="{{ item.hero_image.url }}" class="card-img-top" alt="{{ item.title }}" style="height: 220px; object-fit: cover;">
+                            <div class="card-body bg-white text-center">
+                                <h6 class="fw-bold mb-3 text-dark text-truncate">{{ item.title }}</h6>
+                                <a href="{{ item.youtube_link }}" class="btn btn-action-sm" target="_blank">Watch Now</a>
                             </div>
                         </div>
                     </div>
@@ -128,44 +167,45 @@
 </section>
 
 <section id="league" class="section-spacing px-3">
-    <div class="container py-5 rounded-5 shadow-lg" style="background-color: var(--mwiiri-navy); color: white;">
-        <div class="row align-items-center px-lg-5">
-            <div class="col-lg-5">
+    <div class="container py-5 league-bg shadow-lg">
+        <div class="league-overlay"></div>
+        <div class="row align-items-center px-lg-5 league-content">
+            <div class="col-lg-5 py-4">
                 <h2 class="display-5 fw-bold mb-3">Mwiiri <span style="color: var(--mwiiri-gold);">League</span></h2>
-                <p class="opacity-75 mb-4">Relive the school days on the pitch. Follow standings, fixtures, and cohort rivalries.</p>
+                <p class="opacity-75 mb-4 fs-5">Relive the school days on the pitch. Follow standings, fixtures, and cohort rivalries from the Hill.</p>
                 <div class="card bg-white bg-opacity-10 border-0 rounded-4 mb-4">
                     <div class="card-body d-flex align-items-center p-3">
-                        <div class="bg-gold rounded-circle p-2 text-white me-3"><i class="bi bi-trophy-fill"></i></div>
+                        <div class="bg-gold rounded-circle p-2 text-white me-3 shadow-sm"><i class="bi bi-trophy-fill"></i></div>
                         <div>
                             <span class="fw-bold d-block">Upcoming Matchday</span>
                             <small class="opacity-75">Football, Reunions & Networking</small>
                         </div>
                     </div>
                 </div>
-                <a href="#" class="btn btn-gold btn-lg rounded-pill px-4 shadow-sm">Full Standings</a>
+                <a href="#" class="btn btn-gold btn-lg rounded-pill px-5 shadow-sm fw-bold">Full Standings</a>
             </div>
             <div class="col-lg-6 offset-lg-1 mt-5 mt-lg-0">
-                <div class="bg-white p-4 shadow rounded-4 text-dark position-relative">
+                <div class="bg-white p-4 shadow-lg rounded-4 text-dark position-relative border-top border-5 border-gold">
                     <div class="position-absolute top-0 start-50 translate-middle">
-                        <span class="fixture-badge shadow-sm text-uppercase">Featured Fixture</span>
+                        <span class="fixture-badge shadow-sm text-uppercase small">Featured Fixture</span>
                     </div>
                     {% for fixture in fixtures %}
                     <div class="d-flex justify-content-between align-items-center text-center mt-3">
                         <div class="flex-fill">
-                            <img src="{{ fixture.cohort_1_image.url }}" class="rounded-circle mb-2 shadow-sm border border-2" style="width: 70px; height: 70px; object-fit: cover;">
-                            <h6 class="fw-bold small">{{ fixture.cohort_1_name }}</h6>
+                            <img src="{{ fixture.cohort_1_image.url }}" class="rounded-circle mb-2 shadow-sm border border-2 border-light" style="width: 80px; height: 80px; object-fit: cover;">
+                            <h6 class="fw-bold small text-dark">{{ fixture.cohort_1_name }}</h6>
                         </div>
                         <div class="px-3 text-center">
-                            <span class="display-6 fw-bold text-muted opacity-25">VS</span>
-                            <div class="small fw-bold text-primary">{{ fixture.date|date:"H:i" }}</div>
+                            <span class="display-6 fw-bold text-muted opacity-25 italic">VS</span>
+                            <div class="small fw-bold text-primary mt-1">{{ fixture.date|date:"H:i" }}</div>
                         </div>
                         <div class="flex-fill">
-                            <img src="{{ fixture.cohort_2_image.url }}" class="rounded-circle mb-2 shadow-sm border border-2" style="width: 70px; height: 70px; object-fit: cover;">
-                            <h6 class="fw-bold small">{{ fixture.cohort_2_name }}</h6>
+                            <img src="{{ fixture.cohort_2_image.url }}" class="rounded-circle mb-2 shadow-sm border border-2 border-light" style="width: 80px; height: 80px; object-fit: cover;">
+                            <h6 class="fw-bold small text-dark">{{ fixture.cohort_2_name }}</h6>
                         </div>
                     </div>
-                    <div class="text-center mt-3 py-2 bg-light rounded-3 small fw-bold text-muted">
-                        <i class="bi bi-geo-alt-fill me-1"></i> {{ fixture.location }} | {{ fixture.date|date:"l, d M" }}
+                    <div class="text-center mt-3 py-2 bg-light rounded-pill small fw-bold text-muted px-3 mx-auto" style="width: fit-content;">
+                        <i class="bi bi-geo-alt-fill me-1 text-primary"></i> {{ fixture.location }} | {{ fixture.date|date:"l, d M" }}
                     </div>
                     {% endfor %}
                 </div>
@@ -177,25 +217,25 @@
 <section class="section-spacing container">
     <div class="row g-4">
         <div class="col-lg-8">
-            <h3 class="fw-bold mb-4" style="color: var(--mwiiri-navy);">Inside the Hill</h3>
+            <h3 class="fw-bold mb-4 px-2" style="color: var(--mwiiri-navy);">Inside the Hill</h3>
             <div class="row g-3">
                 <div class="col-md-6">
-                    <div class="glass-card h-100 overflow-hidden shadow-sm">
+                    <div class="glass-card h-100 overflow-hidden shadow-sm border-0">
                         <img src="https://via.placeholder.com/400x220" class="card-img-top" alt="news">
-                        <div class="card-body p-3">
+                        <div class="card-body p-4">
                             <span class="text-uppercase small fw-bold" style="color: var(--mwiiri-gold);">Endowment</span>
-                            <h5 class="fw-bold mt-2 h6">AGM 2026: We make the future NOW!</h5>
-                            <p class="text-muted extra-small">Strategic planning for the MOBA's next Future...</p>
+                            <h5 class="fw-bold mt-2 h6 mb-3">AGM 2026: We make the future NOW!</h5>
+                            <a href="#" class="text-navy text-decoration-none fw-bold small">Read Coverage <i class="bi bi-arrow-right small ms-1"></i></a>
                         </div>
                     </div>
                 </div>
                 <div class="col-md-6">
-                    <div class="glass-card h-100 overflow-hidden shadow-sm">
+                    <div class="glass-card h-100 overflow-hidden shadow-sm border-0">
                         <img src="https://via.placeholder.com/400x220" class="card-img-top" alt="news">
-                        <div class="card-body p-3">
+                        <div class="card-body p-4">
                             <span class="text-uppercase small fw-bold" style="color: var(--mwiiri-navy);">Leadership</span>
-                            <h5 class="fw-bold mt-2 h6">Mwirians in Governance</h5>
-                            <p class="text-muted extra-small">Celebrating leadership in the 11th Parliament...</p>
+                            <h5 class="fw-bold mt-2 h6 mb-3">Mwirians in Governance</h5>
+                            <a href="#" class="text-navy text-decoration-none fw-bold small">View Spotlight <i class="bi bi-arrow-right small ms-1"></i></a>
                         </div>
                     </div>
                 </div>
@@ -203,15 +243,15 @@
         </div>
         
         <div class="col-lg-4">
-            <div class="card border-0 p-4 rounded-4 shadow-sm h-100" style="background-color: var(--mwiiri-navy); color: white;">
+            <div class="card border-0 p-4 rounded-4 shadow-lg h-100" style="background-color: var(--mwiiri-navy); color: white;">
                 <h5 class="fw-bold mb-3 border-bottom border-warning pb-2" style="color: var(--mwiiri-gold);">Man of the Hour</h5>
                 {% for fact in did_you_know_facts %}
                 <div class="mb-4">
                     <h3 class="h4 fw-bold">Dr. Ruhakana Rugunda</h3>
-                    <p class="small opacity-75">{{ fact.description_of_event }}</p>
+                    <p class="small opacity-75 lh-base">{{ fact.description_of_event }}</p>
                 </div>
                 {% endfor %}
-                <a href="{% url 'news' %}" class="btn btn-outline-gold rounded-pill mt-auto fw-bold">Open Broadcasts</a>
+                <a href="{% url 'news' %}" class="btn btn-outline-gold rounded-pill mt-auto fw-bold py-2">Open Broadcasts</a>
             </div>
         </div>
     </div>
@@ -219,9 +259,11 @@
 
 <style>
     .extra-small { font-size: 0.8rem; }
-    .tracking-widest { letter-spacing: 0.1em; }
+    .tracking-widest { letter-spacing: 0.15em; }
     .bg-gold { background-color: var(--mwiiri-gold); color: white; }
     .btn-outline-navy { border: 2px solid var(--mwiiri-navy); color: var(--mwiiri-navy); }
     .btn-outline-navy:hover { background: var(--mwiiri-navy); color: white; }
+    .text-navy { color: var(--mwiiri-navy); }
+    .italic { font-style: italic; }
 </style>
 {% endblock %}
