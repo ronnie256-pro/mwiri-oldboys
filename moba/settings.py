@@ -91,8 +91,8 @@ WSGI_APPLICATION = 'moba.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'OBdatabase',
-        'USER': 'postgres',
+        'NAME': 'mwiri_db',
+        'USER': 'mwiri_user',
         'PASSWORD': '*@oldboys2026#',
         'HOST': 'localhost',
         'PORT': '5432',
