@@ -14,7 +14,7 @@ SECRET_KEY = 'django-insecure-b0mep2c1(5s6jofrphgxx2mw0sd9ckgg3nj=1v6da54)gs41=)
 
 if IS_LOCAL:
     DEBUG = True
-    ALLOWED_HOSTS = []  # Localhost is default for runserver
+    ALLOWED_HOSTS = []
 else:
     DEBUG = False
     ALLOWED_HOSTS = ['mwirioldboys.com', 'www.mwirioldboys.com', '147.93.52.129']
@@ -49,7 +49,7 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
-    'whitenoise.middleware.WhiteNoiseMiddleware',  # <--- Add this line here!
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -118,7 +118,6 @@ USE_TZ = True
 
 # --- STATIC & MEDIA FILES ---
 STATIC_URL = '/static/'
-# This tells Django where to put all files when you run 'collectstatic'
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 
 MEDIA_URL = '/media/'
