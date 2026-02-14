@@ -13,100 +13,118 @@
             </nav>
 
             <div class="card shadow-lg border-0 rounded-5 overflow-hidden">
-                <div class="profile-header-bg" style="height: 180px; background: linear-gradient(135deg, #0f172a 0%, #2563eb 100%); position: relative;">
-                    </div>
+                <div class="profile-header-bg" style="height: 180px; background: linear-gradient(135deg, #002147 0%, #2563eb 100%); position: relative;"></div>
                 
                 <div class="card-body p-4 p-md-5 pt-0">
                     <div class="text-center position-relative" style="margin-top: -90px;">
-                        <img src="{% if user.profile.profile_picture %}{{ user.profile.profile_picture.url }}{% else %}https://ui-avatars.com/api/?name={{ user.username }}&background=4f46e5&color=fff&size=180{% endif %}" 
-                             class="rounded-circle border border-5 border-white shadow-lg mb-3" 
-                             width="180" height="180" alt="Avatar">
+                        <div class="d-inline-block position-relative profile-img-wrapper">
+                            <a href="#" data-bs-toggle="modal" data-bs-target="#imageModal" class="profile-img-link">
+                                <img src="{% if user.profile.profile_picture %}{{ user.profile.profile_picture.url }}{% else %}https://ui-avatars.com/api/?name={{ user.username }}&background=002147&color=fff&size=180{% endif %}" 
+                                     class="rounded-circle border border-5 border-white shadow-lg mb-3 profile-main-img" 
+                                     width="180" height="180" alt="Avatar" style="object-fit: cover;">
+                                <div class="img-overlay-hover">
+                                    <i class="bi bi-search text-white fs-2"></i>
+                                </div>
+                            </a>
+                        </div>
                         
                         <h1 class="fw-bold mb-1 mt-2 text-dark">{{ user.get_full_name|default:user.username }}</h1>
+                        
                         <div class="d-flex justify-content-center gap-2 mb-4">
                             <span class="badge bg-primary-soft text-primary px-3 py-2 rounded-pill fw-bold">
-                                <i class="bi bi-mortarboard-fill me-1"></i> Class of {{ user.cohort.name|default:"N/A" }}
+                                <i class="bi bi-mortarboard-fill me-1"></i> Class of {{ user.profile.cohort.name|default:"N/A" }}
                             </span>
                             <span class="badge bg-secondary-soft text-dark px-3 py-2 rounded-pill fw-bold border">
-                                <i class="bi bi-house-door-fill me-1"></i> {{ user.house.name|default:"N/A" }}
+                                <i class="bi bi-house-door-fill me-1"></i> {{ user.profile.house.name|default:"N/A" }}
                             </span>
                         </div>
                         
-                        <div class="d-flex justify-content-center gap-3 mb-5">
-                            <a href="mailto:{{ user.email }}" class="btn btn-dark rounded-pill px-4 py-2 shadow-sm fw-bold transition-all">
-                                <i class="bi bi-envelope-fill me-2"></i>Send Email
+                        <div class="d-flex justify-content-center gap-3 mb-4">
+                            <a href="mailto:{{ user.email }}" class="btn btn-navy-modern rounded-pill px-4 py-2 shadow-sm fw-bold transition-all">
+                                <i class="bi bi-envelope-fill me-2"></i>Email
                             </a>
-                            <a href="https://wa.me/{{ user.phone_number }}" target="_blank" class="btn btn-success rounded-pill px-4 py-2 shadow-sm fw-bold transition-all">
-                                <i class="bi bi-whatsapp me-2"></i>Message
+                            {% if user.whatsapp_contact %}
+                            <a href="https://wa.me/{{ user.whatsapp_contact }}" target="_blank" class="btn btn-success rounded-pill px-4 py-2 shadow-sm fw-bold transition-all">
+                                <i class="bi bi-whatsapp me-2"></i>WhatsApp
                             </a>
+                            {% endif %}
+                        </div>
+
+                        <div class="d-flex justify-content-center gap-4 mb-5 social-profile-links">
+                            {% if user.linkedin_profile %}
+                                <a href="{{ user.linkedin_profile }}" target="_blank" class="text-primary fs-3" title="LinkedIn"><i class="bi bi-linkedin"></i></a>
+                            {% endif %}
+                            {% if user.x_account %}
+                                <a href="{{ user.x_account }}" target="_blank" class="text-dark fs-3" title="X (Twitter)"><i class="bi bi-twitter-x"></i></a>
+                            {% endif %}
+                            {% if user.facebook_account %}
+                                <a href="{{ user.facebook_account }}" target="_blank" class="text-primary fs-3" title="Facebook"><i class="bi bi-facebook"></i></a>
+                            {% endif %}
+                            {% if user.tiktok_account %}
+                                <a href="{{ user.tiktok_account }}" target="_blank" class="text-dark fs-3" title="TikTok"><i class="bi bi-tiktok"></i></a>
+                            {% endif %}
+                            {% if user.youtube_account %}
+                                <a href="{{ user.youtube_account }}" target="_blank" class="text-danger fs-3" title="YouTube"><i class="bi bi-youtube"></i></a>
+                            {% endif %}
                         </div>
                     </div>
 
-                    <div class="row g-5">
-                        <!-- The biography and side hustle is not required now. 
-                        <div class="col-lg-7">
-                            <div class="mb-5">
-                                <h5 class="fw-bold mb-3 d-flex align-items-center">
-                                    <span class="bg-primary p-1 rounded-3 me-2" style="width: 8px; height: 24px; display: inline-block;"></span>
-                                    Biography
-                                </h5>
-                                <div class="text-muted fs-6 lh-lg">
-                                    {{ user.biography|default:"This brother hasn't shared a bio yet. Reach out to connect!" }}
-                                </div>
-                            </div>
-
-                            <div>
-                                <h5 class="fw-bold mb-3 d-flex align-items-center">
-                                    <span class="bg-warning p-1 rounded-3 me-2" style="width: 8px; height: 24px; display: inline-block;"></span>
-                                    The Side Hustle
-                                </h5>
-                                <div class="p-4 bg-light rounded-4 border">
-                                    <p class="mb-0 text-dark fw-bold">{{ user.side_hustle|default:"No side hustle listed." }}</p>
-                                </div>
-                            </div>
-                        </div>
-                    -->
-                        <div class="col-lg-5">
-                            <div class="card border-0 bg-light rounded-4">
+                    <div class="row g-4 justify-content-center">
+                        <div class="col-lg-8">
+                            <div class="card border-0 bg-light rounded-4 shadow-sm">
                                 <div class="card-body p-4">
-                                    <h6 class="text-uppercase small fw-bold text-muted mb-4 tracking-wider">Professional Profile</h6>
+                                    <h6 class="text-uppercase small fw-bold text-muted mb-4 tracking-wider border-bottom pb-2">Business & Professional Details</h6>
                                     
-                                    <div class="d-flex align-items-center mb-4">
-                                        <div class="bg-white p-2 rounded-3 shadow-sm me-3 text-primary"><i class="bi bi-briefcase fs-5"></i></div>
-                                        <div>
-                                            <small class="text-muted d-block lh-1 mb-1">Profession</small>
-                                            <span class="fw-bold">{{ user.profession.name|default:"N/A" }}</span>
+                                    <div class="row">
+                                        <div class="col-md-6 mb-4">
+                                            <div class="d-flex align-items-center">
+                                                <div class="bg-white p-2 rounded-3 shadow-sm me-3 text-primary"><i class="bi bi-briefcase fs-5"></i></div>
+                                                <div>
+                                                    <small class="text-muted d-block lh-1 mb-1">Profession</small>
+                                                    <span class="fw-bold">{{ user.profession.name|default:"N/A" }}</span>
+                                                </div>
+                                            </div>
                                         </div>
-                                    </div>
 
-                                    <div class="d-flex align-items-center mb-4">
-                                        <div class="bg-white p-2 rounded-3 shadow-sm me-3 text-primary"><i class="bi bi-phone fs-5"></i></div>
-                                        <div>
-                                            <small class="text-muted d-block lh-1 mb-1">Contact Phone</small>
-                                            <span class="fw-bold">{{ user.phone_number|default:"Not Shared" }}</span>
+                                        <div class="col-md-6 mb-4">
+                                            <div class="d-flex align-items-center">
+                                                <div class="bg-white p-2 rounded-3 shadow-sm me-3 text-danger"><i class="bi bi-geo-alt fs-5"></i></div>
+                                                <div>
+                                                    <small class="text-muted d-block lh-1 mb-1">Business Address</small>
+                                                    <span class="fw-bold">{{ user.address|default:"Not Provided" }}</span>
+                                                </div>
+                                            </div>
                                         </div>
-                                    </div>
 
-                                    <hr class="my-4 opacity-10">
+                                        <div class="col-md-6 mb-4">
+                                            <div class="d-flex align-items-center">
+                                                <div class="bg-white p-2 rounded-3 shadow-sm me-3 text-success"><i class="bi bi-globe fs-5"></i></div>
+                                                <div>
+                                                    <small class="text-muted d-block lh-1 mb-1">Website</small>
+                                                    {% if user.website %}
+                                                    <a href="{{ user.website }}" target="_blank" class="fw-bold text-decoration-none text-dark">{{ user.website }}</a>
+                                                    {% else %}
+                                                    <span class="fw-bold">N/A</span>
+                                                    {% endif %}
+                                                </div>
+                                            </div>
+                                        </div>
 
-                                    <div class="d-grid gap-2">
-                                        {% if user.linkedin_profile %}
-                                        <a href="{{ user.linkedin_profile }}" target="_blank" class="btn btn-white border rounded-pill text-start px-3 py-2 btn-sm fw-bold shadow-xs">
-                                            <i class="bi bi-linkedin text-primary me-2"></i> LinkedIn Profile
-                                        </a>
-                                        {% endif %}
-                                        
-                                        {% if user.website %}
-                                        <a href="{{ user.website }}" target="_blank" class="btn btn-white border rounded-pill text-start px-3 py-2 btn-sm fw-bold shadow-xs">
-                                            <i class="bi bi-globe text-success me-2"></i> Personal Website
-                                        </a>
-                                        {% endif %}
+                                        <div class="col-md-6 mb-4">
+                                            <div class="d-flex align-items-center">
+                                                <div class="bg-white p-2 rounded-3 shadow-sm me-3 text-success"><i class="bi bi-whatsapp fs-5"></i></div>
+                                                <div>
+                                                    <small class="text-muted d-block lh-1 mb-1">Business Contact</small>
+                                                    <span class="fw-bold">{{ user.whatsapp_contact|default:"Not Shared" }}</span>
+                                                </div>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                             
                             <div class="mt-4 text-center">
-                                <div class="d-inline-flex align-items-center bg-white border px-3 py-2 rounded-pill shadow-sm">
+                                <div class="d-inline-flex align-items-center bg-white border px-4 py-2 rounded-pill shadow-sm">
                                     <i class="bi bi-patch-check-fill text-primary me-2"></i>
                                     <span class="small fw-bold">Verified MOBA Member</span>
                                 </div>
@@ -119,25 +137,71 @@
     </div>
 </div>
 
+<div class="modal fade" id="imageModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content bg-transparent border-0">
+            <div class="modal-body p-0 text-center position-relative">
+                <button type="button" class="btn-close btn-close-white position-absolute top-0 end-0 m-3" data-bs-dismiss="modal" aria-label="Close"></button>
+                <img src="{% if user.profile.profile_picture %}{{ user.profile.profile_picture.url }}{% else %}https://ui-avatars.com/api/?name={{ user.username }}&background=002147&color=fff&size=600{% endif %}" 
+                     class="img-fluid rounded-4 shadow-lg pop-out-animation" 
+                     style="max-height: 85vh; border: 4px solid rgba(255,255,255,0.1);">
+                <div class="mt-3 text-white fw-bold fs-5">{{ user.get_full_name|default:user.username }}</div>
+            </div>
+        </div>
+    </div>
+</div>
+
 <style>
+    /* Signature Navy & Gold Styling */
+    .btn-navy-modern { background-color: #002147; color: white; border: none; }
+    .btn-navy-modern:hover { background-color: #001630; color: #C5A021; }
+    
     .bg-primary-soft { background-color: rgba(37, 99, 235, 0.1); }
     .bg-secondary-soft { background-color: #f8fafc; }
-    .shadow-xs { box-shadow: 0 1px 2px rgba(0,0,0,0.05); }
-    .tracking-wider { letter-spacing: 0.05em; }
+    .tracking-wider { letter-spacing: 0.1em; }
     
-    .btn-white { background: #fff; }
-    .btn-white:hover { background: #f8fafc; }
+    /* Social Icon Hovers */
+    .social-profile-links a { transition: all 0.3s ease; display: inline-block; }
+    .social-profile-links a:hover { transform: translateY(-5px) scale(1.2); }
     
-    .transition-all:hover {
-        transform: translateY(-2px);
-        filter: brightness(110%);
+    /* WhatsApp Style Image Hover Effect */
+    .profile-img-wrapper { cursor: pointer; }
+    .img-overlay-hover {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 180px;
+        height: 180px;
+        background: rgba(0, 33, 71, 0.4);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        opacity: 0;
+        transition: opacity 0.3s ease;
+    }
+    .profile-img-wrapper:hover .img-overlay-hover { opacity: 1; }
+
+    /* Pop-out Animation for Modal */
+    .pop-out-animation { animation: zoomIn 0.3s cubic-bezier(0.165, 0.84, 0.44, 1); }
+    
+    @keyframes zoomIn {
+        from { transform: scale(0.7); opacity: 0; }
+        to { transform: scale(1); opacity: 1; }
     }
 
-    /* Animation */
-    .card { animation: slideUp 0.5s ease-out; }
+    .transition-all:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(0,0,0,0.1) !important;
+    }
+
+    .card { animation: slideUp 0.6s ease-out; }
     @keyframes slideUp {
-        from { opacity: 0; transform: translateY(30px); }
+        from { opacity: 0; transform: translateY(40px); }
         to { opacity: 1; transform: translateY(0); }
     }
+
+    /* Modal Backdrop Darkening */
+    .modal-backdrop.show { opacity: 0.9; background-color: #000; }
 </style>
 {% endblock %}

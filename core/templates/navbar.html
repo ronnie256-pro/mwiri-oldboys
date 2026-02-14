@@ -1,54 +1,101 @@
+<style>
+    /* MASTER NAVY OVERRIDE - Stops it from turning white on any page */
+    .navbar, 
+    .navbar-expand-lg, 
+    .navbar-dark, 
+    .navbar-mwiiri {
+        background-color: #002147 !important; /* Hardcoded Mwiiri Navy */
+        border-bottom: 3px solid #C5A021 !important; /* Mwiiri Gold */
+        padding: 10px 0 !important;
+    }
 
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    /* Brand & Text */
+    .navbar-brand {
+        font-weight: 800;
+        letter-spacing: 1.5px;
+        color: #C5A021 !important;
+        text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+    }
+
+    .nav-link {
+        font-weight: 600;
+        text-transform: uppercase;
+        font-size: 0.8rem;
+        letter-spacing: 0.5px;
+        color: rgba(255, 255, 255, 0.9) !important;
+        transition: all 0.3s ease;
+    }
+
+    .nav-link:hover {
+        color: #C5A021 !important;
+    }
+
+    /* SOCIAL ICONS - Spaced & Professional */
+    .social-nav-link {
+        color: white !important;
+        font-size: 1.2rem;
+        margin: 0 12px !important; /* Increased spacing between icons */
+        transition: all 0.3s ease;
+        display: inline-block;
+    }
+
+    .social-nav-link:hover {
+        color: #C5A021 !important;
+        transform: translateY(-3px) scale(1.2);
+    }
+
+    /* Dropdowns */
+    .dropdown-menu {
+        background-color: #001630 !important;
+        border: 1px solid #C5A021 !important;
+    }
+    .dropdown-item { color: white !important; }
+    .dropdown-item:hover { background-color: #C5A021 !important; color: #002147 !important; }
+
+    /* Mobile Hamburger Icon - Make sure it stays white */
+    .navbar-toggler-icon {
+        filter: invert(1);
+    }
+</style>
+
+<nav class="navbar navbar-expand-lg navbar-dark navbar-mwiiri sticky-top shadow-lg">
     <div class="container">
-        <a class="navbar-brand" href="#">MOBA</a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
-            aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <a class="navbar-brand" href="{% url 'home' %}">MOBA</a>
+
+        <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
             <span class="navbar-toggler-icon"></span>
         </button>
+
         <div class="collapse navbar-collapse" id="navbarNav">
-            <ul class="navbar-nav ms-auto">
-                <li class="nav-item">
-                    <a class="nav-link" href="{% url 'home' %}">Home</a>
-                </li>
+            <ul class="navbar-nav ms-auto align-items-center">
+                <li class="nav-item"><a class="nav-link" href="{% url 'home' %}">Home</a></li>
+                
                 <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                        Inside
-                    </a>
-                    <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="insideDrop" data-bs-toggle="dropdown">Inside</a>
+                    <ul class="dropdown-menu shadow">
                         <li><a class="dropdown-item" href="{% url 'products' %}">Products</a></li>
-                        <!--<li><a class="dropdown-item" href="{% url 'services' %}">Services</a></li> -->
-                        <li><a class="dropdown-item" href="{% url 'news' %}">News</a></li>
-                        <li><a class="dropdown-item" href="{% url 'history' %}">History</a></li>
+                        <li><a class="dropdown-item" href="{% url 'news' %}">News Hub</a></li>
+                        <li><a class="dropdown-item" href="{% url 'history' %}">The Legacy</a></li>
                     </ul>
                 </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="{% url 'about' %}">About Us</a>
-                </li>
+
+                <li class="nav-item"><a class="nav-link" href="{% url 'about' %}">About Us</a></li>
+
                 {% if user.is_authenticated %}
-                <li class="nav-item">
-                    <a class="nav-link" href="{% url 'ob_connect' %}">OB Connect</a>
-                </li>
-                <!--This is the Alumni SOS page but commented out-->
-                <!--
-                <li class="nav-item">
-                    <a class="nav-link" href="{% url 'alumni_sos' %}">Alumni SOS</a>
-                </li>
-                 -->
-                <li class="nav-item">
-                    <a class="nav-link" href="{% url 'my_account' %}">My Account</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="{% url 'logout' %}">Logout</a>
-                </li>
+                    <li class="nav-item"><a class="nav-link" href="{% url 'ob_connect' %}">OB Connect</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{% url 'my_account' %}">My Account</a></li>
+                    <li class="nav-item"><a class="nav-link text-warning" href="{% url 'logout' %}">Logout</a></li>
                 {% else %}
-                <li class="nav-item">
-                    <a class="nav-link" href="{% url 'register' %}">Join MOBA</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="{% url 'login' %}">Login</a>
-                </li>
+                    <li class="nav-item"><a class="nav-link" href="{% url 'login' %}">Login</a></li>
+                    <li class="nav-item"><a class="nav-link btn-nav-join" href="{% url 'register' %}">Join MOBA</a></li>
                 {% endif %}
+
+                <li class="nav-item d-flex ms-lg-4 border-start ps-lg-3 border-secondary mt-3 mt-lg-0">
+                    <a href="YOUR_X_URL" class="social-nav-link"><i class="bi bi-twitter-x"></i></a>
+                    <a href="YOUR_FB_URL" class="social-nav-link"><i class="bi bi-facebook"></i></a>
+                    <a href="YOUR_TIKTOK_URL" class="social-nav-link"><i class="bi bi-tiktok"></i></a>
+                    <a href="YOUR_YOUTUBE_URL" class="social-nav-link"><i class="bi bi-youtube"></i></a>
+                </li>
             </ul>
         </div>
     </div>

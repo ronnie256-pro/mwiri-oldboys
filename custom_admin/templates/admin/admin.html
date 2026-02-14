@@ -1,212 +1,187 @@
 {% extends "admin/base.html" %}
-{% load log %}
 
 {% block extrastyle %}
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
+
 <style>
+    :root {
+        --mwiiri-navy: #002147;
+        --mwiiri-gold: #C5A021;
+        --dark-bg: #0f172a;
+        --card-bg: #1e293b;
+    }
+
     body {
-        background-color: #212529;
-        color: #fff;
+        background-color: var(--dark-bg) !important;
+        color: #e2e8f0 !important;
+        font-family: 'Inter', system-ui, -apple-system, sans-serif;
     }
+
+    .admin-container { padding: 30px; }
+
+    h1 {
+        font-weight: 800;
+        color: var(--mwiiri-gold);
+        margin-bottom: 30px;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+    }
+
     .card {
-        background-color: #343a40;
-        border: 1px solid #495057;
+        background-color: var(--card-bg) !important;
+        border: 1px solid rgba(255, 255, 255, 0.1) !important;
+        border-radius: 12px !important;
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
     }
+
     .card-header {
-        background-color: #007bff;
-        color: #fff;
+        background-color: rgba(0, 33, 71, 0.8) !important;
+        border-bottom: 2px solid var(--mwiiri-gold) !important;
+        color: var(--mwiiri-gold) !important;
+        font-weight: 700;
+        text-transform: uppercase;
+        font-size: 0.85rem;
     }
+
     .list-group-item {
-        background-color: #343a40;
-        border-color: #495057;
+        background-color: transparent !important;
+        border-color: rgba(255, 255, 255, 0.05) !important;
+        color: #cbd5e1 !important;
     }
-    a {
-        color: #007bff;
-    }
+
+    .btn-sm { font-weight: 600; border-radius: 6px !important; }
+    .btn-primary { background-color: var(--mwiiri-navy) !important; border: 1px solid var(--mwiiri-gold) !important; }
+    .btn-success { background-color: #065f46 !important; border: none !important; }
+
+    /* Custom Scrollbar for Recent Actions */
+    .recent-actions-list { max-height: 600px; overflow-y: auto; }
+    
+    #content { padding: 0 !important; }
 </style>
 {% endblock %}
 
 {% block content %}
-<div class="container-fluid">
-    <div class="row">
-        <div class="col-md-9">
-            <h1>Admin Dashboard</h1>
-            <div class="row">
-                <div class="col-md-6">
-                    <div class="card mb-4">
-                        <div class="card-header">ACCOUNTS</div>
-                        <ul class="list-group list-group-flush">
-                            <li class="list-group-item d-flex justify-content-between align-items-center">
-                                Users
-                                <div>
-                                    <a href="/admin/users/user/" class="btn btn-sm btn-primary">Change</a>
-                                    <a href="/admin/users/user/add/" class="btn btn-sm btn-success">Add</a>
-                                </div>
-                            </li>
-                        </ul>
+<div class="admin-container">
+    <div class="container-fluid">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h1><i class="bi bi-speedometer2 me-2"></i>Admin Dashboard</h1>
+            <div class="text-end">
+                <span class="badge bg-primary px-3 py-2">Total Users: {{ total_users }}</span>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-lg-9">
+                <div class="row g-4">
+                    <div class="col-md-6">
+                        <div class="card h-100">
+                            <div class="card-header px-3 py-3"><i class="bi bi-people-fill me-2"></i>ACCOUNTS</div>
+                            <ul class="list-group list-group-flush">
+                                <li class="list-group-item d-flex justify-content-between align-items-center">
+                                    Users
+                                    <div>
+                                        <a href="/admin/users/user/" class="btn btn-sm btn-primary">Change</a>
+                                        <a href="/admin/users/user/add/" class="btn btn-sm btn-success">Add</a>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
                     </div>
-                    <div class="card mb-4">
-                        <div class="card-header">AUTHENTICATION AND AUTHORIZATION</div>
-                        <ul class="list-group list-group-flush">
-                            <li class="list-group-item d-flex justify-content-between align-items-center">
-                                Groups
-                                <div>
-                                    <a href="/admin/auth/group/" class="btn btn-sm btn-primary">Change</a>
-                                    <a href="/admin/auth/group/add/" class="btn btn-sm btn-success">Add</a>
-                                </div>
-                            </li>
-                        </ul>
+
+                    <div class="col-md-6">
+                        <div class="card h-100">
+                            <div class="card-header px-3 py-3"><i class="bi bi-cart-fill me-2"></i>PRODUCTS</div>
+                            <ul class="list-group list-group-flush">
+                                <li class="list-group-item d-flex justify-content-between align-items-center">
+                                    Product List
+                                    <div>
+                                        <a href="/admin/products/product/" class="btn btn-sm btn-primary">Change</a>
+                                        <a href="/admin/products/product/add/" class="btn btn-sm btn-success">Add</a>
+                                    </div>
+                                </li>
+                                <li class="list-group-item d-flex justify-content-between align-items-center">
+                                    Categories
+                                    <div>
+                                        <a href="/admin/products/category/" class="btn btn-sm btn-primary">Change</a>
+                                        <a href="/admin/products/category/add/" class="btn btn-sm btn-success">Add</a>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
                     </div>
-                    <div class="card mb-4">
-                        <div class="card-header">EVENTS</div>
-                        <ul class="list-group list-group-flush">
-                            <li class="list-group-item d-flex justify-content-between align-items-center">
-                                Events
-                                <div>
-                                    <a href="/admin/content/event/" class="btn btn-sm btn-primary">Change</a>
-                                    <a href="/admin/content/event/add/" class="btn btn-sm btn-success">Add</a>
-                                </div>
-                            </li>
-                        </ul>
+
+                    <div class="col-md-6">
+                        <div class="card h-100">
+                            <div class="card-header px-3 py-3"><i class="bi bi-newspaper me-2"></i>CONTENT HUB</div>
+                            <ul class="list-group list-group-flush">
+                                <li class="list-group-item d-flex justify-content-between align-items-center">
+                                    News Articles
+                                    <div>
+                                        <a href="/admin/content/news/" class="btn btn-sm btn-primary">Change</a>
+                                        <a href="/admin/content/news/add/" class="btn btn-sm btn-success">Add</a>
+                                    </div>
+                                </li>
+                                <li class="list-group-item d-flex justify-content-between align-items-center">
+                                    Events
+                                    <div>
+                                        <a href="/admin/content/event/" class="btn btn-sm btn-primary">Change</a>
+                                        <a href="/admin/content/event/add/" class="btn btn-sm btn-success">Add</a>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
                     </div>
-                    <div class="card mb-4">
-                        <div class="card-header">NEWS</div>
-                        <ul class="list-group list-group-flush">
-                            <li class="list-group-item d-flex justify-content-between align-items-center">
-                                News articles
-                                <div>
-                                    <a href="/admin/content/news/" class="btn btn-sm btn-primary">Change</a>
-                                    <a href="/admin/content/news/add/" class="btn btn-sm btn-success">Add</a>
-                                </div>
-                            </li>
-                        </ul>
-                    </div>
-                    <div class="card mb-4">
-                        <div class="card-header">PAGES</div>
-                        <ul class="list-group list-group-flush">
-                            <li class="list-group-item d-flex justify-content-between align-items-center">
-                                Gallery categories
-                                <div>
-                                    <a href="#" class="btn btn-sm btn-primary">Change</a>
-                                    <a href="#" class="btn btn-sm btn-success">Add</a>
-                                </div>
-                            </li>
-                            <li class="list-group-item d-flex justify-content-between align-items-center">
-                                History categories
-                                <div>
-                                    <a href="#" class="btn btn-sm btn-primary">Change</a>
-                                    <a href="#" class="btn btn-sm btn-success">Add</a>
-                                </div>
-                            </li>
-                            <li class="list-group-item d-flex justify-content-between align-items-center">
-                                News categories
-                                <div>
-                                    <a href="#" class="btn btn-sm btn-primary">Change</a>
-                                    <a href="#" class="btn btn-sm btn-success">Add</a>
-                                </div>
-                            </li>
-                            <li class="list-group-item d-flex justify-content-between align-items-center">
-                                Product categories
-                                <div>
-                                    <a href="/admin/products/category/" class="btn btn-sm btn-primary">Change</a>
-                                    <a href="/admin/products/category/add/" class="btn btn-sm btn-success">Add</a>
-                                </div>
-                            </li>
-                        </ul>
-                    </div>
-                    <div class="card mb-4">
-                        <div class="card-header">PRODUCTS</div>
-                        <ul class="list-group list-group-flush">
-                            <li class="list-group-item d-flex justify-content-between align-items-center">
-                                Categories
-                                <div>
-                                    <a href="/admin/products/category/" class="btn btn-sm btn-primary">Change</a>
-                                    <a href="/admin/products/category/add/" class="btn btn-sm btn-success">Add</a>
-                                </div>
-                            </li>
-                            <li class="list-group-item d-flex justify-content-between align-items-center">
-                                Products
-                                <div>
-                                    <a href="/admin/products/product/" class="btn btn-sm btn-primary">Change</a>
-                                    <a href="/admin/products/product/add/" class="btn btn-sm btn-success">Add</a>
-                                </div>
-                            </li>
-                        </ul>
-                    </div>
-                    <div class="card mb-4">
-                        <div class="card-header">COHORTS AND HOUSES</div>
-                        <ul class="list-group list-group-flush">
-                            <li class="list-group-item d-flex justify-content-between align-items-center">
-                                Cohorts
-                                <div>
-                                    <a href="/admin/organisation/cohort/" class="btn btn-sm btn-primary">Change</a>
-                                    <a href="/admin/organisation/cohort/add/" class="btn btn-sm btn-success">Add</a>
-                                </div>
-                            </li>
-                            <li class="list-group-item d-flex justify-content-between align-items-center">
-                                Houses
-                                <div>
-                                    <a href="/admin/organisation/house/" class="btn btn-sm btn-primary">Change</a>
-                                    <a href="/admin/organisation/house/add/" class="btn btn-sm btn-success">Add</a>
-                                </div>
-                            </li>
-                        </ul>
-                    </div>
-                    <div class="card mb-4">
-                        <div class="card-header">TEASER QUESTIONS</div>
-                        <ul class="list-group list-group-flush">
-                            <li class="list-group-item d-flex justify-content-between align-items-center">
-                                Teaser Questions
-                                <div>
-                                    <a href="/admin/teaser/teaserquestion/" class="btn btn-sm btn-primary">Change</a>
-                                    <a href="/admin/teaser/teaserquestion/add/" class="btn btn-sm btn-success">Add</a>
-                                </div>
-                            </li>
-                        </ul>
-                    </div>
-                    <div class="card mb-4">
-                        <div class="card-header">SITE_CONTENT</div>
-                        <ul class="list-group list-group-flush">
-                            <li class="list-group-item d-flex justify-content-between align-items-center">
-                                Homepage CTAs
-                                <div>
-                                    <a href="#" class="btn btn-sm btn-primary">Change</a>
-                                    <a href="#" class="btn btn-sm btn-success">Add</a>
-                                </div>
-                            </li>
-                            <li class="list-group-item d-flex justify-content-between align-items-center">
-                                Homepage Slides
-                                <div>
-                                    <a href="#" class="btn btn-sm btn-primary">Change</a>
-                                    <a href="#" class="btn btn-sm btn-success">Add</a>
-                                </div>
-                            </li>
-                            <li class="list-group-item d-flex justify-content-between align-items-center">
-                                Site settings
-                                <div>
-                                    <a href="#" class="btn btn-sm btn-primary">Change</a>
-                                    <a href="#" class="btn btn-sm btn-success">Add</a>
-                                </div>
-                            </li>
-                            <li class="list-group-item d-flex justify-content-between align-items-center">
-                                Team members
-                                <div>
-                                    <a href="#" class="btn btn-sm btn-primary">Change</a>
-                                    <a href="#" class="btn btn-sm btn-success">Add</a>
-                                </div>
-                            </li>
-                        </ul>
+
+                    <div class="col-md-6">
+                        <div class="card h-100">
+                            <div class="card-header px-3 py-3"><i class="bi bi-bank2 me-2"></i>ORGANISATION</div>
+                            <ul class="list-group list-group-flush">
+                                <li class="list-group-item d-flex justify-content-between align-items-center">
+                                    Cohorts
+                                    <div>
+                                        <a href="/admin/organisation/cohort/" class="btn btn-sm btn-primary">Change</a>
+                                        <a href="/admin/organisation/cohort/add/" class="btn btn-sm btn-success">Add</a>
+                                    </div>
+                                </li>
+                                <li class="list-group-item d-flex justify-content-between align-items-center">
+                                    Houses
+                                    <div>
+                                        <a href="/admin/organisation/house/" class="btn btn-sm btn-primary">Change</a>
+                                        <a href="/admin/organisation/house/add/" class="btn btn-sm btn-success">Add</a>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
-        <div class="col-md-3">
-            <div class="card">
-                <div class="card-header">Recent actions</div>
-                <div class="card-body">
-                    <p>My actions</p>
-                    {% for entry in log_entries %}
-                        <p>{{ entry.object_repr }} - {{ entry.get_change_message }}</p>
-                    {% endfor %}
+
+            <div class="col-lg-3">
+                <div class="card">
+                    <div class="card-header px-3 py-3"><i class="bi bi-clock-history me-2"></i>RECENT ACTIONS</div>
+                    <div class="card-body recent-actions-list">
+                        {% if not admin_log %}
+                            <p class="text-muted small">No recent actions found.</p>
+                        {% else %}
+                            {% for entry in admin_log %}
+                            <div class="mb-3 border-bottom border-secondary pb-2">
+                                <div class="d-flex align-items-center mb-1">
+                                    {% if entry.is_addition %}
+                                        <span class="badge bg-success me-2" style="font-size: 0.6rem;">ADD</span>
+                                    {% elif entry.is_change %}
+                                        <span class="badge bg-warning text-dark me-2" style="font-size: 0.6rem;">EDIT</span>
+                                    {% else %}
+                                        <span class="badge bg-danger me-2" style="font-size: 0.6rem;">DEL</span>
+                                    {% endif %}
+                                    <small class="text-info fw-bold">{{ entry.content_type|capfirst }}</small>
+                                </div>
+                                <span class="d-block small text-light">{{ entry.object_repr }}</span>
+                                <small class="text-muted" style="font-size: 0.75rem;">{{ entry.action_time|timesince }} ago</small>
+                            </div>
+                            {% endfor %}
+                        {% endif %}
+                    </div>
                 </div>
             </div>
         </div>
