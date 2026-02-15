@@ -32,10 +32,10 @@
                         
                         <div class="d-flex justify-content-center gap-2 mb-4">
                             <span class="badge bg-primary-soft text-primary px-3 py-2 rounded-pill fw-bold">
-                                <i class="bi bi-mortarboard-fill me-1"></i> Class of {{ user.profile.cohort.name|default:"N/A" }}
+                                <i class="bi bi-mortarboard-fill me-1"></i>{{ user.cohort.name|default:"N/A" }}
                             </span>
                             <span class="badge bg-secondary-soft text-dark px-3 py-2 rounded-pill fw-bold border">
-                                <i class="bi bi-house-door-fill me-1"></i> {{ user.profile.house.name|default:"N/A" }}
+                                <i class="bi bi-house-door-fill me-1"></i> {{ user.house.name|default:"N/A" }}
                             </span>
                         </div>
                         
