@@ -1,0 +1,58 @@
+{% extends "base.html" %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+<style>
+    /* Modern aesthetic updates */
+    .modern-card {
+        border-radius: 15px;
+        background-color: #ffffff;
+    }
+    .form-title {
+        color: #1a1a1a;
+        letter-spacing: -0.5px;
+    }
+    /* Style the crispy form inputs */
+    .modern-card .form-control, 
+    .modern-card .form-select {
+        border-radius: 8px;
+        padding: 10px 15px;
+        border: 1px solid #dee2e6;
+        transition: all 0.2s ease-in-out;
+    }
+    .modern-card .form-control:focus {
+        border-color: #0d6efd;
+        box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.1);
+    }
+    .btn-modern {
+        padding: 10px 30px;
+        border-radius: 8px;
+        font-weight: 600;
+        transition: transform 0.2s;
+    }
+    .btn-modern:hover {
+        transform: translateY(-1px);
+    }
+</style>
+
+<div class="container py-5">
+    <div class="row">
+        <div class="col-lg-8 mx-auto">
+            <div class="card shadow-lg border-0 modern-card">
+                <div class="card-body p-4 p-md-5">
+                    <h3 class="fw-bold mb-4 form-title">Add a Story</h3>
+                    <form method="post" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        <div class="mb-3">
+                            {{ form|crispy }}
+                        </div>
+                        <div class="text-end mt-4">
+                            <button type="submit" class="btn btn-primary btn-modern shadow-sm">Submit Story</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

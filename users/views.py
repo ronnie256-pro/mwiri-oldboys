@@ -10,6 +10,7 @@ from alumni_sos.forms import SOSRequestForm
 from teaser.forms import TeaserQuestionForm
 from .models import User, Profile
 from teaser.models import TeaserQuestion
+from stories.forms import StoryForm
 
 def register(request):
     teaser_questions = TeaserQuestion.objects.all()
@@ -48,12 +49,14 @@ class MyAccountView(View):
         if request.user.is_authenticated:
             form = ProfileForm(instance=request.user)
             sos_form = SOSRequestForm()
+            story_form = StoryForm()
         else:
             form = None
             sos_form = None
+            story_form = None
         
         content_types = ["Products", "Services", "News", "History"]
-        return render(request, self.template_name, {'form': form, 'sos_form': sos_form, 'content_types': content_types})
+        return render(request, self.template_name, {'form': form, 'sos_form': sos_form, 'content_types': content_types, 'story_form': story_form})
 
     def post(self, request, *args, **kwargs):
         if not request.user.is_authenticated:
@@ -79,8 +82,18 @@ class MyAccountView(View):
         if 'submit_sos' in request.POST:
             return redirect('alumni_sos')
 
+        if 'add_story' in request.POST:
+            story_form = StoryForm(request.POST, request.FILES)
+            if story_form.is_valid():
+                story = story_form.save(commit=False)
+                story.author = request.user
+                story.save()
+                messages.success(request, 'Story submitted successfully!')
+                return redirect('our_stories')
+
         content_types = ["Products", "Services", "News", "History"]
-        return render(request, self.template_name, {'form': form, 'sos_form': sos_form, 'content_types': content_types})
+        story_form = StoryForm()
+        return render(request, self.template_name, {'form': form, 'sos_form': sos_form, 'content_types': content_types, 'story_form': story_form})
 
 class CustomLoginView(LoginView):
     template_name = 'users/login.html'

@@ -29,6 +29,7 @@ urlpatterns = [
     path('', include('products.urls')),
     path('', include('custom_admin.urls')),
     path('', include('alumni_sos.urls')),
+    path('', include('stories.urls')),
 ]
 
 if settings.DEBUG:

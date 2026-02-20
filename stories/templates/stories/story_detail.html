@@ -1,0 +1,55 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container py-5">
+    <div class="row">
+        <div class="col-lg-8 mx-auto">
+                        
+            <nav aria-label="breadcrumb" class="mb-4">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="{% url 'our_stories' %}" class="text-decoration-none text-primary fw-bold">BACK</a></li>
+                </ol>
+            </nav>
+
+            <div class="card shadow-sm border-0">
+                <img src="{{ story.hero_image.url }}" class="card-img-top" alt="{{ story.title }}" style="max-height: 400px; object-fit: cover;">
+                <div class="card-body p-4">
+                    <h2 class="fw-bold">{{ story.title }}</h2>
+                                        
+                    <div class="d-flex align-items-center gap-2 mb-4 small text-muted">
+                        <img src="{% if story.author.profile.profile_picture %}{{ story.author.profile.profile_picture.url }}{% else %}https://ui-avatars.com/api/?name={{ story.author.username }}&background=4f46e5&color=fff&size=64{% endif %}"
+                             alt="{{ story.author.username }}" class="rounded-circle" style="width: 24px; height: 24px; object-fit: cover;">
+                        <span>| By {{ story.author.get_full_name|default:story.author.username }}</span>
+                    </div>
+
+                    <hr>
+                    <div class="content">{{ story.content|linebreaks }}</div>
+
+                    <div class="row mt-4">
+                        {% if story.additional_image_1 %}
+                        <div class="col-md-6 mb-3">
+                            <img src="{{ story.additional_image_1.url }}" alt="Additional Image 1" class="img-fluid rounded shadow-sm">
+                        </div>
+                        {% endif %}
+                        {% if story.additional_image_2 %}
+                        <div class="col-md-6 mb-3">
+                            <img src="{{ story.additional_image_2.url }}" alt="Additional Image 2" class="img-fluid rounded shadow-sm">
+                        </div>
+                        {% endif %}
+                        {% if story.additional_image_3 %}
+                        <div class="col-md-6 mb-3">
+                            <img src="{{ story.additional_image_3.url }}" alt="Additional Image 3" class="img-fluid rounded shadow-sm">
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+                        
+            <nav aria-label="breadcrumb" class="mb-4">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="{% url 'our_stories' %}" class="text-decoration-none text-primary fw-bold">BACK</a></li>
+                </ol>
+            </nav>
+        </div>
+    </div>
+</div>
+{% endblock %}
