@@ -2,34 +2,164 @@
 {% load crispy_forms_tags %}
 
 {% block content %}
-<div class="container mt-5">
-    <div class="row">
-        <div class="col-md-6 offset-md-3">
-            <div class="card">
-                <div class="card-header">
-                    <h3 class="text-center">Join the Brotherhood</h3>
+
+<style>
+    .moba-hero {
+        background: linear-gradient(135deg, #0b1f3a 0%, #132f5e 100%);
+        color: white;
+        padding: 90px 20px;
+        text-align: center;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .moba-hero::after {
+        content: "";
+        position: absolute;
+        width: 450px;
+        height: 450px;
+        background: rgba(212, 175, 55, 0.18);
+        filter: blur(130px);
+        top: -120px;
+        right: -120px;
+        border-radius: 50%;
+    }
+
+    .gold-text {
+        color: #d4af37;
+    }
+
+    .btn-gold {
+        background-color: #d4af37;
+        color: #0b1f3a;
+        font-weight: 600;
+        border: none;
+    }
+
+    .btn-gold:hover {
+        background-color: #c19b2e;
+        color: #0b1f3a;
+    }
+
+    .benefits-section {
+        background-color: #f8f9fa;
+        padding: 70px 20px;
+    }
+
+    .benefit-card {
+        border: none;
+        border-top: 4px solid #d4af37;
+        box-shadow: 0 8px 25px rgba(0,0,0,0.06);
+        transition: 0.3s ease;
+        height: 100%;
+    }
+
+    .benefit-card:hover {
+        transform: translateY(-5px);
+    }
+
+    /* Blur background when modal is open */
+    .modal-backdrop.show {
+        backdrop-filter: blur(6px);
+        background-color: rgba(0, 0, 0, 0.4);
+    }
+</style>
+
+<!-- HERO SECTION -->
+<section class="moba-hero">
+    <h1 class="fw-bold">Join MOBA today and let us build together.</h1>
+    <p class="mt-3">
+        The Mwiri Old Boys Association continues to contribute meaningfully to the school and its community, <br>
+        from supporting infrastructure projects to funding school events and standing with brothers in times of need.<br>
+        <br>Your subscription sustains this impact.
+    </p>
+
+    <div class="mt-4">
+        <strong class="gold-text">Annual Membership:</strong> 50,000 UGX &nbsp;&nbsp; | &nbsp;&nbsp;
+        <strong class="gold-text">Lifetime Membership:</strong> 1,010,000 UGX
+    </div>
+
+    <!-- Opens Registration Modal -->
+    <button class="btn btn-gold mt-4 px-4 py-2"
+            data-bs-toggle="modal"
+            data-bs-target="#registrationModal">
+        Become a Member
+    </button>
+</section>
+
+<!-- BENEFITS SECTION -->
+<section class="benefits-section">
+    <div class="container">
+        <div class="text-center mb-5">
+            <h2 class="fw-bold" style="color:#0b1f3a;">Membership Benefits</h2>
+        </div>
+
+        <div class="row g-4">
+            <div class="col-md-6">
+                <div class="card benefit-card p-4">
+                    <h4 class="fw-bold" style="color:#0b1f3a;">Annual Membership Benefits</h4>
+                    <p class="gold-text fw-semibold mb-3">50,000 UGX per year</p>
+                    <ul>
+                        <li>Recognized as an active member of MOBA</li>
+                        <li>Full access to members-only features</li>
+                        <li>Priority invitations to alumni events</li>
+                        <li>Access to networking and mentorship opportunities</li>
+                        <li>Contribution to development initiatives</li>
+                        <li>Support for brothers in need</li>
+                    </ul>
                 </div>
-                <div class="card-body">
-                    <form method="post" id="registration-form">
-                        {% csrf_token %}
-                        {{ form|crispy }}
-                        <button type="button" class="btn btn-primary btn-block" data-bs-toggle="modal" data-bs-target="#teaserModal">
-                            Join the Brotherhood
-                        </button>
-                    </form>
+            </div>
+
+            <div class="col-md-6">
+                <div class="card benefit-card p-4">
+                    <h4 class="fw-bold" style="color:#0b1f3a;">Lifetime Membership Benefits</h4>
+                    <p class="gold-text fw-semibold mb-3">1,010,000 UGX (One-time payment)</p>
+                    <ul>
+                        <li>Permanent membership status</li>
+                        <li>Lifetime recognition within MOBA</li>
+                        <li>Eligibility for high-end leadership roles in MOBA and elsewhere</li>
+                        <li>VIP consideration at major events</li>
+                        <li>Strategic support of capital projects</li>
+                        <li>Legacy contribution to future generations</li>
+                    </ul>
                 </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- REGISTRATION MODAL -->
+<div class="modal fade" id="registrationModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header" style="background-color:#0b1f3a; color:white;">
+                <h5 class="modal-title">Join the Brotherhood</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <form method="post" id="registration-form">
+                    {% csrf_token %}
+                    {{ form|crispy }}
+                    <button type="button"
+                            class="btn btn-gold w-100 mt-3"
+                            data-bs-toggle="modal"
+                            data-bs-target="#teaserModal"
+                            data-bs-dismiss="modal">
+                        Submit
+                    </button>
+                </form>
             </div>
         </div>
     </div>
 </div>
 
-<!-- Teaser Modal -->
-<div class="modal fade" id="teaserModal" tabindex="-1" aria-labelledby="teaserModalLabel" aria-hidden="true">
+<!-- Teaser Modal (UNCHANGED LOGIC) -->
+<div class="modal fade" id="teaserModal" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="teaserModalLabel">Teaser Questions</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            <div class="modal-header" style="background-color:#0b1f3a; color:white;">
+                <h5 class="modal-title">Brotherhood Verification</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
             </div>
             <div class="modal-body">
                 <form method="post" id="teaser-form">
@@ -39,7 +169,7 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary" onclick="submitForms()">Submit</button>
+                <button type="button" class="btn btn-gold" onclick="submitForms()">Verify</button>
             </div>
         </div>
     </div>
@@ -51,6 +181,7 @@ function submitForms() {
     var teaserForm = document.getElementById('teaser-form');
     var formData = new FormData(registrationForm);
     var teaserData = new FormData(teaserForm);
+
     for (var pair of teaserData.entries()) {
         formData.append(pair[0], pair[1]);
     }
@@ -76,4 +207,5 @@ function submitForms() {
     });
 }
 </script>
+
 {% endblock %}
