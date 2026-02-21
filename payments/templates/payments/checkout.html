@@ -1,0 +1,171 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div class="container py-5">
+
+  <!-- PAGE TITLE -->
+  <div class="text-center mb-5">
+    <h1 class="checkout-title">Checkout</h1>
+    <div class="title-underline mx-auto"></div>
+  </div>
+
+  <div class="row justify-content-center">
+    <div class="col-lg-6">
+      
+      <div class="card checkout-card shadow-lg p-4">
+
+        <!-- PAYMENT INFO -->
+        <div class="mb-4">
+          <p class="mb-2 text-muted">Amount to Pay</p>
+          <h3 class="amount">UGX {{ payment.amount|floatformat:0 }}</h3>
+          <p class="reference small">
+            Reference: <code>{{ payment.tx_ref }}</code>
+          </p>
+        </div>
+
+        <hr>
+
+        <!-- ACCEPTED METHODS -->
+        <div class="text-center my-4">
+          <p class="fw-semibold mb-3">Pay using:</p>
+
+          <div class="payment-methods d-flex justify-content-center gap-4 flex-wrap">
+
+            <span class="payment-text visa">VISA</span>
+            <span class="payment-text momo">MTN MOMO</span>
+            <span class="payment-text airtel">AIRTEL MONEY</span>
+
+          </div>
+        </div>
+
+        <!-- ACTION BUTTONS -->
+        <div class="d-grid gap-3 mt-4">
+          <a href="#" class="btn btn-pay" id="pay-now">
+            Proceed to Payment
+          </a>
+
+          <a href="{% url 'payments:view_cart' %}" class="btn btn-back">
+            Back to Cart
+          </a>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<style>
+:root {
+  --moba-navy: #0B1F3A;
+  --moba-gold: #D4AF37;
+  --moba-black: #111111;
+  --moba-white: #FFFFFF;
+}
+
+/* TITLE */
+.checkout-title {
+  font-weight: 700;
+  font-size: 2.2rem;
+  color: var(--moba-navy);
+}
+
+.title-underline {
+  width: 80px;
+  height: 4px;
+  background: var(--moba-gold);
+  border-radius: 4px;
+  margin-top: 10px;
+}
+
+/* CARD */
+.checkout-card {
+  border-radius: 20px;
+  border: none;
+  background: linear-gradient(145deg, #ffffff, #f9f9f9);
+}
+
+/* AMOUNT */
+.amount {
+  color: var(--moba-navy);
+  font-weight: 700;
+  font-size: 1.9rem;
+}
+
+/* REFERENCE */
+.reference code {
+  color: #c0392b;
+}
+
+/* PAYMENT TEXT STYLING */
+.payment-methods {
+  font-weight: 700;
+  font-size: 1.05rem;
+  letter-spacing: 1px;
+}
+
+.payment-text {
+  text-transform: uppercase;
+  transition: transform 0.2s ease, opacity 0.2s ease;
+  cursor: default;
+}
+
+.payment-text:hover {
+  transform: scale(1.08);
+  opacity: 0.9;
+}
+
+/* BRAND COLORS */
+.visa {
+  color: #1A1F71; /* Visa Rich Blue */
+}
+
+.momo {
+  color: #FFCC00; /* MTN Golden Yellow */
+}
+
+.airtel {
+  color: #E60000; /* Airtel Red */
+}
+
+/* BUTTONS */
+.btn-pay {
+  background: var(--moba-navy);
+  color: var(--moba-white);
+  padding: 12px;
+  border-radius: 12px;
+  font-weight: 600;
+  transition: all 0.25s ease;
+}
+
+.btn-pay:hover {
+  background: var(--moba-gold);
+  color: var(--moba-black);
+  transform: translateY(-2px);
+  box-shadow: 0 10px 25px rgba(11, 31, 58, 0.25);
+}
+
+.btn-back {
+  background: transparent;
+  border: 1px solid var(--moba-navy);
+  color: var(--moba-navy);
+  padding: 10px;
+  border-radius: 12px;
+  font-weight: 500;
+  transition: all 0.25s ease;
+}
+
+.btn-back:hover {
+  background: var(--moba-navy);
+  color: var(--moba-white);
+}
+</style>
+
+<script>
+  document.getElementById('pay-now').addEventListener('click', function(e){
+    e.preventDefault();
+    alert('We are still testing, Payments are coming soon.');
+  });
+</script>
+
+{% endblock %}

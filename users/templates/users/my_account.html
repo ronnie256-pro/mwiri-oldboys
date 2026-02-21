@@ -53,6 +53,14 @@
                             <small class="text-muted">{{ user.profile.house|default:'No House' }}</small>
                         </div>
                     </div>
+
+                    <!-- link to subscription page handled by payments app -->
+                    <a href="{% url 'payments:subscribe' %}" class="btn btn-gold mt-4 px-4 py-2">
+                        Pay your Subscription
+                    </a>
+                    <a href="{% url 'payments:view_cart' %}" class="btn btn-secondary mt-4 px-4 py-2">
+                        My Cart
+                    </a>
                 </div>
             </div>
 
@@ -93,6 +101,18 @@
         transition: all 0.3s cubic-bezier(0.165, 0.84, 0.44, 1);
         background: #ffffff;
     }
+.btn-gold {
+        background-color: #d4af37;
+        color: #0b1f3a;
+        font-weight: 600;
+        border: none;
+    }
+
+    .btn-gold:hover {
+        background-color: #c19b2e;
+        color: #0b1f3a;
+    }
+
     .bento-card:hover {
         transform: translateY(-8px);
         box-shadow: 0 20px 40px rgba(0,0,0,0.08) !important;

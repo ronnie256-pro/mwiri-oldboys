@@ -30,6 +30,7 @@ urlpatterns = [
     path('', include('custom_admin.urls')),
     path('', include('alumni_sos.urls')),
     path('', include('stories.urls')),
+    path('payments/', include('payments.urls', namespace='payments')),
 ]
 
 if settings.DEBUG:

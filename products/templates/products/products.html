@@ -8,52 +8,6 @@
     </div>
 
     <div class="row g-4">
-        <div class="col-lg-3">
-            <div class="card border-0 shadow-lg sticky-top" style="border-radius: 24px; top: 100px; z-index: 10;">
-                <div class="card-body p-4">
-                    <h5 class="fw-bold mb-4 d-flex align-items-center">
-                        <i class="bi bi-sliders2-vertical me-2 text-primary"></i> Filter
-                    </h5>
-                    
-                    <form method="get" action="." class="mb-4">
-                        <div class="input-group bg-light rounded-pill px-3 py-2 border">
-                            <span class="input-group-text bg-transparent border-0"><i class="bi bi-search text-muted"></i></span>
-                            <input type="text" name="search" class="form-control bg-transparent border-0 shadow-none small" placeholder="Search keywords..." value="{{ request.GET.search }}">
-                        </div>
-                    </form>
-
-                    <hr class="my-4 opacity-10">
-
-                    <h6 class="fw-bold small text-uppercase text-muted mb-3 tracking-wider">Categories</h6>
-                    <div class="d-flex flex-wrap gap-2 mb-4">
-                        <a href="?" class="btn btn-sm {% if not request.GET.category %}btn-primary{% else %}btn-light{% endif %} rounded-pill px-3">All</a>
-                        {% for cat in categories %}
-                        <a href="?category={{ cat.id }}" class="btn btn-sm {% if request.GET.category == cat.id|stringformat:'i' %}btn-primary{% else %}btn-light{% endif %} rounded-pill px-3">
-                            {{ cat.name }}
-                        </a>
-                        {% endfor %}
-                    </div>
-
-                    <h6 class="fw-bold small text-uppercase text-muted mb-3 tracking-wider">Price Range</h6>
-                    <div class="list-group list-group-flush mb-4">
-                        <label class="list-group-item border-0 bg-transparent px-0">
-                            <input class="form-check-input me-2" type="radio" name="price" value="all" checked> <span class="small">All Prices</span>
-                        </label>
-                        <label class="list-group-item border-0 bg-transparent px-0">
-                            <input class="form-check-input me-2" type="radio" name="price" value="under500"> <span class="small">Under UGX 500k</span>
-                        </label>
-                        <label class="list-group-item border-0 bg-transparent px-0">
-                            <input class="form-check-input me-2" type="radio" name="price" value="over500"> <span class="small">Over UGX 500k</span>
-                        </label>
-                    </div>
-
-                    <button class="btn btn-dark w-100 rounded-pill fw-bold py-2 shadow-sm transition-lift">
-                        Search
-                    </button>
-                </div>
-            </div>
-        </div>
-
         <div class="col-lg-9">
             <div class="row g-4">
                 {% for product in products %}
@@ -78,18 +32,8 @@
                         <div class="card-body p-4 d-flex flex-column">
                             <div class="mb-3">
                                 <h5 class="fw-bold text-dark mb-1 h5-title">{{ product.name }}</h5>
-                                <h4 class="fw-bold text-primary mb-0">UGX {{ product.price }}</h4>
+                                <h4 class="fw-bold text-primary mb-0">UGX {{ product.price|floatformat:0 }}</h4>
                             </div>
-                    <!-- This is the code that displays the owner of the product.
-                            <div class="d-flex align-items-center p-2 bg-light rounded-3 mb-4">
-                                <img src="{% if product.owner.profile.profile_picture %}{{ product.owner.profile.profile_picture.url }}{% else %}https://ui-avatars.com/api/?name={{ product.owner.username }}&background=4f46e5&color=fff{% endif %}" 
-                                     class="rounded-circle border border-2 border-white shadow-sm me-2" width="35" height="35" alt="OB">
-                                <div class="overflow-hidden">
-                                    <p class="small text-dark fw-bold mb-0 text-truncate">OB {{ product.owner.get_full_name|default:product.owner.username }}</p>
-                                    <p class="small text-muted mb-0" style="font-size: 0.7rem;">Class of {{ product.owner.profile.cohort|default:'N/A' }}</p>
-                                </div>
-                            </div>
-                        -->
                             <div class="d-grid gap-2">
                                 <a href="{% url 'product_detail' product.id %}" class="btn btn-primary rounded-pill fw-bold py-2 shadow-sm transition-lift">
                                     View Details
@@ -110,49 +54,118 @@
             </div>
 
             </div>
-    </div>
-</div>
-
 <style>
+    /* Page Background */
+    .container-fluid {
+        background: radial-gradient(circle at top left, #eef2ff 0%, #f8fafc 40%, #f1f5f9 100%);
+    }
+
+    /* Premium Product Card */
     .product-card {
-        border-radius: 28px;
-        background: #ffffff;
-        transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+        border-radius: 30px;
+        background: linear-gradient(145deg, #ffffff, #f8fafc);
+        transition: all 0.45s cubic-bezier(0.165, 0.84, 0.44, 1);
+        border: 1px solid rgba(15, 23, 42, 0.04);
+        position: relative;
     }
-    
+
+    .product-card::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        border-radius: 30px;
+        padding: 1px;
+        background: linear-gradient(135deg, rgba(79,70,229,0.15), rgba(99,102,241,0.05));
+        -webkit-mask:
+            linear-gradient(#fff 0 0) content-box,
+            linear-gradient(#fff 0 0);
+        -webkit-mask-composite: xor;
+                mask-composite: exclude;
+        pointer-events: none;
+    }
+
     .product-card:hover {
-        transform: translateY(-10px);
-        box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.12) !important;
+        transform: translateY(-12px) scale(1.02);
+        box-shadow: 0 30px 60px -15px rgba(15, 23, 42, 0.15);
     }
 
-    .bg-primary-soft { background-color: rgba(79, 70, 229, 0.1); color: #4f46e5; }
-    .bg-success-soft { background-color: rgba(22, 163, 74, 0.1); color: #16a34a; }
-    
-    /* Glassmorphism Badge */
+    /* Image Refinement */
+    .product-card img {
+        transition: transform 0.6s ease, filter 0.4s ease;
+    }
+
+    .product-card:hover img {
+        transform: scale(1.08);
+        filter: brightness(1.05);
+    }
+
+    /* Soft Badge Styling */
+    .bg-primary-soft {
+        background-color: rgba(79, 70, 229, 0.1);
+        color: #4f46e5;
+        font-weight: 600;
+    }
+
+    .bg-success-soft {
+        background-color: rgba(22, 163, 74, 0.1);
+        color: #16a34a;
+        font-weight: 600;
+    }
+
+    /* Glassmorphism Category Badge */
     .bg-blur {
-        background: rgba(15, 23, 42, 0.6);
-        backdrop-filter: blur(8px);
-        -webkit-backdrop-filter: blur(8px);
-        border: 1px solid rgba(255, 255, 255, 0.2);
+        background: rgba(15, 23, 42, 0.65);
+        backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px);
+        border: 1px solid rgba(255, 255, 255, 0.15);
+        font-weight: 500;
     }
 
+    /* Product Title */
     .h5-title {
+        font-weight: 700;
+        font-size: 1.05rem;
+        letter-spacing: -0.2px;
         display: -webkit-box;
         -webkit-line-clamp: 1;
         -webkit-box-orient: vertical;
         overflow: hidden;
     }
 
-    .transition-lift {
-        transition: all 0.2s ease;
+    /* Price Styling */
+    .card-body h4 {
+        font-size: 1.35rem;
+        letter-spacing: -0.5px;
     }
+
+    /* Premium Button */
+    .btn-primary {
+        background: linear-gradient(135deg, #4f46e5, #6366f1);
+        border: none;
+        border-radius: 50px;
+        font-weight: 600;
+        transition: all 0.3s ease;
+        box-shadow: 0 8px 20px rgba(79, 70, 229, 0.25);
+    }
+
+    .btn-primary:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 12px 28px rgba(79, 70, 229, 0.35);
+        background: linear-gradient(135deg, #4338ca, #4f46e5);
+    }
+
+    /* Empty State Polish */
+    .opacity-25 i {
+        color: #cbd5e1;
+    }
+
+    /* Smooth Animations */
+    .transition-lift {
+        transition: all 0.25s ease;
+    }
+
     .transition-lift:hover {
         transform: translateY(-2px);
-        filter: brightness(1.1);
     }
-
-    .tracking-wider { letter-spacing: 0.05em; }
-
-    .sticky-top { transition: all 0.3s ease; }
 </style>
 {% endblock %}

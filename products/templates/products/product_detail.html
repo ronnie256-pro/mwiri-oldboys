@@ -38,21 +38,50 @@
                 <h1 class="fw-bold display-5 mb-2 text-dark">{{ product.name }}</h1>
                 
                 <div class="d-flex align-items-center mb-4">
-                    <h2 class="fw-bold text-primary mb-0">UGX {{ product.price }}</h2>
+                    <h2 class="fw-bold text-primary mb-0">UGX {{ product.price|floatformat:0 }}</h2>
                 </div>
 
+                <!--Add to cart button (works with and without JS) -->
                 <div class="d-grid gap-3">
-                    <a href="" 
-                       target="_blank" 
-                       class="btn btn-success btn-lg rounded-pill fw-bold py-3 shadow-sm d-flex align-items-center justify-content-center transition-lift">
-             Add to Cart
-                    </a>
+                    <form method="post" action="{% url 'payments:add_to_cart' %}" id="add-to-cart-form">
+                        {% csrf_token %}
+                        <input type="hidden" name="product_id" value="{{ product.id }}">
+                        <input type="hidden" name="name" value="{{ product.name }}">
+                        <input type="hidden" name="price" value="{{ product.price }}">
+                        <button type="submit" id="add-to-cart" 
+                           class="btn btn-success btn-lg rounded-pill fw-bold py-3 shadow-sm d-flex align-items-center justify-content-center transition-lift">
+                 Add to Cart
+                        </button>
+                    </form>
                 </div>
         
             </div>
         </div>
     </div>
 </div>
+
+{% if other_products %}
+<div class="container py-5">
+  <h3 class="fw-bold mb-4">You may also like</h3>
+  <div class="row g-4">
+    {% for p in other_products|slice:":3" %}
+    <div class="col-md-4">
+      <div class="card border-0 shadow-sm h-100 product-card overflow-hidden">
+        <a href="{% url 'product_detail' p.id %}" class="text-decoration-none text-dark">
+          <div class="position-relative" style="height:180px; overflow:hidden;">
+            <img src="{{ p.hero_image.url }}" class="w-100 h-100" style="object-fit:cover;" alt="{{ p.name }}">
+          </div>
+          <div class="p-3">
+            <h6 class="fw-bold mb-1 text-truncate">{{ p.name }}</h6>
+            <p class="mb-0 text-primary fw-bold">UGX {{ p.price|floatformat:0 }}</p>
+          </div>
+        </a>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+</div>
+{% endif %}
 
 <style>
     .bg-primary-soft { background-color: #eef2ff; color: #4f46e5; }
@@ -80,4 +109,39 @@
         letter-spacing: 0.05em;
     }
 </style>
+
+<script>
+const form = document.getElementById('add-to-cart-form');
+form.addEventListener('submit', function(e){
+    // progressive enhancement: AJAX submit and redirect to cart on success
+    e.preventDefault();
+    const formData = new FormData(form);
+    const payload = {
+        product_id: formData.get('product_id'),
+        price: formData.get('price'),
+        name: formData.get('name'),
+        quantity: 1
+    };
+
+    fetch(form.action, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRFToken': '{{ csrf_token }}'
+        },
+        body: JSON.stringify(payload)
+    }).then(r => r.json()).then(data => {
+        if(data.status === 'ok'){
+            window.location.href = '{% url "payments:view_cart" %}';
+        } else {
+            alert('Could not add to cart');
+        }
+    }).catch(err => {
+        // fallback to normal form submit if AJAX fails
+        form.removeEventListener('submit', arguments.callee);
+        form.submit();
+    });
+});
+</script>
+
 {% endblock %}

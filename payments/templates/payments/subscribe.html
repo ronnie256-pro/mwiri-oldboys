@@ -1,0 +1,152 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div class="container py-5">
+
+  <!-- PAGE TITLE -->
+  <div class="text-center mb-5">
+    <h1 class="subscribe-title">MOBA Subscription</h1>
+    <div class="title-underline mx-auto"></div>
+    <p class="text-muted mt-3">
+      Paying your subscriptions is easy and secure.
+    </p>
+  </div>
+
+  <div class="row g-4 justify-content-center">
+
+    {% for opt in options %}
+    <div class="col-md-6 col-lg-5">
+      
+      <div class="card subscription-card p-5 text-center">
+        
+        <h4 class="plan-label mb-3">
+          {{ opt.label|upper }}
+        </h4>
+
+        <h2 class="plan-amount mb-4">
+          UGX {{ opt.amount|floatformat:0 }}
+        </h2>
+
+        <button class="btn btn-subscribe initiate-sub"
+                data-option="{{ opt.key }}">
+          Pay {{ opt.label }}
+        </button>
+
+      </div>
+
+    </div>
+    {% endfor %}
+
+  </div>
+</div>
+
+<style>
+:root {
+  --moba-navy: #0B1F3A;
+  --moba-gold: #D4AF37;
+  --moba-white: #FFFFFF;
+  --moba-black: #111111;
+}
+
+/* TITLE */
+.subscribe-title {
+  font-weight: 700;
+  font-size: 2.3rem;
+  color: var(--moba-navy);
+}
+
+.title-underline {
+  width: 90px;
+  height: 4px;
+  background: var(--moba-gold);
+  border-radius: 4px;
+  margin-top: 10px;
+}
+
+/* CARD */
+.subscription-card {
+  border-radius: 22px;
+  border: 2px solid transparent;
+  background: linear-gradient(145deg, #ffffff, #f9f9f9);
+  box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+  transition: all 0.35s ease;
+  cursor: pointer;
+}
+
+/* HOVER EFFECT */
+.subscription-card:hover {
+  background: var(--moba-navy);
+  transform: translateY(-8px);
+  box-shadow: 0 20px 45px rgba(11, 31, 58, 0.25);
+}
+
+.subscription-card:hover .plan-label,
+.subscription-card:hover .plan-amount {
+  color: var(--moba-white);
+}
+
+.subscription-card:hover .btn-subscribe {
+  background: var(--moba-gold);
+  color: var(--moba-black);
+}
+
+/* PLAN TEXT */
+.plan-label {
+  font-weight: 600;
+  letter-spacing: 1px;
+  color: var(--moba-navy);
+}
+
+.plan-amount {
+  font-weight: 700;
+  font-size: 2rem;
+  color: var(--moba-black);
+}
+
+/* BUTTON */
+.btn-subscribe {
+  background: var(--moba-navy);
+  color: var(--moba-white);
+  padding: 12px 20px;
+  border-radius: 12px;
+  font-weight: 600;
+  border: none;
+  transition: all 0.3s ease;
+}
+
+.btn-subscribe:hover {
+  background: var(--moba-gold);
+  color: var(--moba-black);
+}
+
+/* RESPONSIVE */
+@media (max-width: 768px) {
+  .subscribe-title {
+    font-size: 1.9rem;
+  }
+
+  .plan-amount {
+    font-size: 1.6rem;
+  }
+}
+</style>
+
+<script>
+  document.querySelectorAll('.initiate-sub').forEach(function(btn){
+    btn.addEventListener('click', function(){
+      const option = this.dataset.option;
+      fetch('{% url "payments:initiate_subscription_payment" %}', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json', 'X-CSRFToken': '{{ csrf_token }}'},
+        body: JSON.stringify({option: option})
+      }).then(r=>r.json()).then(data=>{
+        if(data.status === 'ok'){
+          // Redirect user to cart so they can proceed to checkout
+          window.location.href = data.cart_url || '{% url "payments:view_cart" %}';
+        }
+      });
+    });
+  });
+</script>
+
+{% endblock %}
