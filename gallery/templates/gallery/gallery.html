@@ -1,0 +1,238 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="mb-4">
+    <a href="{% url 'gallery:gallery' %}" class="btn btn-sm btn-outline-secondary me-2 {% if not active_category %}active{% endif %}">All</a>
+    {% for cat in categories %}
+      <a href="?category={{ cat.slug }}" class="btn btn-sm btn-outline-secondary me-2 {% if active_category and active_category.pk == cat.pk %}active{% endif %}">{{ cat.name }}</a>
+    {% endfor %}
+  </div>
+
+  <div class="row g-3">
+    {% for img in images %}
+    <div class="col-6 col-md-4 col-lg-3">
+      <div class="card shadow-sm">
+        <a href="#" class="img-link" data-index="{{ forloop.counter0 }}" data-src="{{ img.image.url }}" data-title="{{ img.title|escapejs }}">
+          <img src="{{ img.image.url }}" class="card-img-top" style="height: 200px; object-fit: cover; cursor: pointer;" alt="{{ img.title }}">
+        </a>
+        <div class="card-body p-2">
+          <p class="small mb-0 fw-bold">{{ img.title }}</p>
+          {% if img.category %}
+          <p class="small text-muted mb-0">{{ img.category.name }}</p>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+    {% empty %}
+    <div class="col-12 text-center py-5">
+      <p class="text-muted">No images yet.</p>
+    </div>
+    {% endfor %}
+  </div>
+</div>
+
+<!-- Custom Lightbox Overlay -->
+<div id="lightboxOverlay" style="display:none;position:fixed;inset:0;z-index:99999;align-items:center;justify-content:center;background:rgba(0,0,0,0.88);">
+  <button id="lbClose" aria-label="Close" style="position:absolute;top:18px;right:18px;background:rgba(255,255,255,0.06);border:none;color:#fff;font-size:28px;padding:8px 12px;border-radius:8px;cursor:pointer;">×</button>
+  <a id="lbDownload" aria-label="Download" style="position:absolute;top:18px;left:18px;background:rgba(255,255,255,0.06);border:none;color:#fff;font-size:18px;padding:8px 10px;border-radius:8px;text-decoration:none;" download>
+    ⬇
+  </a>
+  <button id="lbPrev" aria-label="Previous" style="position:absolute;left:18px;top:50%;transform:translateY(-50%);background:rgba(255,255,255,0.08);border:none;color:#fff;font-size:34px;padding:14px;border-radius:12px;cursor:pointer;">&lt;</button>
+  <img id="lightboxImage" src="" style="max-width:90%;max-height:80vh;border-radius:6px;box-shadow:0 10px 30px rgba(0,0,0,0.6);" alt="">
+  <button id="lbNext" aria-label="Next" style="position:absolute;right:18px;top:50%;transform:translateY(-50%);background:rgba(255,255,255,0.08);border:none;color:#fff;font-size:34px;padding:14px;border-radius:12px;cursor:pointer;">&gt;</button>
+  <div id="lightboxTitle" style="position:absolute;bottom:24px;left:24px;color:#fff;font-size:1rem;"></div>
+</div>
+
+<script>
+(function(){
+  const links = Array.from(document.querySelectorAll('.img-link'));
+  if(!links.length) return;
+  const images = links.map(l => ({src: l.dataset.src, title: l.dataset.title}));
+  const overlay = document.getElementById('lightboxOverlay');
+  const imgEl = document.getElementById('lightboxImage');
+  const titleEl = document.getElementById('lightboxTitle');
+  const btnPrev = document.getElementById('lbPrev');
+  const btnNext = document.getElementById('lbNext');
+  const btnClose = document.getElementById('lbClose');
+  const btnDownload = document.getElementById('lbDownload');
+  let currentIndex = 0;
+
+  function filenameFromUrl(url, title){
+    try{
+      const urlObj = new URL(url, window.location.origin);
+      const pathname = urlObj.pathname;
+      const name = pathname.substring(pathname.lastIndexOf('/')+1) || title || 'image';
+      return name;
+    }catch(e){
+      return title || 'image';
+    }
+  }
+
+  function showIndex(i){
+    currentIndex = (i + images.length) % images.length;
+    imgEl.src = images[currentIndex].src;
+    titleEl.textContent = images[currentIndex].title || '';
+    overlay.style.display = 'flex';
+    overlay.style.flexDirection = 'row';
+    // update download link
+    if(btnDownload){
+      btnDownload.href = images[currentIndex].src;
+      btnDownload.download = filenameFromUrl(images[currentIndex].src, images[currentIndex].title);
+      btnDownload.setAttribute('title', 'Download image');
+    }
+    // trap focus for keyboard navigation
+    document.body.style.overflow = 'hidden';
+  }
+
+  function hideOverlay(){
+    overlay.style.display = 'none';
+    document.body.style.overflow = '';
+    imgEl.src = '';
+  }
+
+  links.forEach((link, idx)=>{
+    link.addEventListener('click', function(e){
+      e.preventDefault();
+      showIndex(idx);
+    });
+  });
+
+  btnPrev.addEventListener('click', function(e){ e.stopPropagation(); showIndex(currentIndex-1); });
+  btnNext.addEventListener('click', function(e){ e.stopPropagation(); showIndex(currentIndex+1); });
+  btnClose.addEventListener('click', function(){ hideOverlay(); });
+
+  // click outside image closes
+  overlay.addEventListener('click', function(e){
+    if(e.target === overlay) hideOverlay();
+  });
+
+  // keyboard navigation
+  document.addEventListener('keydown', function(e){
+    if(overlay.style.display !== 'flex') return;
+    if(e.key === 'ArrowLeft') { showIndex(currentIndex-1); }
+    if(e.key === 'ArrowRight') { showIndex(currentIndex+1); }
+    if(e.key === 'Escape') { hideOverlay(); }
+  });
+})();
+</script>
+<style>
+
+/* ===============================
+   CATEGORY FILTER BUTTONS
+================================ */
+.btn-outline-secondary {
+    border: 1px solid #0b3a75;
+    color: #0b3a75;
+    background: #ffffff;
+    border-radius: 50px;
+    padding: 6px 18px;
+    font-weight: 600;
+    transition: all 0.3s ease;
+}
+
+.btn-outline-secondary:hover,
+.btn-outline-secondary.active {
+    background: linear-gradient(135deg, #0b3a75, #0f4c9c);
+    color: #ffffff !important;
+    border-color: #0b3a75;
+    box-shadow: 0 6px 18px rgba(11, 58, 117, 0.25);
+}
+
+/* ===============================
+   GALLERY CARDS
+================================ */
+.card {
+    border-radius: 18px;
+    border: 1px solid rgba(11, 58, 117, 0.08);
+    transition: all 0.35s ease;
+    background: #ffffff;
+}
+
+.card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 20px 40px rgba(11, 58, 117, 0.15);
+    border-color: rgba(250, 190, 0, 0.4);
+}
+
+/* ===============================
+   IMAGE EFFECT
+================================ */
+.card-img-top {
+    border-top-left-radius: 18px;
+    border-top-right-radius: 18px;
+    transition: transform 0.5s ease;
+}
+
+.card:hover .card-img-top {
+    transform: scale(1.05);
+}
+
+/* ===============================
+   CARD BODY
+================================ */
+.card-body {
+    padding: 14px 16px !important;
+}
+
+.card-body p:first-child {
+    color: #0b3a75;
+    font-weight: 700;
+}
+
+.card-body .text-muted {
+    color: #6b7280 !important;
+    font-size: 0.85rem;
+}
+
+/* ===============================
+   LIGHTBOX OVERLAY
+================================ */
+#lightboxOverlay {
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+    background: rgba(0, 0, 0, 0.85) !important;
+}
+
+/* Lightbox Image */
+#lightboxImage {
+    border-radius: 12px !important;
+    border: 3px solid #facc15;
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.7) !important;
+}
+
+/* Lightbox Buttons */
+#lbPrev, #lbNext {
+    background: rgba(11, 58, 117, 0.85) !important;
+    border: none !important;
+    transition: all 0.3s ease;
+}
+
+#lbPrev:hover, #lbNext:hover {
+    background: #facc15 !important;
+    color: #0b3a75 !important;
+}
+
+/* Close + Download Buttons */
+#lbClose, #lbDownload {
+    background: rgba(11, 58, 117, 0.85) !important;
+    border: none !important;
+    transition: all 0.3s ease;
+}
+
+#lbClose:hover, #lbDownload:hover {
+    background: #facc15 !important;
+    color: #0b3a75 !important;
+}
+
+/* Lightbox Title */
+#lightboxTitle {
+    background: rgba(11, 58, 117, 0.9);
+    padding: 8px 16px;
+    border-radius: 8px;
+    font-weight: 600;
+    color: #ffffff;
+}
+
+</style>
+{% endblock %}

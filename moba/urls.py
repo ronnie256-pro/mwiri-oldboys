@@ -31,6 +31,7 @@ urlpatterns = [
     path('', include('alumni_sos.urls')),
     path('', include('stories.urls')),
     path('payments/', include('payments.urls', namespace='payments')),
+    path('gallery/', include('gallery.urls', namespace='gallery')),
 ]
 
 if settings.DEBUG:
