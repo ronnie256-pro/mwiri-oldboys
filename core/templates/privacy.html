@@ -1,0 +1,166 @@
+{% extends "base.html" %}
+
+{% block content %}
+<section class="privacy-hero py-5">
+    <div class="container">
+        <div class="text-center text-white">
+            <h1 class="fw-bold display-5 mb-3">Privacy Policy</h1>
+            <p class="lead mb-0">Mwiri Old Boys Association (MOBA)</p>
+            <small class="text-warning">Effective Date: 27 February 2026</small>
+        </div>
+    </div>
+</section>
+
+<section class="privacy-content py-5">
+    <div class="container">
+        <div class="privacy-card shadow-lg p-4 p-md-5">
+
+            <div class="policy-section">
+                <h4>1. Introduction</h4>
+                <p>
+                    Welcome to the official online portal of the Mwiri Old Boys Association (MOBA). 
+                    We are committed to protecting the privacy of our alumni and members. 
+                    This Privacy Policy explains how we collect, use, and safeguard your personal 
+                    information when you visit our website, register for an account, and engage with our services.
+                </p>
+            </div>
+
+            <div class="policy-section">
+                <h4>2. Information We Collect</h4>
+
+                <p><strong>Personal Information:</strong> Name, House and cohort affiliation, contact details (email address, phone number, business address), and profession.</p>
+
+                <p><strong>Financial Information:</strong> If you are a member of MOBA or use our payment services, we collect transaction details and your contribution history.</p>
+
+                <p><strong>Engagement Data:</strong> Records of your stories, your images (captured during Mwiri events), subscriptions paid, donations made, and interactions with our digital content.</p>
+            </div>
+
+            <div class="policy-section">
+                <h4>3. How We Use Your Information</h4>
+                <ul>
+                    <li><strong>Community Building:</strong> Maintain an up-to-date alumni database.</li>
+                    <li><strong>Service Delivery:</strong> Process subscriptions and manage membership status.</li>
+                    <li><strong>Communication:</strong> Send relevant news, event invitations, and updates.</li>
+                    <li><strong>Administrative Records:</strong> Ensure compliance with governance and financial policies.</li>
+                    <li><strong>Security:</strong> Verify member identity and protect platform integrity.</li>
+                </ul>
+            </div>
+
+            <div class="policy-section">
+                <h4>4. How We Protect Your Data</h4>
+                <ul>
+                    <li><strong>Secure Storage:</strong> Financial and personal data are stored in secure, restricted-access databases.</li>
+                    <li><strong>Access Control:</strong> Only authorized Association officials (Admin only) have access.</li>
+                    <li><strong>Payment Security:</strong> We use reputable payment gateways. We do not store full credit card numbers or sensitive banking credentials.</li>
+                </ul>
+            </div>
+
+            <div class="policy-section">
+                <h4>5. Sharing of Information</h4>
+                <p>We do not sell your personal data. Information may be shared only in the following contexts:</p>
+                <ul>
+                    <li><strong>Service Providers:</strong> Trusted third-party vendors operating under strict confidentiality agreements.</li>
+                    <li><strong>Legal Requirements:</strong> Where required by law, including compliance with the Computer Misuse Act of Uganda.</li>
+                    <li><strong>Internal Community:</strong> Within the secure members-only OB Connect directory (Mwirians only).</li>
+                </ul>
+            </div>
+
+            <div class="policy-section">
+                <h4>6. Your Rights</h4>
+                <ul>
+                    <li><strong>Access:</strong> Request a copy of your personal data.</li>
+                    <li><strong>Rectify:</strong> Update your profile information.</li>
+                    <li><strong>Withdraw Consent:</strong> Opt out of newsletters at any time.</li>
+                    <li><strong>Deletion:</strong> Request account removal, subject to governance and financial record requirements.</li>
+                </ul>
+            </div>
+
+            <div class="policy-section">
+                <h4>7. Children’s Privacy</h4>
+                <p>
+                    Our services are directed at adult alumni of Busoga College Mwiri. 
+                    We do not knowingly collect data from minors without appropriate oversight.
+                </p>
+            </div>
+
+            <div class="policy-section">
+                <h4>8. Contact Us</h4>
+                <p>
+                    Mwiri Old Boys Association (MOBA)<br>
+                    Email: <strong>[Insert Official Support Email]</strong><br>
+                    Phone: <strong>[Insert Official Phone Number]</strong><br>
+                    Website: <strong>www.mwirioldboys.com</strong>
+                </p>
+                <p class="mt-3 small text-muted">
+                    This policy may be updated periodically. Please check this page for changes.
+                </p>
+            </div>
+
+        </div>
+    </div>
+</section>
+
+<style>
+
+/* HERO SECTION */
+.privacy-hero {
+    background: linear-gradient(135deg, #002147, #001630);
+    border-bottom: 4px solid #C5A021;
+}
+
+/* MAIN CARD */
+.privacy-card {
+    background: #ffffff;
+    border-radius: 18px;
+    border: 1px solid rgba(0, 33, 71, 0.08);
+}
+
+/* HEADINGS */
+.policy-section h4 {
+    color: #002147;
+    font-weight: 700;
+    margin-bottom: 15px;
+    position: relative;
+}
+
+.policy-section h4::after {
+    content: "";
+    width: 50px;
+    height: 3px;
+    background: #C5A021;
+    display: block;
+    margin-top: 8px;
+    border-radius: 2px;
+}
+
+/* TEXT */
+.policy-section p,
+.policy-section li {
+    color: #333;
+    line-height: 1.7;
+    font-size: 0.95rem;
+}
+
+.policy-section {
+    margin-bottom: 35px;
+}
+
+/* LIST STYLE */
+.policy-section ul {
+    padding-left: 18px;
+}
+
+.policy-section li {
+    margin-bottom: 8px;
+}
+
+/* RESPONSIVE SPACING */
+@media (max-width: 768px) {
+    .privacy-card {
+        padding: 25px !important;
+    }
+}
+
+</style>
+
+{% endblock %}
