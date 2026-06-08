@@ -1,7 +1,128 @@
 {% extends "base.html" %}
 
 {% block content %}
-<div class="container py-5 mt-5">
-    <h1>Elections</h1>
+<div class="container-fluid py-5 px-lg-5" style="background-color: #f8fafc; min-height: 100vh;">
+
+    <div class="text-center mb-5">
+        <h1 class="fw-bold display-4">MOBA <span class="text-primary">Elections</span></h1>
+        <p class="text-muted mx-auto" style="max-width: 600px;">View active elections, positions, and approved
+            candidates.</p>
+    </div>
+
+    <div class="row justify-content-center">
+        <div class="col-xl-10">
+            {% for category in categories %}
+            <div class="card shadow-sm border-0 rounded-4 mb-5 overflow-hidden">
+                <div class="card-header bg-primary text-white p-4 border-0">
+                    <h3 class="fw-bold mb-0">{{ category.name }}</h3>
+                    {% if category.description %}
+                    <p class="mb-0 mt-2 text-white-50 small">{{ category.description }}</p>
+                    {% endif %}
+                </div>
+                <div class="card-body p-4 p-md-5 bg-white">
+
+                    {% for position in category.positions.all %}
+                    <div class="mb-5 pb-4 border-bottom position-relative">
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <h4 class="fw-bold text-dark mb-0">
+                                <i class="bi bi-briefcase text-primary me-2"></i>{{ position.title }}
+                            </h4>
+                            <a href="{% url 'apply_for_office' %}"
+                                class="btn btn-outline-primary btn-sm rounded-pill fw-bold px-3">
+                                <i class="bi bi-person-up me-1"></i>Apply
+                            </a>
+                        </div>
+                        <p class="text-muted small mb-4">{{ position.description }}</p>
+
+                        <h6 class="text-uppercase text-muted fw-bold small mb-3">Approved Candidates</h6>
+                        <div class="row g-3">
+                            {% for candidate in position.candidates.all %}
+                            {% if candidate.status == 'APPROVED' %}
+                            <div class="col-md-6 col-lg-4">
+                                <!-- The entire card acts as a trigger -->
+                                <div class="card border-0 shadow-lg rounded-4 overflow-hidden h-100 candidate-card transition-all"
+                                    {% if candidate.manifesto %}data-bs-toggle="modal"
+                                    data-bs-target="#manifestoModal{{ candidate.id }}" style="cursor: pointer;"
+                                    title="Click to read manifesto" {% endif %}>
+
+                                    <div class="position-relative">
+                                        <img src="{% if candidate.user.profile.profile_picture %}{{ candidate.user.profile.profile_picture.url }}{% else %}https://ui-avatars.com/api/?name={{ candidate.user.username }}&background=4f46e5&color=fff&size=400{% endif %}"
+                                            class="card-img-top" style="height: 250px; object-fit: cover;"
+                                            alt="Candidate Photo">
+                                    </div>
+
+                                    <!-- Navy body matching the image -->
+                                    <div class="card-body text-center p-3 d-flex flex-column justify-content-center"
+                                        style="background-color: #1e3a8a; min-height: 90px;">
+                                        <h5 class="fw-bold text-white mb-1">{{ candidate.user.get_full_name|default:candidate.user.username }}</h5>
+                                        <small class="text-white-50" style="font-size: 0.8rem;">Class of {{ candidate.user.profile.cohort|default:'N/A' }}</small>
+                                    </div>
+                                </div>
+
+                                {% if candidate.manifesto %}
+                                <!-- Manifesto Modal (outside the clickable card) -->
+                                <div class="modal fade text-start" id="manifestoModal{{ candidate.id }}" tabindex="-1"
+                                    aria-hidden="true">
+                                    <div class="modal-dialog modal-dialog-centered modal-lg">
+                                        <div class="modal-content border-0 shadow-lg rounded-4">
+                                            <div class="modal-header border-0 pb-0">
+                                                <h5 class="fw-bold mb-0">Manifesto: {{ candidate.user.get_full_name|default:candidate.user.username }}</h5>
+                                                <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                    aria-label="Close"></button>
+                                            </div>
+                                            <div class="modal-body p-4">
+                                                <p class="text-secondary"
+                                                    style="white-space: pre-wrap; line-height: 1.7; font-size: 1.05rem;">
+                                                    {{ candidate.manifesto }}</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                {% endif %}
+                            </div>
+                            {% endif %}
+                            {% endfor %}
+
+                            <!-- If no candidates approved yet -->
+                            {% if not position.candidates.all %}
+                            <div class="col-12">
+                                <div class="p-4 bg-light rounded-3 text-center border border-dashed">
+                                    <p class="text-muted small mb-0"><i class="bi bi-info-circle me-2"></i>No approved
+                                        candidates for this position yet.</p>
+                                </div>
+                            </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                    {% empty %}
+                    <p class="text-muted text-center py-4">No positions have been added to this category yet.</p>
+                    {% endfor %}
+
+                </div>
+            </div>
+            {% empty %}
+            <div class="text-center py-5">
+                <div class="opacity-25 mb-3">
+                    <i class="bi bi-calendar-x display-1"></i>
+                </div>
+                <h3 class="text-muted">No Active Elections</h3>
+                <p class="text-muted">There are currently no active election categories available.</p>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
 </div>
+
+<style>
+    .candidate-card:hover {
+        transform: translateY(-5px);
+        border-color: rgba(11, 85, 213, 0.722) !important;
+        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.05) !important;
+    }
+
+    .border-dashed {
+        border-style: dashed !important;
+        border-color: #cbd5e1 !important;
+    }
+</style>
 {% endblock %}

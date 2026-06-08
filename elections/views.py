@@ -4,9 +4,16 @@ from django.contrib import messages
 from .models import Candidate
 from .forms import CandidateApplicationForm
 
+from .models import Candidate, ElectionCategory
+
 @login_required
 def elections_home(request):
-    return render(request, 'elections/elections_home.html')
+    categories = ElectionCategory.objects.filter(is_active=True).prefetch_related(
+        'positions',
+        'positions__candidates',
+        'positions__candidates__user'
+    )
+    return render(request, 'elections/elections_home.html', {'categories': categories})
 
 @login_required
 def apply_for_office(request):

@@ -14,7 +14,8 @@ SECRET_KEY = 'django-insecure-b0mep2c1(5s6jofrphgxx2mw0sd9ckgg3nj=1v6da54)gs41=)
 
 if IS_LOCAL:
     DEBUG = True
-    ALLOWED_HOSTS = []
+    ALLOWED_HOSTS = ['*']
+    CSRF_TRUSTED_ORIGINS = ['http://127.0.0.1:8000', 'http://localhost:8000']
 else:
     DEBUG = False
     ALLOWED_HOSTS = ['mwirioldboys.com', 'www.mwirioldboys.com', '147.93.52.129']
