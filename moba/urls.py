@@ -33,6 +33,7 @@ urlpatterns = [
     path('', include('stories.urls')),
     path('payments/', include('payments.urls', namespace='payments')),
     path('gallery/', include('gallery.urls', namespace='gallery')),
+    path('elections/', include('elections.urls')),
     path('privacy/', TemplateView.as_view(template_name='privacy.html'), name='privacy'),
 ]
 
