@@ -102,8 +102,8 @@ else:
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.postgresql',
-            'NAME': 'mwiri_db',
-            'USER': 'mwiri_user',
+            'NAME': 'moba_db',
+            'USER': 'moba_user',
             'PASSWORD': '*@oldboys2026#',
             'HOST': 'localhost',
             'PORT': '5432',
