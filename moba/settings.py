@@ -18,7 +18,7 @@ if IS_LOCAL:
     CSRF_TRUSTED_ORIGINS = ['http://127.0.0.1:8000', 'http://localhost:8000']
 else:
     DEBUG = False
-    ALLOWED_HOSTS = ['mwirioldboys.com', 'www.mwirioldboys.com', '147.93.52.129']
+    ALLOWED_HOSTS = ['mwirioldboys.com', 'www.mwirioldboys.com', '187.77.176.70']
     CSRF_TRUSTED_ORIGINS = ['https://mwirioldboys.com', 'https://www.mwirioldboys.com']
 
 
