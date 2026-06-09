@@ -26,3 +26,23 @@ class ManOfTheHour(models.Model):
 
     def __str__(self):
         return self.title
+
+class SiteSettings(models.Model):
+    site_logo = models.ImageField(upload_to='brand/', blank=True, null=True)
+    site_icon = models.ImageField(upload_to='brand/', blank=True, null=True)
+
+    class Meta:
+        verbose_name = 'Site Setting'
+        verbose_name_plural = 'Site Settings'
+
+    def save(self, *args, **kwargs):
+        self.pk = 1
+        super().save(*args, **kwargs)
+
+    @classmethod
+    def load(cls):
+        obj, created = cls.objects.get_or_create(pk=1)
+        return obj
+
+    def __str__(self):
+        return "Site Settings"

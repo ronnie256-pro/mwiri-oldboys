@@ -69,7 +69,13 @@
 
 <nav class="navbar navbar-expand-lg navbar-dark navbar-mwiiri sticky-top shadow-lg">
     <div class="container">
-        <a class="navbar-brand" href="{% url 'home' %}">MOBA</a>
+        <a class="navbar-brand d-flex align-items-center" href="{% url 'home' %}">
+            {% if site_settings and site_settings.site_logo %}
+                <img src="{{ site_settings.site_logo.url }}" alt="MOBA Logo" height="40" class="me-2">
+            {% else %}
+                MOBA
+            {% endif %}
+        </a>
 
         <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
             <span class="navbar-toggler-icon"></span>
