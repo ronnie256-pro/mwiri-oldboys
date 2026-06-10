@@ -140,6 +140,11 @@ CRISPY_TEMPLATE_PACK = "bootstrap5"
 # Custom User Model
 AUTH_USER_MODEL = 'users.User'
 
+# Use case-insensitive authentication backend
+AUTHENTICATION_BACKENDS = [
+    'users.backends.CaseInsensitiveModelBackend',
+]
+
 LOGIN_URL = 'login'
 LOGIN_REDIRECT_URL = 'my_account'
 
