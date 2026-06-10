@@ -12,6 +12,9 @@ from .models import User, Profile
 from teaser.models import TeaserQuestion
 from stories.forms import StoryForm
 
+from django.http import JsonResponse
+from django.urls import reverse
+
 def register(request):
     teaser_questions = TeaserQuestion.objects.all()
     if request.method == 'POST':
@@ -31,10 +34,16 @@ def register(request):
                 user = form.save(commit=False)
                 user.is_active = True
                 user.save()
-                messages.success(request, 'Your account has been created successfully!')
+                Profile.objects.create(user=user)
+                messages.success(request, 'Your account has been created successfully, please login')
+                
+                if request.headers.get('x-requested-with') == 'XMLHttpRequest':
+                    return JsonResponse({'success': True, 'redirect_url': reverse('login')})
                 return redirect('login')
             else:
                 messages.error(request, 'You are not a Mwirian')
+                if request.headers.get('x-requested-with') == 'XMLHttpRequest':
+                    return JsonResponse({'success': False, 'error': 'You are not a Mwirian'})
     else:
         form = RegistrationForm()
         teaser_form = TeaserQuestionForm(questions=teaser_questions)
