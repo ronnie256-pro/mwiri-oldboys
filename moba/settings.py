@@ -17,7 +17,8 @@ if IS_LOCAL:
     ALLOWED_HOSTS = ['*']
     CSRF_TRUSTED_ORIGINS = ['http://127.0.0.1:8000', 'http://localhost:8000']
 else:
-    DEBUG = False
+    # TEMPORARY: Set DEBUG = True to debug the moba_db 500 error!
+    DEBUG = True
     ALLOWED_HOSTS = ['mwirioldboys.com', 'www.mwirioldboys.com', '187.77.176.70']
     CSRF_TRUSTED_ORIGINS = ['https://mwirioldboys.com', 'https://www.mwirioldboys.com']
 
@@ -90,19 +91,15 @@ WSGI_APPLICATION = 'moba.wsgi.application'
 
 # --- DATABASE SELECTION ---
 if IS_LOCAL:
-    # LAPTOP: PostgreSQL (test DB)
+    # LAPTOP: SQLite
     DATABASES = {
         'default': {
-            'ENGINE': 'django.db.backends.postgresql',
-            'NAME': 'test_db',
-            'USER': 'test_user',
-            'PASSWORD': '*@test2026#',
-            'HOST': 'localhost',
-            'PORT': '5432',
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': BASE_DIR / 'db.sqlite3',
         }
     }
 else:
-    # VPS: PostgreSQL (moba_db)
+    # VPS: PostgreSQL
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.postgresql',
