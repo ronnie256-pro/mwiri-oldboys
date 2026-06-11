@@ -24,9 +24,11 @@ def register(request):
         if form.is_valid() and teaser_form.is_valid():
             all_correct = True
             for question in teaser_questions:
-                selected_answer_id = teaser_form.cleaned_data.get(f'question_{question.id}').id
-                correct_answer = question.answers.get(is_correct=True)
-                if selected_answer_id != correct_answer.id:
+                selected_answer = teaser_form.cleaned_data.get(f'question_{question.id}')
+                correct_answer = question.answers.filter(is_correct=True).first()
+                
+                # If no answer was selected, or the question doesn't have a correct answer set in the admin, or they don't match
+                if not selected_answer or not correct_answer or selected_answer.id != correct_answer.id:
                     all_correct = False
                     break
             
