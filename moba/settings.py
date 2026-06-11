@@ -90,7 +90,7 @@ WSGI_APPLICATION = 'moba.wsgi.application'
 
 # --- DATABASE SELECTION ---
 if IS_LOCAL:
-    # LAPTOP: PostgreSQL (Test DB)
+    # LAPTOP: PostgreSQL (test DB)
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.postgresql',
@@ -102,7 +102,7 @@ if IS_LOCAL:
         }
     }
 else:
-    # VPS: PostgreSQL
+    # VPS: PostgreSQL (moba_db)
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.postgresql',

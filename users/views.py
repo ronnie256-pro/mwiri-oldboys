@@ -41,9 +41,9 @@ def register(request):
                     return JsonResponse({'success': True, 'redirect_url': reverse('login')})
                 return redirect('login')
             else:
-                messages.error(request, 'You are not a Mwirian')
+                messages.error(request, 'Gundi, you are not a Mwirian')
                 if request.headers.get('x-requested-with') == 'XMLHttpRequest':
-                    return JsonResponse({'success': False, 'error': 'You are not a Mwirian'})
+                    return JsonResponse({'success': False, 'error': 'Gundi, you are not a Mwirian'})
     else:
         form = RegistrationForm()
         teaser_form = TeaserQuestionForm(questions=teaser_questions)
