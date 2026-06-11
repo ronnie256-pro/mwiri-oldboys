@@ -7,7 +7,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # --- THE PRODUCTION SWITCH ---
 # Keep this as True while working on your laptop.
 # IMPORTANT: Change this to False before you commit and push to GitHub!
-IS_LOCAL = False
+IS_LOCAL = True
 
 # Quick-start development settings - unsuitable for production
 SECRET_KEY = 'django-insecure-b0mep2c1(5s6jofrphgxx2mw0sd9ckgg3nj=1v6da54)gs41=)'
@@ -90,11 +90,15 @@ WSGI_APPLICATION = 'moba.wsgi.application'
 
 # --- DATABASE SELECTION ---
 if IS_LOCAL:
-    # LAPTOP: SQLite
+    # LAPTOP: PostgreSQL (Test DB)
     DATABASES = {
         'default': {
-            'ENGINE': 'django.db.backends.sqlite3',
-            'NAME': BASE_DIR / 'db.sqlite3',
+            'ENGINE': 'django.db.backends.postgresql',
+            'NAME': 'test_db',
+            'USER': 'test_user',
+            'PASSWORD': '*@test2026#',
+            'HOST': 'localhost',
+            'PORT': '5432',
         }
     }
 else:
