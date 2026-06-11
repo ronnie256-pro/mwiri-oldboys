@@ -17,8 +17,7 @@ if IS_LOCAL:
     ALLOWED_HOSTS = ['*']
     CSRF_TRUSTED_ORIGINS = ['http://127.0.0.1:8000', 'http://localhost:8000']
 else:
-    # TEMPORARY: Set DEBUG = True to debug the moba_db 500 error!
-    DEBUG = True
+    DEBUG = False
     ALLOWED_HOSTS = ['mwirioldboys.com', 'www.mwirioldboys.com', '187.77.176.70']
     CSRF_TRUSTED_ORIGINS = ['https://mwirioldboys.com', 'https://www.mwirioldboys.com']
 
