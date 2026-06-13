@@ -13,72 +13,72 @@
                 <div class="accordion-item border-0">
                     <!-- Mobile Accordion Header -->
                     <h2 class="accordion-header" id="filterHeading">
-                        <button class="accordion-button collapsed fw-bold py-3 px-4 bg-white text-dark border-bottom" type="button" data-bs-toggle="collapse" data-bs-target="#filterCollapse" aria-expanded="false" aria-controls="filterCollapse">
-                            <i class="bi bi-funnel-fill text-primary me-2 fs-5"></i> 
-                            <span>Filter</span>
+                        <button class="accordion-button collapsed fw-bold py-3 px-4 premium-accordion-btn" type="button" data-bs-toggle="collapse" data-bs-target="#filterCollapse" aria-expanded="false" aria-controls="filterCollapse">
+                            <i class="bi bi-funnel-fill text-gold me-2 fs-5"></i> 
+                            <span class="text-uppercase tracking-wider">Filter</span>
                         </button>
                     </h2>
                     <!-- Collapse container -->
                     <div id="filterCollapse" class="accordion-collapse collapse" aria-labelledby="filterHeading" data-bs-parent="#filterAccordion">
-                        <div class="accordion-body p-4 p-md-0">
+                        <div class="accordion-body p-4 p-md-4 bg-light border-bottom border-3" style="border-color: #C5A021 !important;">
                             <form method="get" class="row g-3 align-items-end">
                                 <div class="col-md-3">
-                                    <label for="name" class="form-label small fw-bold text-uppercase text-muted">Search Name</label>
-                    <div class="input-group">
-                        <span class="input-group-text bg-light border-0"><i class="bi bi-search"></i></span>
-                        <input type="text" name="name" id="name" class="form-control bg-light border-0" placeholder="e.g. Muyinda Ronnie" value="{{ request.GET.name }}">
-                    </div>
-                </div>
-                <div class="col-md-2">
-                    <label for="cohort" class="form-label small fw-bold text-uppercase text-muted">Cohort</label>
-                    <select name="cohort" id="cohort" class="form-select bg-light border-0">
-                        <option value="">All Years</option>
-                        {% for cohort in cohorts %}
-                            <option value="{{ cohort.id }}" {% if request.GET.cohort == cohort.id|stringformat:"i" %}selected{% endif %}>{{ cohort.name }}</option>
-                        {% endfor %}
-                    </select>
-                </div>
-                <div class="col-md-2">
-                    <label for="profession" class="form-label small fw-bold text-uppercase text-muted">Profession</label>
-                    <select name="profession" id="profession" class="form-select bg-light border-0">
-                        <option value="">All Careers</option>
-                        {% for profession in professions %}
-                            <option value="{{ profession.id }}" {% if request.GET.profession == profession.id|stringformat:"i" %}selected{% endif %}>{{ profession.name }}</option>
-                        {% endfor %}
-                    </select>
-                </div>
-                <div class="col-md-2">
-                    <label for="house" class="form-label small fw-bold text-uppercase text-muted">House</label>
-                    <select name="house" id="house" class="form-select bg-light border-0">
-                        <option value="">All Houses</option>
-                        {% for house in houses %}
-                            <option value="{{ house.id }}" {% if request.GET.house == house.id|stringformat:"i" %}selected{% endif %}>{{ house.name }}</option>
-                        {% endfor %}
-                    </select>
-                </div>
-                <div class="col-md-3">
-                    <label class="form-label small fw-bold text-uppercase text-muted">Years at Mwiri</label>
-                    <div class="input-group">
-                        <input type="number" name="year_from" class="form-control bg-light border-0 text-center px-1" placeholder="From" value="{{ request.GET.year_from }}" min="1900" max="2030">
-                        <span class="input-group-text bg-light border-0 px-2">-</span>
-                        <input type="number" name="year_to" class="form-control bg-light border-0 text-center px-1" placeholder="To" value="{{ request.GET.year_to }}" min="1900" max="2030">
-                    </div>
-                </div>
-                <div class="col-md-2">
-                    <label class="form-label small fw-bold text-uppercase text-muted">S4 Year</label>
-                    <input type="number" name="s4_year" class="form-control bg-light border-0 text-center px-1" placeholder="e.g. 2008" value="{{ request.GET.s4_year }}" min="1900" max="2030">
-                </div>
-                <div class="col-md-2">
-                    <label class="form-label small fw-bold text-uppercase text-muted">S6 Year</label>
-                    <input type="number" name="s6_year" class="form-control bg-light border-0 text-center px-1" placeholder="e.g. 2010" value="{{ request.GET.s6_year }}" min="1900" max="2030">
-                </div>
-                <div class="col-12 mt-4 text-end">
-                    <a href="?" class="btn btn-link text-muted me-3 text-decoration-none fw-bold">Clear Filters</a>
-                    <button type="submit" class="btn btn-primary rounded-pill px-5 py-2 fw-bold shadow-sm">
-                        Apply Filters
-                    </button>
-                </div>
-            </form>
+                                    <label for="name" class="form-label small fw-bold text-uppercase text-navy">Search Name</label>
+                                    <div class="input-group shadow-sm">
+                                        <span class="input-group-text bg-white border-0 text-navy"><i class="bi bi-search"></i></span>
+                                        <input type="text" name="name" id="name" class="form-control bg-white border-0 fw-bold" placeholder="e.g. Muyinda Ronnie" value="{{ request.GET.name }}">
+                                    </div>
+                                </div>
+                                <div class="col-md-2">
+                                    <label for="cohort" class="form-label small fw-bold text-uppercase text-navy">Cohort</label>
+                                    <select name="cohort" id="cohort" class="form-select bg-white border-0 shadow-sm fw-bold">
+                                        <option value="">All Years</option>
+                                        {% for cohort in cohorts %}
+                                            <option value="{{ cohort.id }}" {% if request.GET.cohort == cohort.id|stringformat:"i" %}selected{% endif %}>{{ cohort.name }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                                <div class="col-md-2">
+                                    <label for="profession" class="form-label small fw-bold text-uppercase text-navy">Profession</label>
+                                    <select name="profession" id="profession" class="form-select bg-white border-0 shadow-sm fw-bold">
+                                        <option value="">All Careers</option>
+                                        {% for profession in professions %}
+                                            <option value="{{ profession.id }}" {% if request.GET.profession == profession.id|stringformat:"i" %}selected{% endif %}>{{ profession.name }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                                <div class="col-md-2">
+                                    <label for="house" class="form-label small fw-bold text-uppercase text-navy">House</label>
+                                    <select name="house" id="house" class="form-select bg-white border-0 shadow-sm fw-bold">
+                                        <option value="">All Houses</option>
+                                        {% for house in houses %}
+                                            <option value="{{ house.id }}" {% if request.GET.house == house.id|stringformat:"i" %}selected{% endif %}>{{ house.name }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                                <div class="col-md-3">
+                                    <label class="form-label small fw-bold text-uppercase text-navy">Years at Mwiri</label>
+                                    <div class="input-group shadow-sm">
+                                        <input type="number" name="year_from" class="form-control bg-white border-0 text-center px-1 fw-bold" placeholder="From" value="{{ request.GET.year_from }}" min="1900" max="2030">
+                                        <span class="input-group-text bg-white border-0 px-2 fw-bold text-gold">-</span>
+                                        <input type="number" name="year_to" class="form-control bg-white border-0 text-center px-1 fw-bold" placeholder="To" value="{{ request.GET.year_to }}" min="1900" max="2030">
+                                    </div>
+                                </div>
+                                <div class="col-md-2">
+                                    <label class="form-label small fw-bold text-uppercase text-navy">S4 Year</label>
+                                    <input type="number" name="s4_year" class="form-control bg-white border-0 text-center px-1 shadow-sm fw-bold" placeholder="e.g. 2008" value="{{ request.GET.s4_year }}" min="1900" max="2030">
+                                </div>
+                                <div class="col-md-2">
+                                    <label class="form-label small fw-bold text-uppercase text-navy">S6 Year</label>
+                                    <input type="number" name="s6_year" class="form-control bg-white border-0 text-center px-1 shadow-sm fw-bold" placeholder="e.g. 2010" value="{{ request.GET.s6_year }}" min="1900" max="2030">
+                                </div>
+                                <div class="col-12 mt-4 text-end">
+                                    <a href="?" class="btn btn-link text-navy me-3 text-decoration-none fw-bold">Clear Filters</a>
+                                    <button type="submit" class="btn btn-gold rounded-pill px-5 py-2 shadow-sm">
+                                        Apply Filters
+                                    </button>
+                                </div>
+                            </form>
                         </div>
                     </div>
                 </div>
@@ -154,6 +154,40 @@
 </div>
 
 <style>
+    /* Premium Filter Styling */
+    .bg-navy { background-color: #002147 !important; }
+    .text-navy { color: #002147 !important; }
+    .text-gold { color: #C5A021 !important; }
+    .bg-gold { background-color: #C5A021 !important; }
+    
+    .btn-gold {
+        background-color: #C5A021;
+        color: #002147;
+        font-weight: 800;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        transition: all 0.3s ease;
+    }
+    .btn-gold:hover {
+        background-color: #002147;
+        color: #C5A021;
+        box-shadow: 0 5px 15px rgba(0,33,71,0.2) !important;
+    }
+
+    .premium-accordion-btn {
+        background-color: #002147 !important;
+        color: white !important;
+        border-bottom: 4px solid #C5A021 !important;
+        transition: all 0.3s ease;
+    }
+    .premium-accordion-btn::after {
+        filter: invert(1) brightness(200%);
+    }
+    .premium-accordion-btn:not(.collapsed) {
+        color: #C5A021 !important;
+        background-color: #001630 !important;
+    }
+
     .alumni-list-item {
         background: #ffffff;
         transition: all 0.2s ease-in-out;
