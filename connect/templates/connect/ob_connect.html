@@ -8,10 +8,22 @@
     </div>
 
     <div class="card shadow-lg border-0 rounded-5 mb-5 overflow-hidden">
-        <div class="card-body p-4 p-md-5 bg-white">
-            <form method="get" class="row g-3 align-items-end">
-                <div class="col-md-3">
-                    <label for="name" class="form-label small fw-bold text-uppercase text-muted">Search Name</label>
+        <div class="card-body p-0 p-md-5 bg-white">
+            <div class="accordion accordion-flush" id="filterAccordion">
+                <div class="accordion-item border-0">
+                    <!-- Mobile Accordion Header -->
+                    <h2 class="accordion-header d-md-none" id="filterHeading">
+                        <button class="accordion-button collapsed fw-bold py-3 px-4 bg-white text-dark border-bottom" type="button" data-bs-toggle="collapse" data-bs-target="#filterCollapse" aria-expanded="false" aria-controls="filterCollapse">
+                            <i class="bi bi-funnel-fill text-primary me-2 fs-5"></i> 
+                            <span>Filter</span>
+                        </button>
+                    </h2>
+                    <!-- Collapse container -->
+                    <div id="filterCollapse" class="accordion-collapse collapse d-md-block" aria-labelledby="filterHeading" data-bs-parent="#filterAccordion">
+                        <div class="accordion-body p-4 p-md-0">
+                            <form method="get" class="row g-3 align-items-end">
+                                <div class="col-md-3">
+                                    <label for="name" class="form-label small fw-bold text-uppercase text-muted">Search Name</label>
                     <div class="input-group">
                         <span class="input-group-text bg-light border-0"><i class="bi bi-search"></i></span>
                         <input type="text" name="name" id="name" class="form-control bg-light border-0" placeholder="e.g. Muyinda Ronnie" value="{{ request.GET.name }}">
@@ -67,6 +79,10 @@
                     </button>
                 </div>
             </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 
