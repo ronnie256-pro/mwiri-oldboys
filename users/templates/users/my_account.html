@@ -43,6 +43,42 @@
                         Class of {{ user.profile.cohort|default:'N/A' }}
                     </span>
 
+                    <!-- Years at Mwiri Form -->
+                    <div class="p-3 bg-light rounded-4 text-start mb-3">
+                        <h6 class="fw-bold mb-3 text-dark text-center" style="font-size: 0.85rem;"><i class="bi bi-clock-history me-2"></i>Years at Mwiri</h6>
+                        <form method="post" action="{% url 'my_account' %}">
+                            {% csrf_token %}
+                            <div class="row g-2 align-items-center mb-2">
+                                <div class="col-5">
+                                    <input type="number" name="years_from" class="form-control form-control-sm" placeholder="From" value="{{ user.profile.years_at_mwiri_from|default:'' }}" min="1900" max="2030">
+                                </div>
+                                <div class="col-2 text-center text-muted fw-bold" style="font-size: 0.75rem;">
+                                    TO
+                                </div>
+                                <div class="col-5">
+                                    <input type="number" name="years_to" class="form-control form-control-sm" placeholder="To" value="{{ user.profile.years_at_mwiri_to|default:'' }}" min="1900" max="2030">
+                                </div>
+                            </div>
+                            <div class="row g-2 align-items-center">
+                                <div class="col-6">
+                                    <label class="form-label small text-muted mb-0 fw-bold">S4 Year</label>
+                                    <input type="number" name="s4_year" class="form-control form-control-sm" placeholder="e.g. 2008" value="{{ user.profile.s4_year|default:'' }}" min="1900" max="2030">
+                                </div>
+                                <div class="col-6">
+                                    <label class="form-label small text-muted mb-0 fw-bold">S6 Year</label>
+                                    <input type="number" name="s6_year" class="form-control form-control-sm" placeholder="e.g. 2010" value="{{ user.profile.s6_year|default:'' }}" min="1900" max="2030">
+                                </div>
+                                <div class="col-12 mt-2">
+                                    <label class="form-label small text-muted mb-0 fw-bold">School Nickname</label>
+                                    <input type="text" name="nickname" class="form-control form-control-sm" placeholder="e.g. Odo" value="{{ user.profile.nickname|default:'' }}">
+                                </div>
+                                <div class="col-12 mt-3">
+                                    <button type="submit" name="update_years" class="btn btn-sm btn-outline-primary w-100 fw-bold rounded-pill">Update School Info</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+
                     <div class="p-3 bg-light rounded-4 text-start">
                         <div class="d-flex align-items-center mb-2">
                             <i class="bi bi-shield-check text-success me-2"></i>

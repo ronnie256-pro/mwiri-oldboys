@@ -32,6 +32,11 @@ class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     bio = models.TextField(blank=True)
     profile_picture = models.ImageField(upload_to='profile_pictures/', blank=True)
+    years_at_mwiri_from = models.PositiveIntegerField(null=True, blank=True)
+    years_at_mwiri_to = models.PositiveIntegerField(null=True, blank=True)
+    s4_year = models.PositiveIntegerField(null=True, blank=True)
+    s6_year = models.PositiveIntegerField(null=True, blank=True)
+    nickname = models.CharField(max_length=100, blank=True)
 
     def __str__(self):
         return self.user.username

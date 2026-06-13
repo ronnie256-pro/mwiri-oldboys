@@ -90,6 +90,41 @@ class MyAccountView(View):
                 messages.success(request, 'Profile updated successfully!')
                 return redirect('my_account')
 
+        if 'update_years' in request.POST:
+            profile, _ = Profile.objects.get_or_create(user=request.user)
+            years_from = request.POST.get('years_from')
+            years_to = request.POST.get('years_to')
+            s4_year = request.POST.get('s4_year')
+            s6_year = request.POST.get('s6_year')
+            nickname = request.POST.get('nickname')
+            
+            if years_from:
+                profile.years_at_mwiri_from = int(years_from)
+            else:
+                profile.years_at_mwiri_from = None
+                
+            if years_to:
+                profile.years_at_mwiri_to = int(years_to)
+            else:
+                profile.years_at_mwiri_to = None
+
+            if s4_year:
+                profile.s4_year = int(s4_year)
+            else:
+                profile.s4_year = None
+                
+            if s6_year:
+                profile.s6_year = int(s6_year)
+            else:
+                profile.s6_year = None
+                
+            if nickname is not None:
+                profile.nickname = nickname.strip()
+                
+            profile.save()
+            messages.success(request, 'School details updated successfully!')
+            return redirect('my_account')
+
         if 'submit_sos' in request.POST:
             return redirect('alumni_sos')
 
