@@ -5,12 +5,11 @@
     
     <div class="text-center mb-5">
         <h1 class="fw-bold display-4">OB <span class="text-primary">Connect</span></h1>
-        <p class="text-muted mx-auto" style="max-width: 600px;">Network with thousands of Mwirians across the globe.</p>
     </div>
 
     <div class="card shadow-lg border-0 rounded-5 mb-5 overflow-hidden">
         <div class="card-body p-4 p-md-5 bg-white">
-            <form method="get" class="row g-4 align-items-end">
+            <form method="get" class="row g-3 align-items-end">
                 <div class="col-md-3">
                     <label for="name" class="form-label small fw-bold text-uppercase text-muted">Search Name</label>
                     <div class="input-group">
@@ -27,7 +26,7 @@
                         {% endfor %}
                     </select>
                 </div>
-                <div class="col-md-3">
+                <div class="col-md-2">
                     <label for="profession" class="form-label small fw-bold text-uppercase text-muted">Profession</label>
                     <select name="profession" id="profession" class="form-select bg-light border-0">
                         <option value="">All Careers</option>
@@ -45,8 +44,25 @@
                         {% endfor %}
                     </select>
                 </div>
+                <div class="col-md-3">
+                    <label class="form-label small fw-bold text-uppercase text-muted">Years at Mwiri</label>
+                    <div class="input-group">
+                        <input type="number" name="year_from" class="form-control bg-light border-0 text-center px-1" placeholder="From" value="{{ request.GET.year_from }}" min="1900" max="2030">
+                        <span class="input-group-text bg-light border-0 px-2">-</span>
+                        <input type="number" name="year_to" class="form-control bg-light border-0 text-center px-1" placeholder="To" value="{{ request.GET.year_to }}" min="1900" max="2030">
+                    </div>
+                </div>
                 <div class="col-md-2">
-                    <button type="submit" class="btn btn-primary w-100 rounded-pill py-2 fw-bold shadow-sm">
+                    <label class="form-label small fw-bold text-uppercase text-muted">S4 Year</label>
+                    <input type="number" name="s4_year" class="form-control bg-light border-0 text-center px-1" placeholder="e.g. 2008" value="{{ request.GET.s4_year }}" min="1900" max="2030">
+                </div>
+                <div class="col-md-2">
+                    <label class="form-label small fw-bold text-uppercase text-muted">S6 Year</label>
+                    <input type="number" name="s6_year" class="form-control bg-light border-0 text-center px-1" placeholder="e.g. 2010" value="{{ request.GET.s6_year }}" min="1900" max="2030">
+                </div>
+                <div class="col-12 mt-4 text-end">
+                    <a href="?" class="btn btn-link text-muted me-3 text-decoration-none fw-bold">Clear Filters</a>
+                    <button type="submit" class="btn btn-primary rounded-pill px-5 py-2 fw-bold shadow-sm">
                         Apply Filters
                     </button>
                 </div>
@@ -108,13 +124,13 @@
     <nav class="mt-5">
         <ul class="pagination justify-content-center">
             {% if users.has_previous %}
-                <li class="page-item"><a class="page-link border-0 shadow-sm mx-1 rounded-circle" href="?page={{ users.previous_page_number }}&name={{ request.GET.name }}&cohort={{ request.GET.cohort }}&profession={{ request.GET.profession }}&house={{ request.GET.house }}"><i class="bi bi-chevron-left"></i></a></li>
+                <li class="page-item"><a class="page-link border-0 shadow-sm mx-1 rounded-circle" href="?page={{ users.previous_page_number }}&name={{ request.GET.name|default:'' }}&cohort={{ request.GET.cohort|default:'' }}&profession={{ request.GET.profession|default:'' }}&house={{ request.GET.house|default:'' }}&year_from={{ request.GET.year_from|default:'' }}&year_to={{ request.GET.year_to|default:'' }}&s4_year={{ request.GET.s4_year|default:'' }}&s6_year={{ request.GET.s6_year|default:'' }}"><i class="bi bi-chevron-left"></i></a></li>
             {% endif %}
             
             <li class="page-item active"><span class="page-link border-0 shadow-sm mx-1 rounded-circle">{{ users.number }}</span></li>
 
             {% if users.has_next %}
-                <li class="page-item"><a class="page-link border-0 shadow-sm mx-1 rounded-circle" href="?page={{ users.next_page_number }}&name={{ request.GET.name }}&cohort={{ request.GET.cohort }}&profession={{ request.GET.profession }}&house={{ request.GET.house }}"><i class="bi bi-chevron-right"></i></a></li>
+                <li class="page-item"><a class="page-link border-0 shadow-sm mx-1 rounded-circle" href="?page={{ users.next_page_number }}&name={{ request.GET.name|default:'' }}&cohort={{ request.GET.cohort|default:'' }}&profession={{ request.GET.profession|default:'' }}&house={{ request.GET.house|default:'' }}&year_from={{ request.GET.year_from|default:'' }}&year_to={{ request.GET.year_to|default:'' }}&s4_year={{ request.GET.s4_year|default:'' }}&s6_year={{ request.GET.s6_year|default:'' }}"><i class="bi bi-chevron-right"></i></a></li>
             {% endif %}
         </ul>
     </nav>

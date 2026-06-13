@@ -52,6 +52,21 @@
                             {% endif %}
                         </div>
 
+                        {% if user.profile.s4_year or user.profile.s6_year %}
+                        <div class="d-flex justify-content-center gap-2 mb-4">
+                            {% if user.profile.s4_year %}
+                            <span class="badge bg-white text-dark px-3 py-2 rounded-pill fw-bold border shadow-sm">
+                                <span class="text-muted me-1">S4:</span> {{ user.profile.s4_year }}
+                            </span>
+                            {% endif %}
+                            {% if user.profile.s6_year %}
+                            <span class="badge bg-white text-dark px-3 py-2 rounded-pill fw-bold border shadow-sm">
+                                <span class="text-muted me-1">S6:</span> {{ user.profile.s6_year }}
+                            </span>
+                            {% endif %}
+                        </div>
+                        {% endif %}
+
                         <div class="d-flex justify-content-center gap-3 mb-4">
                             <a href="mailto:{{ user.email }}"
                                 class="btn btn-navy-modern rounded-pill px-4 py-2 shadow-sm fw-bold transition-all">
