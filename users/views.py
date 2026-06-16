@@ -33,6 +33,8 @@ def register(request):
                     break
             
             if all_correct:
+                if 'teaser_attempts' in request.session:
+                    del request.session['teaser_attempts']
                 user = form.save(commit=False)
                 user.is_active = True
                 user.save()
@@ -43,9 +45,20 @@ def register(request):
                     return JsonResponse({'success': True, 'redirect_url': reverse('login')})
                 return redirect('login')
             else:
-                messages.error(request, 'Gundi, you are not a Mwirian')
-                if request.headers.get('x-requested-with') == 'XMLHttpRequest':
-                    return JsonResponse({'success': False, 'error': 'Gundi, you are not a Mwirian'})
+                attempts = request.session.get('teaser_attempts', 0)
+                attempts += 1
+                request.session['teaser_attempts'] = attempts
+                
+                if attempts >= 2:
+                    del request.session['teaser_attempts']
+                    messages.error(request, 'Gundi, you are not a Mwirian')
+                    if request.headers.get('x-requested-with') == 'XMLHttpRequest':
+                        return JsonResponse({'success': False, 'error': 'Gundi, you are not a Mwirian', 'reset': True})
+                    return redirect('register')
+                else:
+                    messages.error(request, 'Incorrect answers. You have one attempt remaining.')
+                    if request.headers.get('x-requested-with') == 'XMLHttpRequest':
+                        return JsonResponse({'success': False, 'error': 'Incorrect answers. You have one attempt remaining.', 'reset': False})
     else:
         form = RegistrationForm()
         teaser_form = TeaserQuestionForm(questions=teaser_questions)

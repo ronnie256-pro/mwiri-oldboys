@@ -35,7 +35,6 @@ class ProfileForm(forms.ModelForm):
             'address', 
             'linkedin_profile', 
             'website', 
-            'cohort', 
             'x_account', 
             'tiktok_account', 
             'youtube_account', 
@@ -50,8 +49,7 @@ class ProfileForm(forms.ModelForm):
             'x_account': 'X (Twitter)',
             'tiktok_account': 'TikTok',
             'youtube_account': 'YouTube Channel',
-            'facebook_account': 'Facebook Page',
-            'cohort': 'Year of Completion'
+            'facebook_account': 'Facebook Page'
         }
         
         # Adding modern styling attributes to the inputs

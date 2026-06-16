@@ -202,8 +202,9 @@ function submitForms() {
                     window.location.href = data.redirect_url;
                 } else {
                     alert(data.error);
-                    // Optionally reload to show standard django error messages
-                    window.location.reload();
+                    if (data.reset) {
+                        window.location.reload();
+                    }
                 }
             });
         }
