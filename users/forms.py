@@ -7,6 +7,11 @@ class RegistrationForm(UserCreationForm):
     cohort = forms.ModelChoiceField(queryset=Cohort.objects.all(), required=False)
     house = forms.ModelChoiceField(queryset=House.objects.all(), required=False)
 
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        if 'username' in self.fields:
+            self.fields['username'].help_text = ''
+
     class Meta(UserCreationForm.Meta):
         model = User
         fields = UserCreationForm.Meta.fields + (
