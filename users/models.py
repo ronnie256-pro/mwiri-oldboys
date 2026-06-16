@@ -40,3 +40,15 @@ class Profile(models.Model):
 
     def __str__(self):
         return self.user.username
+
+class SideHustle(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='side_hustles')
+    title = models.CharField(max_length=255)
+    details = models.TextField(help_text="Maximum 50 words.", max_length=500)
+    address = models.CharField(max_length=255)
+    image_1 = models.ImageField(upload_to='side_hustles/', blank=True, null=True)
+    image_2 = models.ImageField(upload_to='side_hustles/', blank=True, null=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"{self.title} - {self.user.username}"

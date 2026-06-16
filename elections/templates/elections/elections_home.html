@@ -4,17 +4,15 @@
 <div class="container-fluid py-5 px-lg-5" style="background-color: #f8fafc; min-height: 100vh;">
 
     <div class="text-center mb-5">
-        <h1 class="fw-bold display-4">MOBA <span class="text-primary">Elections</span></h1>
-        <p class="text-muted mx-auto" style="max-width: 600px;">View active elections, positions, and approved
-            candidates.</p>
+        <h1 class="fw-bold display-4" style="color: #002147;">MOBA <span class="text-gold">Elections</span></h1>
     </div>
 
     <div class="row justify-content-center">
         <div class="col-xl-10">
             {% for category in categories %}
-            <div class="card shadow-sm border-0 rounded-4 mb-5 overflow-hidden">
-                <div class="card-header bg-primary text-white p-4 border-0">
-                    <h3 class="fw-bold mb-0">{{ category.name }}</h3>
+            <div class="card shadow-sm border-0 rounded-4 mb-5 overflow-hidden border-gold" style="border-width: 2px !important;">
+                <div class="card-header bg-navy text-white p-4 border-bottom border-gold" style="border-bottom-width: 4px !important;">
+                    <h3 class="fw-bold mb-0 text-white">{{ category.name }}</h3>
                     {% if category.description %}
                     <p class="mb-0 mt-2 text-white-50 small">{{ category.description }}</p>
                     {% endif %}
@@ -24,11 +22,11 @@
                     {% for position in category.positions.all %}
                     <div class="mb-5 pb-4 border-bottom position-relative">
                         <div class="d-flex justify-content-between align-items-center mb-3">
-                            <h4 class="fw-bold text-dark mb-0">
-                                <i class="bi bi-briefcase text-primary me-2"></i>{{ position.title }}
+                            <h4 class="fw-bold text-navy mb-0">
+                                <i class="bi bi-briefcase text-gold me-2"></i>{{ position.title }}
                             </h4>
                             <a href="{% url 'apply_for_office' %}"
-                                class="btn btn-outline-primary btn-sm rounded-pill fw-bold px-3">
+                                class="btn btn-outline-navy btn-sm rounded-pill fw-bold px-3">
                                 <i class="bi bi-person-up me-1"></i>Apply
                             </a>
                         </div>
@@ -38,47 +36,14 @@
                         <div class="row g-3">
                             {% for candidate in position.candidates.all %}
                             {% if candidate.status == 'APPROVED' %}
-                            <div class="col-md-6 col-lg-4">
-                                <!-- The entire card acts as a trigger -->
-                                <div class="card border-0 shadow-lg rounded-4 overflow-hidden h-100 candidate-card transition-all"
-                                    {% if candidate.manifesto %}data-bs-toggle="modal"
-                                    data-bs-target="#manifestoModal{{ candidate.id }}" style="cursor: pointer;"
-                                    title="Click to read manifesto" {% endif %}>
-
-                                    <div class="position-relative">
-                                        <img src="{% if candidate.user.profile.profile_picture %}{{ candidate.user.profile.profile_picture.url }}{% else %}https://ui-avatars.com/api/?name={{ candidate.user.username }}&background=4f46e5&color=fff&size=400{% endif %}"
-                                            class="card-img-top" style="height: 250px; object-fit: cover;"
-                                            alt="Candidate Photo">
+                            <div class="col-6 col-md-6 col-lg-4 text-center">
+                                <a href="{% url 'candidate_manifesto' candidate.id %}" class="text-decoration-none text-dark d-block candidate-circle-card group transition-all py-3">
+                                    <div class="mx-auto rounded-circle overflow-hidden shadow-lg border border-4 border-navy position-relative mb-3 bg-white" style="width: 140px; height: 140px; transition: all 0.3s ease;">
+                                        <img src="{% if candidate.user.profile.profile_picture %}{{ candidate.user.profile.profile_picture.url }}{% else %}https://ui-avatars.com/api/?name={{ candidate.user.username }}&background=002147&color=fff&size=400{% endif %}" class="w-100 h-100" style="object-fit: cover;" alt="Candidate Photo">
                                     </div>
-
-                                    <!-- Navy body matching the image -->
-                                    <div class="card-body text-center p-3 d-flex flex-column justify-content-center"
-                                        style="background-color: #1e3a8a; min-height: 90px;">
-                                        <h5 class="fw-bold text-white mb-1">{{ candidate.user.get_full_name|default:candidate.user.username }}</h5>
-                                        <small class="text-white-50" style="font-size: 0.8rem;">Class of {{ candidate.user.profile.cohort|default:'N/A' }}</small>
-                                    </div>
-                                </div>
-
-                                {% if candidate.manifesto %}
-                                <!-- Manifesto Modal (outside the clickable card) -->
-                                <div class="modal fade text-start" id="manifestoModal{{ candidate.id }}" tabindex="-1"
-                                    aria-hidden="true">
-                                    <div class="modal-dialog modal-dialog-centered modal-lg">
-                                        <div class="modal-content border-0 shadow-lg rounded-4">
-                                            <div class="modal-header border-0 pb-0">
-                                                <h5 class="fw-bold mb-0">Manifesto: {{ candidate.user.get_full_name|default:candidate.user.username }}</h5>
-                                                <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                                    aria-label="Close"></button>
-                                            </div>
-                                            <div class="modal-body p-4">
-                                                <p class="text-secondary"
-                                                    style="white-space: pre-wrap; line-height: 1.7; font-size: 1.05rem;">
-                                                    {{ candidate.manifesto }}</p>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                {% endif %}
+                                    <h5 class="fw-bold mb-1 text-navy">{{ candidate.user.get_full_name|default:candidate.user.username }}</h5>
+                                    <small class="text-muted fw-bold d-block">Class of {{ candidate.user.cohort.name|default:'N/A' }}</small>
+                                </a>
                             </div>
                             {% endif %}
                             {% endfor %}
@@ -114,10 +79,39 @@
 </div>
 
 <style>
-    .candidate-card:hover {
-        transform: translateY(-5px);
-        border-color: rgba(11, 85, 213, 0.722) !important;
-        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.05) !important;
+    /* Mwiri Signature Colors */
+    .bg-navy { background-color: #002147 !important; }
+    .text-navy { color: #002147 !important; }
+    .border-navy { border-color: #002147 !important; }
+    .bg-gold { background-color: #C5A021 !important; }
+    .text-gold { color: #C5A021 !important; }
+    .border-gold { border-color: #C5A021 !important; }
+
+    .btn-outline-navy {
+        color: #002147;
+        border-color: #002147;
+    }
+    .btn-outline-navy:hover {
+        background-color: #002147;
+        color: #C5A021;
+    }
+
+    .candidate-circle-card > div {
+        transition: all 0.3s ease;
+    }
+    
+    .candidate-circle-card:hover > div {
+        transform: scale(1.05);
+        border-color: #C5A021 !important;
+        box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1) !important;
+    }
+    
+    .candidate-circle-card h5 {
+        transition: color 0.3s ease;
+    }
+    
+    .candidate-circle-card:hover h5 {
+        color: #C5A021 !important;
     }
 
     .border-dashed {

@@ -1,6 +1,6 @@
 from django import forms
 from django.contrib.auth.forms import UserCreationForm
-from .models import User, Profile
+from .models import User, Profile, SideHustle
 from organisation.models import Cohort, House, Profession
 
 class RegistrationForm(UserCreationForm):
@@ -68,4 +68,12 @@ class ProfileForm(forms.ModelForm):
             'tiktok_account': forms.URLInput(attrs={'placeholder': 'https://tiktok.com/@yourhandle'}),
             'youtube_account': forms.URLInput(attrs={'placeholder': 'https://youtube.com/yourchannel'}),
             'facebook_account': forms.URLInput(attrs={'placeholder': 'https://facebook.com/yourpage'}),
+        }
+
+class SideHustleForm(forms.ModelForm):
+    class Meta:
+        model = SideHustle
+        fields = ('title', 'details', 'address', 'image_1', 'image_2')
+        widgets = {
+            'details': forms.Textarea(attrs={'rows': 4, 'placeholder': 'Maximum 50 words describing your hustle.'}),
         }

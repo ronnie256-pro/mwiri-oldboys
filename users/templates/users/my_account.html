@@ -12,7 +12,7 @@
                     <li class="breadcrumb-item active small" aria-current="page">My Account</li>
                 </ol>
             </nav>
-            <h2 class="fw-bold text-dark">Welcome back, <span class="text-primary">{{ user.first_name|default:user.username }}</span></h2>
+            <h2 class="fw-bold text-navy">Welcome back, <span class="text-gold">{{ user.first_name|default:user.username }}</span></h2>
             <p class="text-muted small">Manage your profile.</p>
         </div>
     </div>
@@ -39,7 +39,7 @@
                     </div>
                     
                     <h4 class="fw-bold mb-1 text-dark">{{ user.get_full_name|default:user.username }}</h4>
-                    <span class="badge bg-primary-soft text-primary px-3 py-2 rounded-pill mb-4 fw-bold">
+                    <span class="badge bg-navy text-gold px-3 py-2 rounded-pill mb-4 fw-bold border border-gold">
                         Class of {{ user.profile.cohort|default:'N/A' }}
                     </span>
 
@@ -73,7 +73,7 @@
                                     <input type="text" name="nickname" class="form-control form-control-sm" placeholder="e.g. Odo" value="{{ user.profile.nickname|default:'' }}">
                                 </div>
                                 <div class="col-12 mt-3">
-                                    <button type="submit" name="update_years" class="btn btn-sm btn-outline-primary w-100 fw-bold rounded-pill">Update School Info</button>
+                                    <button type="submit" name="update_years" class="btn btn-sm btn-outline-navy w-100 fw-bold rounded-pill">Update School Info</button>
                                 </div>
                             </div>
                         </form>
@@ -98,7 +98,7 @@
                         My Cart
                     </a>
                     
-                    <a href="{% url 'apply_for_office' %}" class="btn btn-outline-primary mt-4 px-4 py-2 w-100 fw-bold">
+                    <a href="{% url 'apply_for_office' %}" class="btn btn-outline-navy mt-4 px-4 py-2 w-100 fw-bold">
                         <i class="bi bi-person-up me-2"></i>Run for Office
                     </a>
                 </div>
@@ -112,7 +112,7 @@
             <div class="card border-0 shadow-sm mb-4" style="border-radius: 24px; background: #ffffff;">
                 <div class="card-header bg-white border-0 pt-4 px-4 pb-0">
                     <h5 class="fw-bold mb-0">
-                        <i class="bi bi-person-gear me-2 text-primary"></i>Profile Settings
+                        <i class="bi bi-person-gear me-2 text-gold"></i>Profile Settings
                     </h5>
                 </div>
                 <div class="card-body p-4 p-md-5">
@@ -122,11 +122,74 @@
                             {{ form|crispy }}
                         </div>
                         <div class="col-12 mt-4 text-end">
-                            <button type="submit" name="update_profile" class="btn btn-primary px-5 py-2 rounded-pill shadow-md fw-bold">
+                            <button type="submit" name="update_profile" class="btn btn-navy text-white border border-gold px-5 py-2 rounded-pill shadow-md fw-bold">
                                 Save All Changes
                             </button>
                         </div>
                     </form>
+                </div>
+            </div>
+
+            <!-- Side Hustles Section -->
+            <div class="card border-0 shadow-sm mb-4 border-gold" style="border-radius: 24px; background: #ffffff; border-width: 2px !important;">
+                <div class="card-header bg-navy border-bottom border-gold pt-4 px-4 pb-3" style="border-bottom-width: 4px !important;">
+                    <h5 class="fw-bold mb-0 text-white">
+                        <i class="bi bi-briefcase-fill me-2 text-gold"></i>My Side Hustles
+                    </h5>
+                    <p class="text-white-50 small mb-0 mt-2">Showcase up to 2 side hustles to the brotherhood.</p>
+                </div>
+                <div class="card-body p-4 p-md-5">
+                    
+                    {% if side_hustles %}
+                    <div class="row g-4 mb-5">
+                        {% for hustle in side_hustles %}
+                        <div class="col-md-6">
+                            <div class="card h-100 border-0 shadow-sm rounded-4 overflow-hidden border border-gold">
+                                {% if hustle.image_1 %}
+                                <img src="{{ hustle.image_1.url }}" class="card-img-top" style="height: 200px; object-fit: cover;" alt="{{ hustle.title }}">
+                                {% elif hustle.image_2 %}
+                                <img src="{{ hustle.image_2.url }}" class="card-img-top" style="height: 200px; object-fit: cover;" alt="{{ hustle.title }}">
+                                {% else %}
+                                <div class="bg-light d-flex align-items-center justify-content-center" style="height: 200px;">
+                                    <i class="bi bi-image text-muted opacity-25 display-1"></i>
+                                </div>
+                                {% endif %}
+                                <div class="card-body p-4 bg-white">
+                                    <h5 class="fw-bold text-navy mb-2">{{ hustle.title }}</h5>
+                                    <p class="small text-muted mb-3"><i class="bi bi-geo-alt-fill text-gold me-1"></i>{{ hustle.address }}</p>
+                                    <p class="text-dark small mb-0" style="line-height: 1.6;">{{ hustle.details }}</p>
+                                </div>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                    {% else %}
+                    <div class="text-center py-4 mb-4 bg-light rounded-4 border border-dashed">
+                        <i class="bi bi-shop display-4 text-muted opacity-25 mb-3"></i>
+                        <p class="text-muted mb-0">You haven't added any side hustles yet.</p>
+                    </div>
+                    {% endif %}
+
+                    {% if side_hustles.count < 2 %}
+                    <div class="bg-light p-4 rounded-4 border border-gold">
+                        <h6 class="fw-bold text-navy mb-3"><i class="bi bi-plus-circle-fill text-gold me-2"></i>Add a Side Hustle</h6>
+                        <form method="post" action="{% url 'my_account' %}" enctype="multipart/form-data" class="row g-3 modern-crispy">
+                            {% csrf_token %}
+                            <div class="col-12">
+                                {{ side_hustle_form|crispy }}
+                            </div>
+                            <div class="col-12 text-end mt-4">
+                                <button type="submit" name="add_side_hustle" class="btn btn-navy text-white px-4 py-2 rounded-pill fw-bold border border-gold shadow-sm">
+                                    Save Side Hustle
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                    {% else %}
+                    <div class="alert alert-info border-0 bg-navy text-white rounded-3 mt-4">
+                        <i class="bi bi-info-circle-fill text-gold me-2"></i>You have reached the maximum limit of 2 side hustles.
+                    </div>
+                    {% endif %}
                 </div>
             </div>
 
@@ -135,44 +198,58 @@
 </div>
 
 <style>
-    /* Professional Styling Tweaks */
+    /* Mwiri Signature Colors */
+    .bg-navy { background-color: #002147 !important; }
+    .text-navy { color: #002147 !important; }
+    .bg-gold { background-color: #C5A021 !important; }
+    .text-gold { color: #C5A021 !important; }
+    .border-gold { border-color: #C5A021 !important; }
+
+    .btn-navy { background: #002147; color: #fff; }
+    .btn-navy:hover { background: #001633; color: #C5A021; transform: translateY(-1px); }
+
+    .btn-outline-navy {
+        color: #002147;
+        border-color: #002147;
+    }
+    .btn-outline-navy:hover {
+        background-color: #002147;
+        color: #C5A021;
+    }
+
+    .btn-gold {
+        background-color: #C5A021;
+        color: #002147;
+        font-weight: 600;
+        border: none;
+    }
+    .btn-gold:hover {
+        background-color: #b5921c;
+        color: #002147;
+    }
+
     .bento-card {
         border-radius: 24px;
         transition: all 0.3s cubic-bezier(0.165, 0.84, 0.44, 1);
         background: #ffffff;
     }
-.btn-gold {
-        background-color: #d4af37;
-        color: #0b1f3a;
-        font-weight: 600;
-        border: none;
-    }
-
-    .btn-gold:hover {
-        background-color: #c19b2e;
-        color: #0b1f3a;
-    }
-
     .bento-card:hover {
         transform: translateY(-8px);
         box-shadow: 0 20px 40px rgba(0,0,0,0.08) !important;
     }
-    .bg-primary-soft { background-color: #eef2ff; color: #4f46e5; }
+    
     .bg-danger-soft { background-color: #fff1f2; }
     
-    .btn-primary { background: #4f46e5; border: none; }
-    .btn-primary:hover { background: #4338ca; transform: translateY(-1px); }
-    
-    .modern-crispy label { font-weight: 700; font-size: 0.85rem; color: #64748b; text-transform: uppercase; margin-bottom: 5px; }
+    .modern-crispy label { font-weight: 700; font-size: 0.85rem; color: #002147; text-transform: uppercase; margin-bottom: 5px; }
     .modern-crispy input, .modern-crispy select, .modern-crispy textarea { 
         border-radius: 12px; border: 1px solid #e2e8f0; padding: 12px; background-color: #f8fafc;
     }
-    .modern-crispy input:focus { background-color: #fff; box-shadow: 0 0 0 4px rgba(79, 70, 229, 0.1); border-color: #4f46e5; }
+    .modern-crispy input:focus { background-color: #fff; box-shadow: 0 0 0 4px rgba(0, 33, 71, 0.1); border-color: #002147; }
 
     /* SOS specific compacting */
     .sos-form-sm label { font-size: 0.75rem; }
     .sos-form-sm .form-control { font-size: 0.85rem; border-radius: 10px; }
 
-    .shadow-md { box-shadow: 0 4px 12px rgba(79, 70, 229, 0.2); }
+    .shadow-md { box-shadow: 0 4px 12px rgba(0, 33, 71, 0.2); }
 </style>
 {% endblock %}

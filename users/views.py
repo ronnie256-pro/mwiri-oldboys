@@ -5,10 +5,10 @@ from django.contrib.auth import logout
 from django.contrib.auth.decorators import login_required
 from django.views.generic import TemplateView
 from django.contrib import messages
-from .forms import RegistrationForm, ProfileForm
+from .forms import RegistrationForm, ProfileForm, SideHustleForm
 from alumni_sos.forms import SOSRequestForm
 from teaser.forms import TeaserQuestionForm
-from .models import User, Profile
+from .models import User, Profile, SideHustle
 from teaser.models import TeaserQuestion
 from stories.forms import StoryForm
 
@@ -74,13 +74,24 @@ class MyAccountView(View):
             form = ProfileForm(instance=request.user)
             sos_form = SOSRequestForm()
             story_form = StoryForm()
+            side_hustle_form = SideHustleForm()
+            side_hustles = request.user.side_hustles.all()
         else:
             form = None
             sos_form = None
             story_form = None
+            side_hustle_form = None
+            side_hustles = None
         
         content_types = ["Products", "Services", "News", "History"]
-        return render(request, self.template_name, {'form': form, 'sos_form': sos_form, 'content_types': content_types, 'story_form': story_form})
+        return render(request, self.template_name, {
+            'form': form, 
+            'sos_form': sos_form, 
+            'content_types': content_types, 
+            'story_form': story_form,
+            'side_hustle_form': side_hustle_form,
+            'side_hustles': side_hustles
+        })
 
     def post(self, request, *args, **kwargs):
         if not request.user.is_authenticated:
@@ -150,9 +161,33 @@ class MyAccountView(View):
                 messages.success(request, 'Story submitted successfully!')
                 return redirect('our_stories')
 
+        if 'add_side_hustle' in request.POST:
+            if request.user.side_hustles.count() >= 2:
+                messages.error(request, 'You can only have a maximum of 2 side hustles.')
+                return redirect('my_account')
+            
+            side_hustle_form = SideHustleForm(request.POST, request.FILES)
+            if side_hustle_form.is_valid():
+                hustle = side_hustle_form.save(commit=False)
+                hustle.user = request.user
+                hustle.save()
+                messages.success(request, 'Side hustle added successfully!')
+                return redirect('my_account')
+            else:
+                messages.error(request, 'Error adding side hustle. Please check the form.')
+
         content_types = ["Products", "Services", "News", "History"]
         story_form = StoryForm()
-        return render(request, self.template_name, {'form': form, 'sos_form': sos_form, 'content_types': content_types, 'story_form': story_form})
+        side_hustle_form = SideHustleForm()
+        side_hustles = request.user.side_hustles.all()
+        return render(request, self.template_name, {
+            'form': form, 
+            'sos_form': sos_form, 
+            'content_types': content_types, 
+            'story_form': story_form,
+            'side_hustle_form': side_hustle_form,
+            'side_hustles': side_hustles
+        })
 
 class CustomLoginView(LoginView):
     template_name = 'users/login.html'

@@ -1,10 +1,8 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
-from .models import Candidate
-from .forms import CandidateApplicationForm
-
 from .models import Candidate, ElectionCategory
+from .forms import CandidateApplicationForm
 
 @login_required
 def elections_home(request):
@@ -34,3 +32,8 @@ def apply_for_office(request):
         form = CandidateApplicationForm()
 
     return render(request, 'elections/apply_for_office.html', {'form': form})
+
+@login_required
+def candidate_manifesto(request, id):
+    candidate = get_object_or_404(Candidate, id=id)
+    return render(request, 'elections/manifesto.html', {'candidate': candidate})
