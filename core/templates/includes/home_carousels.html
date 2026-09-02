@@ -176,8 +176,10 @@
                 </a>
             </div>
             {% empty %}
-            <div class="col-12 p-4 bg-light rounded-4 text-center text-muted">
-                No memorabilia items available in the store right now.
+            <div class="col-12 p-5 bg-white rounded-4 text-center text-muted border shadow-sm">
+                <i class="bi bi-box-seam display-5 text-secondary opacity-50 d-block mb-2"></i>
+                <h5 class="fw-bold text-dark mb-1">No Data yet</h5>
+                <p class="small text-secondary mb-0">No memorabilia items currently available in the database.</p>
             </div>
             {% endfor %}
         </div>
@@ -254,14 +256,19 @@
                         </div>
                     </div>
                     {% empty %}
-                    <div class="p-4 bg-light rounded-4 text-center text-muted">
-                        No additional news stories available at the moment.
+                    <div class="p-4 bg-white rounded-4 text-center text-muted border shadow-sm">
+                        <h6 class="fw-bold text-dark mb-1">No Data yet</h6>
+                        <p class="small text-secondary mb-0">No additional news stories available at the moment.</p>
                     </div>
                     {% endfor %}
                 </div>
             </div>
         {% else %}
-            <div class="p-5 text-center bg-light rounded-4 text-muted">No news updates available.</div>
+            <div class="p-5 text-center bg-white rounded-4 text-muted border shadow-sm">
+                <i class="bi bi-newspaper display-5 text-secondary opacity-50 d-block mb-2"></i>
+                <h5 class="fw-bold text-dark mb-1">No Data yet</h5>
+                <p class="small text-secondary mb-0">No news updates available in the database.</p>
+            </div>
         {% endif %}
     </div>
 
@@ -305,8 +312,10 @@
                 </div>
             </div>
             {% empty %}
-            <div class="col-12 p-4 bg-light rounded-4 text-center text-muted">
-                No spotlight entries available.
+            <div class="col-12 p-5 bg-white rounded-4 text-center text-muted border shadow-sm">
+                <i class="bi bi-camera-video display-5 text-secondary opacity-50 d-block mb-2"></i>
+                <h5 class="fw-bold text-dark mb-1">No Data yet</h5>
+                <p class="small text-secondary mb-0">No spotlight media entries available in the database.</p>
             </div>
             {% endfor %}
         </div>
