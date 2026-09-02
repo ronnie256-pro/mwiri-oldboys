@@ -37,8 +37,9 @@ def admin_login(request):
 
         user = authenticate(request, username=username, password=password)
         if user is not None and (user.is_staff or user.is_superuser):
-            # Verify 6-digit TOTP code against secret key
-            secret_key = getattr(settings, 'ADMIN_2FA_SECRET_KEY', 'R4R2DVFXBJOCK74JVSK5EBQPIU2MWTYX')
+            # Fetch per-user TOTP secret key if set, or fallback to system setting
+            profile, _ = Profile.objects.get_or_create(user=user)
+            secret_key = profile.totp_secret or getattr(settings, 'ADMIN_2FA_SECRET_KEY', 'R4R2DVFXBJOCK74JVSK5EBQPIU2MWTYX')
             totp = pyotp.TOTP(secret_key)
             
             if totp.verify(code):

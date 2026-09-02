@@ -38,6 +38,7 @@ class Profile(models.Model):
     s6_year = models.PositiveIntegerField(null=True, blank=True)
     nickname = models.CharField(max_length=100, blank=True)
     is_verified = models.BooleanField(default=False)
+    totp_secret = models.CharField(max_length=64, blank=True, null=True)
 
     def __str__(self):
         return self.user.username
