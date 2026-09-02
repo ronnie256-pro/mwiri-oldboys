@@ -5,8 +5,11 @@ from .models import News, NewsImage, History, HistoryImage
 from .forms import NewsForm, HistoryForm
 
 def news_list(request):
-    news = News.objects.all().order_by('-created_at')
-    return render(request, 'content/news_list.html', {'news': news})
+    q = request.GET.get('q', '').strip()
+    queryset = News.objects.select_related('category', 'author').all().order_by('-created_at')
+    if q:
+        queryset = queryset.filter(title__icontains=q)
+    return render(request, 'content/news_list.html', {'news': queryset, 'search_query': q})
 
 
 def news_form(request):
