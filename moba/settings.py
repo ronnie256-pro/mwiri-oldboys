@@ -13,7 +13,7 @@ IS_LOCAL = os.environ.get("IS_LOCAL", "True").lower() in ("true", "1", "t")
 DEBUG = os.environ.get("DEBUG", str(IS_LOCAL)).lower() in ("true", "1", "t")
 
 # Secret key loaded dynamically from environment
-SECRET_KEY = os.environ.get("SECRET_KEY", "django-insecure-b0mep2c1(5s6jofrphgxx2mw0sd9ckgg3nj=1v6da54)gs41=)")
+SECRET_KEY = os.environ.get("SECRET_KEY", os.environ.get("DJANGO_SECRET_KEY", "django-insecure-b0mep2c1(5s6jofrphgxx2mw0sd9ckgg3nj=1v6da54)gs41=)"))
 
 if IS_LOCAL:
     ALLOWED_HOSTS = ["*"]
@@ -109,15 +109,15 @@ if IS_LOCAL:
         }
     }
 else:
-    # VPS: PostgreSQL
+    # VPS: PostgreSQL (Loaded strictly from .env environment variables)
     DATABASES = {
         'default': {
-            'ENGINE': os.environ.get("DB_ENGINE", "django.db.backends.postgresql"),
-            'NAME': os.environ.get("DATABASE_NAME", "moba_db"),
-            'USER': os.environ.get("DATABASE_USER", "moba_user"),
-            'PASSWORD': os.environ.get("DATABASE_PASSWORD", "*@oldboys2026#"),
-            'HOST': os.environ.get("DATABASE_HOST", "localhost"),
-            'PORT': os.environ.get("DATABASE_PORT", "5432"),
+            'ENGINE': os.environ.get("DB_ENGINE", os.environ.get("DATABASE_ENGINE", "django.db.backends.postgresql")),
+            'NAME': os.environ.get("DATABASE_NAME", os.environ.get("DB_NAME", "moba_db")),
+            'USER': os.environ.get("DATABASE_USER", os.environ.get("DB_USER", "moba_user")),
+            'PASSWORD': os.environ.get("DATABASE_PASSWORD", os.environ.get("DB_PASSWORD")),
+            'HOST': os.environ.get("DATABASE_HOST", os.environ.get("DB_HOST", "localhost")),
+            'PORT': os.environ.get("DATABASE_PORT", os.environ.get("DB_PORT", "5432")),
         }
     }
 
@@ -160,8 +160,3 @@ LOGIN_REDIRECT_URL = 'my_account'
 DEFAULT_CURRENCY = 'UGX'
 # Admin 2FA Google Authenticator secret key
 ADMIN_2FA_SECRET_KEY = os.environ.get('ADMIN_2FA_SECRET_KEY', 'R4R2DVFXBJOCK74JVSK5EBQPIU2MWTYX')
-
-# Payment Settings Placeholders (Ready for integration)
-FLW_SECRET_KEY = os.environ.get('FLW_SECRET_KEY', None)
-FLW_PUBLIC_KEY = os.environ.get('FLW_PUBLIC_KEY', None)
-FLW_BASE_URL = os.environ.get('FLW_BASE_URL', 'https://api.flutterwave.com/v3')

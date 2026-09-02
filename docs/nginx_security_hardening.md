@@ -4,27 +4,22 @@ This document provides production hardening rules for Nginx reverse proxy servin
 
 ---
 
-## 1. Upload Size & Media Execution Protection
-
-Add these directives inside `/etc/nginx/sites-available/oldboys`:
+## 1. Updated `/etc/nginx/sites-available/oldboys` Configuration
 
 ```nginx
 server {
-    listen 80;
-    listen 443 ssl;
-    server_name mwirioldboys.com www.mwirioldboys.com 187.7.19.28;
+    server_name 187.7.19.28 mwirioldboys.com www.mwirioldboys.com;
 
-    # Allow up to 120MB file/media uploads
+    # Allow up to 120MB media uploads
     client_max_body_size 120M;
 
-    # Serve static files
     location /static/ {
         alias /var/www/oldboys/static/;
         expires 30d;
         add_header Cache-Control "public, no-transform";
     }
 
-    # Serve uploaded media files safely (Disable directory listing)
+    # Serve uploaded media safely (Disable directory listing)
     location /media/ {
         alias /var/www/oldboys/media/;
         autoindex off;
@@ -43,45 +38,32 @@ server {
         proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
         proxy_set_header X-Forwarded-Proto $scheme;
     }
+
+    listen 443 ssl; # managed by Certbot
+    ssl_certificate /etc/letsencrypt/live/mwirioldboys.com/fullchain.pem; # managed by Certbot
+    ssl_certificate_key /etc/letsencrypt/live/mwirioldboys.com/privkey.pem; # managed by Certbot
+    include /etc/letsencrypt/options-ssl-nginx.conf; # managed by Certbot
+    ssl_dhparam /etc/letsencrypt/ssl-dhparams.pem; # managed by Certbot
+}
+
+server {
+    if ($host = www.mwirioldboys.com) {
+        return 301 https://$host$request_uri;
+    } # managed by Certbot
+
+    if ($host = mwirioldboys.com) {
+        return 301 https://$host$request_uri;
+    } # managed by Certbot
+
+    listen 80;
+    server_name 187.7.19.28 mwirioldboys.com www.mwirioldboys.com;
+    return 404; # managed by Certbot
 }
 ```
 
 ---
 
-## 2. Authentication Rate Limiting
-
-Add rate limiting zone definition at the top of `/etc/nginx/nginx.conf` (inside `http { ... }` block):
-
-```nginx
-# Limit authentication requests to 5 requests per minute per IP
-limit_req_zone $binary_remote_addr zone=auth_limit:10m rate=5r/m;
-```
-
-Apply the rate limit to login endpoints inside `/etc/nginx/sites-available/oldboys`:
-
-```nginx
-location /admin-dashboard/login/ {
-    limit_req zone=auth_limit burst=5 nodelay;
-    proxy_pass http://127.0.0.1:8000;
-    proxy_set_header Host $host;
-    proxy_set_header X-Real-IP $remote_addr;
-    proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-    proxy_set_header X-Forwarded-Proto $scheme;
-}
-
-location /accounts/login/ {
-    limit_req zone=auth_limit burst=5 nodelay;
-    proxy_pass http://127.0.0.1:8000;
-    proxy_set_header Host $host;
-    proxy_set_header X-Real-IP $remote_addr;
-    proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-    proxy_set_header X-Forwarded-Proto $scheme;
-}
-```
-
----
-
-## 3. Server UFW Firewall Hardening
+## 2. Server UFW Firewall Hardening
 
 Run these commands on your VPS terminal to ensure only SSH and Web ports are exposed:
 
