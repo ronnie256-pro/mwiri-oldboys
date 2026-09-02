@@ -7,7 +7,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # --- THE PRODUCTION SWITCH ---
 # Keep this as True while working on your laptop.
 # IMPORTANT: Change this to False before you commit and push to GitHub!
-IS_LOCAL = True
+IS_LOCAL = False
 
 # Quick-start development settings - unsuitable for production
 SECRET_KEY = 'django-insecure-b0mep2c1(5s6jofrphgxx2mw0sd9ckgg3nj=1v6da54)gs41=)'
@@ -18,8 +18,15 @@ if IS_LOCAL:
     CSRF_TRUSTED_ORIGINS = ['http://127.0.0.1:8000', 'http://localhost:8000']
 else:
     DEBUG = False
-    ALLOWED_HOSTS = ['mwirioldboys.com', 'www.mwirioldboys.com', '187.77.176.70']
-    CSRF_TRUSTED_ORIGINS = ['https://mwirioldboys.com', 'https://www.mwirioldboys.com']
+    ALLOWED_HOSTS = ['mwirioldboys.com', 'www.mwirioldboys.com', '187.7.19.28', '187.77.176.70', 'localhost', '127.0.0.1']
+    CSRF_TRUSTED_ORIGINS = [
+        'https://mwirioldboys.com', 
+        'https://www.mwirioldboys.com', 
+        'http://mwirioldboys.com', 
+        'http://www.mwirioldboys.com', 
+        'http://187.7.19.28', 
+        'http://187.77.176.70'
+    ]
 
 
 # Application definition
@@ -149,7 +156,7 @@ LOGIN_REDIRECT_URL = 'my_account'
 
 DEFAULT_CURRENCY = 'UGX'
 # Admin 2FA Google Authenticator secret key for user 'admin'
-ADMIN_2FA_SECRET_KEY = 'R4R2DVFXBJOCK74JVSK5EBQPIU2MWTYX'
+ADMIN_2FA_SECRET_KEY = os.environ.get('ADMIN_2FA_SECRET_KEY', 'R4R2DVFXBJOCK74JVSK5EBQPIU2MWTYX')
 # Flutterwave settings placeholders - set these via environment variables
 FLW_SECRET_KEY = None
 FLW_PUBLIC_KEY = None
