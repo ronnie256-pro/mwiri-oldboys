@@ -8,8 +8,7 @@
     <!-- PAGE TITLE -->
     <div class="d-flex justify-content-between align-items-center mb-4">
         <div>
-            <h3 class="fw-bold text-white mb-1" style="color: var(--admin-gold) !important;">Admin Dashboard</h3>
-            <p class="text-secondary small mb-0">System overview, member statistics, and executive control operations.</p>
+            <h3 class="fw-bold mb-1" style="color: #002147 !important;">Admin Dashboard</h3>
         </div>
         <div>
             <a href="{% url 'admin_members' %}" class="btn btn-gold rounded-pill px-4 py-2 shadow-sm font-size-xs">
@@ -28,8 +27,8 @@
                         <i class="bi bi-people-fill fs-4"></i>
                     </div>
                 </div>
-                <h2 class="display-6 fw-bold text-white mb-1">{{ total_members }}</h2>
-                <span class="text-warning font-size-xs fw-semibold"><i class="bi bi-person-check me-1"></i> {{ verified_members }} Verified MOBA Members</span>
+                <h2 class="display-6 fw-bold mb-1" style="color: #002147;">{{ total_members }}</h2>
+                <span class="text-primary font-size-xs fw-semibold"><i class="bi bi-person-check me-1"></i> {{ verified_members }} Verified MOBA Members</span>
             </div>
         </div>
 
@@ -41,7 +40,7 @@
                         <i class="bi bi-shop fs-4"></i>
                     </div>
                 </div>
-                <h2 class="display-6 fw-bold text-white mb-1">{{ total_products }}</h2>
+                <h2 class="display-6 fw-bold mb-1" style="color: #002147;">{{ total_products }}</h2>
                 <span class="text-secondary font-size-xs">Active Marketplace Listings</span>
             </div>
         </div>
@@ -54,7 +53,7 @@
                         <i class="bi bi-person-exclamation fs-4"></i>
                     </div>
                 </div>
-                <h2 class="display-6 fw-bold text-white mb-1">{{ pending_candidates }}</h2>
+                <h2 class="display-6 fw-bold mb-1" style="color: #002147;">{{ pending_candidates }}</h2>
                 <a href="{% url 'admin_elections' %}" class="text-danger font-size-xs fw-bold text-decoration-none">
                     Review Nominations <i class="bi bi-arrow-right"></i>
                 </a>
@@ -70,7 +69,7 @@
                     </div>
                 </div>
                 <h2 class="display-6 fw-bold text-success mb-1">Active</h2>
-                <span class="text-white-50 font-size-xs">Google 2FA Enabled</span>
+                <span class="text-muted font-size-xs">Google 2FA Enabled</span>
             </div>
         </div>
     </div>
@@ -80,13 +79,13 @@
         <!-- RECENT MEMBERS -->
         <div class="col-lg-7">
             <div class="admin-card p-4 h-100">
-                <div class="d-flex justify-content-between align-items-center mb-3 pb-2 border-bottom border-secondary border-opacity-25">
-                    <h5 class="fw-bold text-white mb-0"><i class="bi bi-person-badge me-2 text-warning"></i>Recently Joined Members</h5>
+                <div class="d-flex justify-content-between align-items-center mb-3 pb-2 border-bottom">
+                    <h5 class="fw-bold mb-0" style="color: #002147;"><i class="bi bi-person-badge me-2 text-primary"></i>Recently Joined Members</h5>
                     <a href="{% url 'admin_members' %}" class="btn btn-sm btn-outline-gold rounded-pill px-3 font-size-xs">View All</a>
                 </div>
 
                 <div class="table-responsive">
-                    <table class="table table-dark table-hover align-middle mb-0" style="background-color: transparent;">
+                    <table class="table table-hover align-middle mb-0">
                         <thead>
                             <tr class="text-secondary font-size-xs text-uppercase">
                                 <th>User</th>
@@ -101,12 +100,12 @@
                             <tr>
                                 <td>
                                     <div class="d-flex align-items-center gap-2">
-                                        <div class="rounded-circle bg-secondary text-white fw-bold d-flex align-items-center justify-content-center" style="width: 32px; height: 32px; font-size: 0.8rem;">
+                                        <div class="rounded-circle bg-primary text-white fw-bold d-flex align-items-center justify-content-center" style="width: 32px; height: 32px; font-size: 0.8rem;">
                                             {{ u.username|slice:":1"|upper }}
                                         </div>
                                         <div>
-                                            <span class="fw-bold text-white font-size-xs d-block">{{ u.get_full_name|default:u.username }}</span>
-                                            <small class="text-secondary font-size-xs">@{{ u.username }}</small>
+                                            <span class="fw-bold text-dark font-size-xs d-block">{{ u.get_full_name|default:u.username }}</span>
+                                            <small class="text-muted font-size-xs">@{{ u.username }}</small>
                                         </div>
                                     </div>
                                 </td>
@@ -116,7 +115,7 @@
                                     {% if u.profile.is_verified %}
                                         <span class="badge bg-primary rounded-pill px-2 py-1 font-size-xs"><i class="bi bi-patch-check-fill text-warning me-1"></i>Verified</span>
                                     {% else %}
-                                        <span class="badge bg-secondary opacity-50 rounded-pill px-2 py-1 font-size-xs">Unverified</span>
+                                        <span class="badge bg-light text-secondary rounded-pill px-2 py-1 font-size-xs border">Unverified</span>
                                     {% endif %}
                                 </td>
                                 <td>
@@ -137,49 +136,49 @@
         <!-- QUICK SHORTCUTS & ACTIONS -->
         <div class="col-lg-5">
             <div class="admin-card p-4 h-100">
-                <div class="mb-3 pb-2 border-bottom border-secondary border-opacity-25">
-                    <h5 class="fw-bold text-white mb-0"><i class="bi bi-lightning-charge-fill me-2 text-warning"></i>Admin Action Shortcuts</h5>
+                <div class="mb-3 pb-2 border-bottom">
+                    <h5 class="fw-bold mb-0" style="color: #002147;"><i class="bi bi-lightning-charge-fill me-2 text-warning"></i>Admin Action Shortcuts</h5>
                 </div>
 
                 <div class="d-flex flex-column gap-2">
-                    <a href="{% url 'admin_members' %}" class="admin-card p-3 text-decoration-none text-white d-flex align-items-center justify-content-between hover-lift">
+                    <a href="{% url 'admin_members' %}" class="admin-card p-3 text-decoration-none text-dark d-flex align-items-center justify-content-between hover-lift" style="background-color: #f8fafc;">
                         <div class="d-flex align-items-center gap-3">
                             <i class="bi bi-person-check-fill fs-3 text-primary"></i>
                             <div>
-                                <h6 class="fw-bold mb-0">Member Verification Desk</h6>
+                                <h6 class="fw-bold mb-0" style="color: #002147;">Member Verification Desk</h6>
                                 <small class="text-secondary font-size-xs">Verify MOBA members and award verified badges</small>
                             </div>
                         </div>
                         <i class="bi bi-chevron-right text-secondary"></i>
                     </a>
 
-                    <a href="{% url 'admin_elections' %}" class="admin-card p-3 text-decoration-none text-white d-flex align-items-center justify-content-between hover-lift">
+                    <a href="{% url 'admin_elections' %}" class="admin-card p-3 text-decoration-none text-dark d-flex align-items-center justify-content-between hover-lift" style="background-color: #f8fafc;">
                         <div class="d-flex align-items-center gap-3">
                             <i class="bi bi-check2-square fs-3 text-warning"></i>
                             <div>
-                                <h6 class="fw-bold mb-0">Candidate Approval Desk</h6>
+                                <h6 class="fw-bold mb-0" style="color: #002147;">Candidate Approval Desk</h6>
                                 <small class="text-secondary font-size-xs">Approve or reject election candidate nominations</small>
                             </div>
                         </div>
                         <i class="bi bi-chevron-right text-secondary"></i>
                     </a>
 
-                    <a href="{% url 'admin_content' %}" class="admin-card p-3 text-decoration-none text-white d-flex align-items-center justify-content-between hover-lift">
+                    <a href="{% url 'admin_content' %}" class="admin-card p-3 text-decoration-none text-dark d-flex align-items-center justify-content-between hover-lift" style="background-color: #f8fafc;">
                         <div class="d-flex align-items-center gap-3">
                             <i class="bi bi-file-earmark-pdf-fill fs-3 text-danger"></i>
                             <div>
-                                <h6 class="fw-bold mb-0">PDF History Archives</h6>
+                                <h6 class="fw-bold mb-0" style="color: #002147;">PDF History Archives</h6>
                                 <small class="text-secondary font-size-xs">Upload downloadable PDF documents and news articles</small>
                             </div>
                         </div>
                         <i class="bi bi-chevron-right text-secondary"></i>
                     </a>
 
-                    <a href="/admin/users/user/add/" target="_blank" class="admin-card p-3 text-decoration-none text-white d-flex align-items-center justify-content-between hover-lift">
+                    <a href="/admin/users/user/add/" target="_blank" class="admin-card p-3 text-decoration-none text-dark d-flex align-items-center justify-content-between hover-lift" style="background-color: #f8fafc;">
                         <div class="d-flex align-items-center gap-3">
                             <i class="bi bi-person-plus-fill fs-3 text-info"></i>
                             <div>
-                                <h6 class="fw-bold mb-0">Add User (Django Admin)</h6>
+                                <h6 class="fw-bold mb-0" style="color: #002147;">Add User (Django Admin)</h6>
                                 <small class="text-secondary font-size-xs">Create new user account in default Django panel</small>
                             </div>
                         </div>

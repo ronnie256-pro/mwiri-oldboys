@@ -73,14 +73,51 @@ def dashboard_home(request):
     }
     return render(request, 'admin/dashboard_home.html', context)
 
+from django.db.models import Q
+from organisation.models import House, Cohort
+
 # Manage Members & Verification
 @admin_dashboard_required
 def manage_members(request):
     q = request.GET.get('q', '').strip()
+    house_id = request.GET.get('house', '').strip()
+    cohort_id = request.GET.get('cohort', '').strip()
+    verification = request.GET.get('verification', '').strip()
+
     users = User.objects.select_related('profile', 'house', 'cohort', 'profession').all().order_by('-date_joined')
+
     if q:
-        users = users.filter(username__icontains=q) | users.filter(first_name__icontains=q) | users.filter(last_name__icontains=q)
-    return render(request, 'admin/manage_members.html', {'users': users, 'search_query': q})
+        users = users.filter(
+            Q(username__icontains=q) | 
+            Q(first_name__icontains=q) | 
+            Q(last_name__icontains=q) | 
+            Q(email__icontains=q)
+        )
+
+    if house_id:
+        users = users.filter(house_id=house_id)
+
+    if cohort_id:
+        users = users.filter(cohort_id=cohort_id)
+
+    if verification == 'verified':
+        users = users.filter(profile__is_verified=True)
+    elif verification == 'unverified':
+        users = users.filter(Q(profile__is_verified=False) | Q(profile__isnull=True))
+
+    houses = House.objects.all().order_by('name')
+    cohorts = Cohort.objects.all().order_by('name')
+
+    context = {
+        'users': users,
+        'search_query': q,
+        'selected_house': house_id,
+        'selected_cohort': cohort_id,
+        'selected_verification': verification,
+        'houses': houses,
+        'cohorts': cohorts,
+    }
+    return render(request, 'admin/manage_members.html', context)
 
 @admin_dashboard_required
 def toggle_user_verification(request, user_id):
@@ -98,6 +135,14 @@ def manage_products(request):
     products = Product.objects.select_related('category', 'owner').all().order_by('-id')
     categories = Category.objects.all()
     return render(request, 'admin/manage_products.html', {'products': products, 'categories': categories})
+
+@admin_dashboard_required
+def delete_product(request, product_id):
+    product = get_object_or_404(Product, pk=product_id)
+    product_name = product.name
+    product.delete()
+    messages.success(request, f"Product '{product_name}' has been successfully deleted.")
+    return redirect('admin_products')
 
 # Manage Content (News & History)
 @admin_dashboard_required

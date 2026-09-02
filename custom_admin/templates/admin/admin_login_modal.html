@@ -1,20 +1,20 @@
-<!-- ADMIN 2FA LOGIN MODAL GATEWAY -->
+<!-- ADMIN LOGIN MODAL -->
+<style>
+    .modal-backdrop.show {
+        backdrop-filter: blur(6px) !important;
+        -webkit-backdrop-filter: blur(6px) !important;
+        background-color: rgba(0, 22, 48, 0.45) !important;
+    }
+</style>
+
 <div class="modal fade" id="adminLoginModal" tabindex="-1" aria-labelledby="adminLoginModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered" style="max-width: 420px;">
-        <div class="modal-content border-0 shadow-lg rounded-4 overflow-hidden" style="background-color: #002147; color: #ffffff;">
+    <div class="modal-dialog modal-dialog-centered" style="max-width: 380px;">
+        <div class="modal-content border-0 shadow-lg rounded-4 overflow-hidden bg-white text-dark">
             
             <!-- MODAL HEADER -->
-            <div class="modal-header border-bottom border-secondary border-opacity-25 p-4" style="background-color: #001630;">
-                <div class="d-flex align-items-center gap-3">
-                    <div class="rounded-circle p-2 bg-warning bg-opacity-10 text-warning d-flex align-items-center justify-content-center" style="width: 44px; height: 44px;">
-                        <i class="bi bi-shield-lock-fill fs-4" style="color: #C5A021;"></i>
-                    </div>
-                    <div>
-                        <h5 class="modal-title fw-bold m-0" id="adminLoginModalLabel" style="color: #ffffff;">Admin Dashboard</h5>
-                        <small class="text-white-50 font-size-xs">2FA Authenticator Protected Gateway</small>
-                    </div>
-                </div>
-                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+            <div class="modal-header border-bottom p-4 bg-light">
+                <h5 class="modal-title fw-bold m-0" id="adminLoginModalLabel" style="color: #002147;">Admin</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
 
             <!-- MODAL BODY -->
@@ -24,41 +24,27 @@
                     
                     <!-- USERNAME FIELD -->
                     <div class="mb-3">
-                        <label for="admin_username" class="form-label small fw-bold text-uppercase" style="color: #C5A021; letter-spacing: 0.5px;">Username</label>
-                        <div class="input-group">
-                            <span class="input-group-text border-0 text-white-50" style="background-color: rgba(255,255,255,0.08);"><i class="bi bi-person-fill"></i></span>
-                            <input type="text" name="username" id="admin_username" class="form-control border-0 text-white fw-bold shadow-none" placeholder="Enter username" required style="background-color: rgba(255,255,255,0.08);">
-                        </div>
+                        <label for="admin_username" class="form-label small fw-bold text-uppercase text-secondary font-size-xs">Username</label>
+                        <input type="text" name="username" id="admin_username" class="form-control bg-light border-1 fw-bold text-dark p-2" required>
                     </div>
 
                     <!-- PASSWORD FIELD -->
                     <div class="mb-3">
-                        <label for="admin_password" class="form-label small fw-bold text-uppercase" style="color: #C5A021; letter-spacing: 0.5px;">Password</label>
-                        <div class="input-group">
-                            <span class="input-group-text border-0 text-white-50" style="background-color: rgba(255,255,255,0.08);"><i class="bi bi-key-fill"></i></span>
-                            <input type="password" name="password" id="admin_password" class="form-control border-0 text-white fw-bold shadow-none" placeholder="Enter password" required style="background-color: rgba(255,255,255,0.08);">
-                        </div>
+                        <label for="admin_password" class="form-label small fw-bold text-uppercase text-secondary font-size-xs">Password</label>
+                        <input type="password" name="password" id="admin_password" class="form-control bg-light border-1 fw-bold text-dark p-2" required>
                     </div>
 
-                    <!-- 6-DIGIT CODE FIELD -->
+                    <!-- CODE FIELD -->
                     <div class="mb-4">
-                        <label for="admin_code" class="form-label small fw-bold text-uppercase" style="color: #C5A021; letter-spacing: 0.5px;">Code (6-Digit Authenticator)</label>
-                        <div class="input-group">
-                            <span class="input-group-text border-0 text-white-50" style="background-color: rgba(255,255,255,0.08);"><i class="bi bi-[#C5A021] bi-qr-code"></i></span>
-                            <input type="text" name="code" id="admin_code" class="form-control border-0 text-warning fw-bold fs-5 tracking-widest text-center shadow-none" placeholder="000 000" maxlength="6" pattern="[0-9]{6}" required style="background-color: rgba(255,255,255,0.08); letter-spacing: 4px;">
-                        </div>
+                        <label for="admin_code" class="form-label small fw-bold text-uppercase text-secondary font-size-xs">Code</label>
+                        <input type="text" name="code" id="admin_code" class="form-control bg-light border-1 fw-bold text-dark text-center tracking-widest p-2" maxlength="6" pattern="[0-9]{6}" required style="letter-spacing: 4px;">
                     </div>
 
                     <!-- SUBMIT BUTTON -->
-                    <button type="submit" class="btn w-100 py-3 fw-bold rounded-pill shadow-sm" style="background-color: #C5A021; color: #002147; border: none;">
-                        Access Admin Dashboard <i class="bi bi-arrow-right-short ms-1 fs-5"></i>
+                    <button type="submit" class="btn w-100 py-2.5 fw-bold rounded-pill shadow-sm" style="background-color: #002147; color: #ffffff; border: none;">
+                        Login
                     </button>
                 </form>
-            </div>
-
-            <!-- MODAL FOOTER -->
-            <div class="modal-footer border-top border-secondary border-opacity-25 py-2 px-4 justify-content-center" style="background-color: #001630;">
-                <span class="small text-white-50 font-size-xs"><i class="bi bi-lock-fill me-1 text-warning"></i> End-to-end 2FA encrypted session</span>
             </div>
 
         </div>

@@ -8,8 +8,7 @@
     <!-- PAGE HEADER -->
     <div class="d-flex justify-content-between align-items-center mb-4">
         <div>
-            <h3 class="fw-bold text-white mb-1" style="color: var(--admin-gold) !important;">Marketplace Products (Our Owino)</h3>
-            <p class="text-secondary small mb-0">Manage product inventory, pricing, images, and category assignments.</p>
+            <h3 class="fw-bold mb-1" style="color: #002147 !important;">Marketplace Products (Our Owino)</h3>
         </div>
         <a href="{% url 'product_add' %}" target="_blank" class="btn btn-gold rounded-pill px-4 py-2 shadow-sm font-size-xs">
             <i class="bi bi-plus-lg me-1"></i> Add Product
@@ -19,14 +18,13 @@
     <!-- PRODUCTS TABLE CARD -->
     <div class="admin-card p-4">
         <div class="table-responsive">
-            <table class="table table-dark table-hover align-middle mb-0">
+            <table class="table table-hover align-middle mb-0" style="font-size: 0.95rem;">
                 <thead>
-                    <tr class="text-secondary font-size-xs text-uppercase border-bottom border-secondary border-opacity-25">
+                    <tr class="text-secondary text-uppercase border-bottom" style="font-size: 0.85rem; letter-spacing: 0.5px;">
                         <th>Product</th>
                         <th>Category</th>
                         <th>Price (UGX)</th>
-                        <th>Owner</th>
-                        <th>Rating</th>
+                        <th>Quantity</th>
                         <th class="text-end">Actions</th>
                     </tr>
                 </thead>
@@ -35,36 +33,41 @@
                     <tr>
                         <td>
                             <div class="d-flex align-items-center gap-3">
-                                <div class="rounded-3 overflow-hidden bg-secondary d-flex align-items-center justify-content-center flex-shrink-0" style="width: 50px; height: 50px;">
+                                <div class="rounded-3 overflow-hidden bg-light border d-flex align-items-center justify-content-center flex-shrink-0" style="width: 48px; height: 48px;">
                                     {% if p.hero_image %}
                                         <img src="{{ p.hero_image.url }}" class="w-100 h-100 object-fit-cover" alt="{{ p.name }}">
                                     {% else %}
-                                        <i class="bi bi-box-seam text-white-50"></i>
+                                        <i class="bi bi-box-seam text-secondary fs-4"></i>
                                     {% endif %}
                                 </div>
                                 <div>
-                                    <span class="fw-bold text-white font-size-xs d-block">{{ p.name }}</span>
-                                    <small class="text-secondary font-size-xs">{{ p.description|truncatewords:8 }}</small>
+                                    <span class="fw-bold text-dark d-block" style="font-size: 1rem;">{{ p.name }}</span>
                                 </div>
                             </div>
                         </td>
                         <td>
-                            <span class="badge bg-secondary rounded-pill px-3 py-1 font-size-xs">
+                            <span class="badge bg-light text-dark border rounded-pill px-3 py-1.5" style="font-size: 0.85rem;">
                                 {{ p.category.name|default:"Uncategorized" }}
                             </span>
                         </td>
-                        <td class="fw-bold text-warning font-size-xs">{{ p.price|floatformat:0 }} UGX</td>
-                        <td class="font-size-xs text-white-50">{{ p.owner.username|default:"Admin" }}</td>
-                        <td class="font-size-xs text-warning"><i class="bi bi-star-fill me-1"></i>{{ p.rating|default:"0" }}</td>
+                        <td class="fw-bold text-primary" style="font-size: 0.95rem;">{{ p.price|floatformat:0 }} UGX</td>
+                        <td>
+                            <span class="badge bg-light text-dark border rounded-pill px-3 py-1.5 fw-semibold" style="font-size: 0.85rem;">
+                                {{ p.quantity|default:1 }} Units
+                            </span>
+                        </td>
                         <td class="text-end">
-                            <a href="{% url 'product_detail' p.id %}" target="_blank" class="btn btn-sm btn-outline-info rounded-pill px-3 font-size-xs py-1">
-                                View Item <i class="bi bi-arrow-up-right ms-1"></i>
-                            </a>
+                            <form method="POST" action="{% url 'admin_delete_product' p.id %}" onsubmit="return confirm('Are you sure you want to delete product \'{{ p.name|escapejs }}\'?');" class="d-inline">
+                                {% csrf_token %}
+                                <button type="submit" class="btn btn-sm btn-outline-danger rounded-pill px-3 py-1.5 fw-bold" style="font-size: 0.85rem;">
+                                    <i class="bi bi-trash3-fill me-1"></i> Delete
+                                </button>
+                            </form>
                         </td>
                     </tr>
                     {% empty %}
                     <tr>
-                        <td colspan="6" class="text-center text-muted p-5">
+                        <td colspan="5" class="text-center text-muted p-5">
                             <i class="bi bi-box-seam display-4 d-block opacity-25 mb-2"></i>
                             No products currently listed in Our Owino marketplace.
                         </td>

@@ -11,13 +11,14 @@
             --admin-navy: #002147;
             --admin-navy-deep: #001630;
             --admin-gold: #C5A021;
-            --admin-bg: #0f172a;
-            --admin-card-bg: #1e293b;
+            --admin-powder-blue: #EBF4FA;
+            --admin-offwhite: #f8fafc;
+            --admin-card-bg: #ffffff;
         }
 
         body {
-            background-color: var(--admin-bg);
-            color: #f8fafc;
+            background-color: #ffffff !important;
+            color: #0f172a !important;
             font-family: 'Inter', system-ui, -apple-system, sans-serif;
             min-height: 100vh;
         }
@@ -25,8 +26,8 @@
         /* Sidebar Styling */
         .sidebar {
             width: 260px;
-            background-color: var(--admin-navy-deep);
-            border-right: 1px solid rgba(197, 160, 33, 0.2);
+            background-color: var(--admin-offwhite);
+            border-right: 1px solid #e2e8f0;
             min-height: 100vh;
             position: fixed;
             top: 0;
@@ -39,8 +40,8 @@
 
         .sidebar-brand {
             padding: 24px 20px;
-            border-bottom: 2px solid var(--admin-gold);
-            background-color: var(--admin-navy);
+            border-bottom: 1px solid #e2e8f0;
+            background-color: var(--admin-offwhite);
         }
 
         .sidebar-nav {
@@ -54,18 +55,19 @@
             align-items: center;
             gap: 12px;
             padding: 12px 16px;
-            color: #cbd5e1;
+            color: #002147;
+            background-color: var(--admin-powder-blue);
             text-decoration: none;
-            font-weight: 600;
+            font-weight: 700;
             font-size: 0.9rem;
             border-radius: 10px;
             transition: all 0.2s ease;
-            margin-bottom: 4px;
+            margin-bottom: 8px;
         }
 
         .sidebar-link:hover, .sidebar-link.active {
             background-color: var(--admin-navy);
-            color: var(--admin-gold);
+            color: #ffffff;
             transform: translateX(4px);
         }
 
@@ -79,11 +81,12 @@
             min-height: 100vh;
             display: flex;
             flex-direction: column;
+            background-color: #ffffff;
         }
 
         .top-navbar {
-            background-color: var(--admin-navy);
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            background-color: var(--admin-offwhite);
+            border-bottom: 1px solid #e2e8f0;
             padding: 16px 30px;
             display: flex;
             align-items: center;
@@ -93,14 +96,15 @@
         .content-area {
             padding: 30px;
             flex: 1;
+            background-color: #ffffff;
         }
 
         /* Cards & Components */
         .admin-card {
-            background-color: var(--admin-card-bg);
-            border: 1px solid rgba(255, 255, 255, 0.08);
+            background-color: #ffffff;
+            border: 1px solid #e2e8f0;
             border-radius: 16px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            box-shadow: 0 4px 20px rgba(0,33,71,0.04);
         }
 
         .btn-gold {
@@ -115,12 +119,13 @@
         }
 
         .btn-outline-gold {
-            border: 1px solid var(--admin-gold);
-            color: var(--admin-gold);
+            border: 1px solid var(--admin-navy);
+            color: var(--admin-navy);
+            font-weight: 600;
         }
         .btn-outline-gold:hover {
-            background-color: var(--admin-gold);
-            color: var(--admin-navy);
+            background-color: var(--admin-navy);
+            color: #ffffff;
         }
 
         .font-size-xs { font-size: 0.75rem; }
@@ -131,12 +136,8 @@
     <!-- SIDEBAR NAVIGATION -->
     <aside class="sidebar">
         <div>
-            <div class="sidebar-brand d-flex align-items-center gap-2">
-                <i class="bi bi-shield-lock-fill fs-3 text-warning"></i>
-                <div>
-                    <h5 class="fw-bold text-white mb-0" style="letter-spacing: 0.5px;">Admin Dashboard</h5>
-                    <small class="text-warning font-size-xs fw-semibold">MOBA Executive Control</small>
-                </div>
+            <div class="sidebar-brand">
+                <h5 class="fw-bold mb-0" style="color: #002147; letter-spacing: 0.5px;">Admin Dashboard</h5>
             </div>
 
             <ul class="sidebar-nav">
@@ -176,14 +177,14 @@
                     </a>
                 </li>
                 <li>
-                    <a href="/admin/users/user/add/" target="_blank" class="sidebar-link text-info">
+                    <a href="/admin/users/user/add/" target="_blank" class="sidebar-link" style="background-color: #d0e7ff; color: #002147;">
                         <i class="bi bi-person-plus-fill"></i> Add User (Django Admin)
                     </a>
                 </li>
             </ul>
         </div>
 
-        <div class="p-3 border-top border-secondary border-opacity-25">
+        <div class="p-3 border-top border-secondary border-opacity-10">
             <a href="{% url 'admin_dashboard_logout' %}" class="btn btn-outline-danger w-100 btn-sm rounded-pill fw-bold">
                 <i class="bi bi-box-arrow-right me-1"></i> Exit Dashboard
             </a>
@@ -196,22 +197,19 @@
         <!-- TOP NAVBAR -->
         <header class="top-navbar">
             <div class="d-flex align-items-center gap-2">
-                <a href="{% url 'home' %}" class="btn btn-sm btn-outline-light rounded-pill px-3 fw-bold">
+                <a href="{% url 'home' %}" class="btn btn-sm btn-outline-dark rounded-pill px-3 fw-bold">
                     <i class="bi bi-globe me-1"></i> View Main Site
                 </a>
             </div>
 
             <div class="d-flex align-items-center gap-3">
-                <span class="badge bg-warning bg-opacity-10 text-warning px-3 py-2 rounded-pill fw-bold border border-warning border-opacity-25 font-size-xs">
-                    <i class="bi bi-shield-check me-1"></i> 2FA Authenticated
-                </span>
                 <div class="d-flex align-items-center gap-2">
                     <div class="rounded-circle bg-primary text-white fw-bold d-flex align-items-center justify-content-center" style="width: 38px; height: 38px;">
                         {{ user.username|slice:":1"|upper }}
                     </div>
                     <div class="d-none d-md-block">
-                        <h6 class="mb-0 text-white fw-bold font-size-xs">{{ user.get_full_name|default:user.username }}</h6>
-                        <small class="text-warning font-size-xs">Superuser</small>
+                        <h6 class="mb-0 text-dark fw-bold font-size-xs">{{ user.get_full_name|default:user.username }}</h6>
+                        <small class="text-secondary font-size-xs fw-semibold">Superuser</small>
                     </div>
                 </div>
             </div>

@@ -1,42 +1,89 @@
 {% extends "admin/admin_base.html" %}
 
-{% block title %}Members & Verification{% endblock %}
+{% block title %}Members & Verification Desk{% endblock %}
 
 {% block content %}
-<div class="container-fluid p-0">
+<div class="container-fluid p-0 d-flex flex-column" style="height: calc(100vh - 120px);">
 
-    <!-- PAGE HEADER & SEARCH -->
-    <div class="d-flex flex-wrap justify-content-between align-items-center mb-4 gap-3">
-        <div>
-            <h3 class="fw-bold text-white mb-1" style="color: var(--admin-gold) !important;">Members & Verification Desk</h3>
-            <p class="text-secondary small mb-0">Manage alumni accounts, assign roles, and award Verified MOBA Member badges.</p>
+    <!-- FIXED TOP SECTION (HEADER + FILTER BAR) -->
+    <div class="flex-shrink-0 bg-white pb-2">
+        <!-- PAGE HEADER -->
+        <div class="d-flex flex-wrap justify-content-between align-items-center mb-3">
+            <div>
+                <h3 class="fw-bold mb-1" style="color: #002147 !important;">Members & Verification Desk</h3>
+                <span class="badge bg-light text-dark border rounded-pill px-3 py-1 font-size-xs fw-semibold">
+                    Showing {{ users|length }} Members
+                </span>
+            </div>
         </div>
 
-        <div class="d-flex align-items-center gap-2">
-            <form method="GET" action="{% url 'admin_members' %}" class="d-flex gap-2">
-                <div class="input-group input-group-sm">
-                    <input type="text" name="q" class="form-control bg-dark text-white border-secondary ps-3" placeholder="Search members..." value="{{ search_query }}">
-                    <button type="submit" class="btn btn-gold btn-sm px-3">
-                        <i class="bi bi-search"></i>
-                    </button>
+        <!-- FIXED COMPACT FILTER BAR CARD -->
+        <div class="admin-card p-3 mb-2 shadow-sm" style="background-color: #f8fafc; max-width: 900px;">
+            <form method="GET" action="{% url 'admin_members' %}" class="row g-2 align-items-center">
+                
+                <!-- SEARCH FIELD -->
+                <div class="col-12 col-sm-6 col-md-3">
+                    <div class="input-group input-group-sm">
+                        <span class="input-group-text bg-white border-end-0 text-muted"><i class="bi bi-search"></i></span>
+                        <input type="text" name="q" class="form-control bg-white border-start-0 ps-0" placeholder="Search member..." value="{{ search_query }}">
+                    </div>
                 </div>
+
+                <!-- HOUSE FILTER -->
+                <div class="col-6 col-sm-3 col-md-2">
+                    <select name="house" class="form-select form-select-sm bg-white text-dark border">
+                        <option value="">All Houses</option>
+                        {% for h in houses %}
+                            <option value="{{ h.id }}" {% if selected_house == h.id|stringformat:"s" %}selected{% endif %}>{{ h.name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <!-- COHORT FILTER -->
+                <div class="col-6 col-sm-3 col-md-2">
+                    <select name="cohort" class="form-select form-select-sm bg-white text-dark border">
+                        <option value="">All Cohorts</option>
+                        {% for c in cohorts %}
+                            <option value="{{ c.id }}" {% if selected_cohort == c.id|stringformat:"s" %}selected{% endif %}>{{ c.name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <!-- VERIFICATION FILTER -->
+                <div class="col-6 col-sm-6 col-md-3">
+                    <select name="verification" class="form-select form-select-sm bg-white text-dark border">
+                        <option value="">All Statuses</option>
+                        <option value="verified" {% if selected_verification == 'verified' %}selected{% endif %}>Verified</option>
+                        <option value="unverified" {% if selected_verification == 'unverified' %}selected{% endif %}>Not Verified</option>
+                    </select>
+                </div>
+
+                <!-- SUBMIT & CLEAR BUTTONS -->
+                <div class="col-6 col-sm-6 col-md-2 d-flex gap-2">
+                    <button type="submit" class="btn btn-gold btn-sm w-100 fw-bold">
+                        <i class="bi bi-funnel-fill me-1"></i> Filter
+                    </button>
+                    {% if search_query or selected_house or selected_cohort or selected_verification %}
+                    <a href="{% url 'admin_members' %}" class="btn btn-outline-secondary btn-sm rounded px-2" title="Reset Filters">
+                        <i class="bi bi-x-lg"></i>
+                    </a>
+                    {% endif %}
+                </div>
+
             </form>
-            <a href="/admin/users/user/add/" target="_blank" class="btn btn-sm btn-success rounded-pill px-3 font-size-xs text-nowrap">
-                <i class="bi bi-plus-lg me-1"></i> Add User
-            </a>
         </div>
     </div>
 
-    <!-- MEMBERS TABLE CARD -->
-    <div class="admin-card p-4">
-        <div class="table-responsive">
-            <table class="table table-dark table-hover align-middle mb-0">
-                <thead>
-                    <tr class="text-secondary font-size-xs text-uppercase border-bottom border-secondary border-opacity-25">
-                        <th>Member Details</th>
+    <!-- SCROLLABLE MEMBERS TABLE CARD -->
+    <div class="admin-card p-3 flex-grow-1 overflow-hidden d-flex flex-column shadow-sm">
+        <div class="table-responsive flex-grow-1" style="overflow-y: auto;">
+            <table class="table table-hover align-middle mb-0" style="font-size: 0.95rem;">
+                <thead class="sticky-top bg-white border-bottom shadow-sm" style="z-index: 5;">
+                    <tr class="text-secondary text-uppercase" style="font-size: 0.85rem; letter-spacing: 0.5px; background-color: #ffffff;">
+                        <th>Name</th>
                         <th>House</th>
                         <th>Cohort</th>
-                        <th>Profession</th>
+                        <th>Contact Details</th>
                         <th>Role</th>
                         <th>Verification Status</th>
                         <th class="text-end">Action</th>
@@ -47,45 +94,53 @@
                     <tr>
                         <td>
                             <div class="d-flex align-items-center gap-3">
-                                <div class="rounded-circle bg-primary text-white fw-bold d-flex align-items-center justify-content-center flex-shrink-0" style="width: 40px; height: 40px; font-size: 0.9rem;">
+                                <div class="rounded-circle bg-primary text-white fw-bold d-flex align-items-center justify-content-center flex-shrink-0" style="width: 44px; height: 44px; font-size: 1rem;">
                                     {{ u.username|slice:":1"|upper }}
                                 </div>
                                 <div>
-                                    <span class="fw-bold text-white d-block font-size-xs">
+                                    <span class="fw-bold text-dark d-block" style="font-size: 1rem;">
                                         {{ u.get_full_name|default:u.username }}
                                         {% if u.profile.nickname %}
-                                        <small class="text-info">({{ u.profile.nickname }})</small>
+                                        <small class="text-primary fs-6">({{ u.profile.nickname }})</small>
                                         {% endif %}
                                     </span>
-                                    <small class="text-secondary font-size-xs">@{{ u.username }} &bull; {{ u.email|default:"No email" }}</small>
                                 </div>
                             </div>
                         </td>
-                        <td class="font-size-xs text-white-50">{{ u.house.name|default:"N/A" }}</td>
-                        <td class="font-size-xs text-white-50">{{ u.cohort.name|default:"N/A" }}</td>
-                        <td class="font-size-xs text-white-50">{{ u.profession.name|default:"N/A" }}</td>
+                        <td class="fw-medium text-dark">{{ u.house.name|default:"N/A" }}</td>
+                        <td class="fw-medium text-dark">{{ u.cohort.name|default:"N/A" }}</td>
+                        <td>
+                            <div>
+                                <span class="d-block text-dark fw-medium" style="font-size: 0.9rem;">
+                                    <i class="bi bi-envelope me-1 text-secondary"></i>{{ u.email|default:"No email" }}
+                                </span>
+                                <small class="text-muted d-block" style="font-size: 0.85rem;">
+                                    <i class="bi bi-telephone me-1 text-secondary"></i>{{ u.phone_number|default:"No phone" }}
+                                </small>
+                            </div>
+                        </td>
                         <td>
                             {% if u.is_superuser %}
-                                <span class="badge bg-danger rounded-pill px-2 py-1 font-size-xs">Superuser</span>
+                                <span class="badge bg-danger rounded-pill px-2.5 py-1" style="font-size: 0.8rem;">Superuser</span>
                             {% elif u.is_staff %}
-                                <span class="badge bg-warning text-dark rounded-pill px-2 py-1 font-size-xs">Staff</span>
+                                <span class="badge bg-warning text-dark rounded-pill px-2.5 py-1" style="font-size: 0.8rem;">Staff</span>
                             {% else %}
-                                <span class="badge bg-secondary rounded-pill px-2 py-1 font-size-xs">Member</span>
+                                <span class="badge bg-light text-secondary rounded-pill px-2.5 py-1 border" style="font-size: 0.8rem;">Member</span>
                             {% endif %}
                         </td>
                         <td>
                             {% if u.profile.is_verified %}
-                                <span class="badge bg-primary rounded-pill px-3 py-2 font-size-xs shadow-sm">
-                                    <i class="bi bi-patch-check-fill text-warning me-1"></i> Verified MOBA Member
+                                <span class="badge bg-success rounded-pill px-3 py-1.5 shadow-sm" style="font-size: 0.85rem;">
+                                    <i class="bi bi-patch-check-fill me-1"></i> Verified
                                 </span>
                             {% else %}
-                                <span class="badge bg-secondary bg-opacity-25 text-white-50 rounded-pill px-3 py-1 font-size-xs">
-                                    Unverified
+                                <span class="badge bg-light text-secondary border rounded-pill px-3 py-1.5" style="font-size: 0.85rem;">
+                                    Not Verified
                                 </span>
                             {% endif %}
                         </td>
                         <td class="text-end">
-                            <a href="{% url 'admin_verify_user' u.id %}" class="btn btn-sm {% if u.profile.is_verified %}btn-outline-warning{% else %}btn-gold{% endif %} rounded-pill px-3 font-size-xs py-1">
+                            <a href="{% url 'admin_verify_user' u.id %}" class="btn btn-sm {% if u.profile.is_verified %}btn-outline-secondary{% else %}btn-gold{% endif %} rounded-pill px-3 py-1.5 fw-bold" style="font-size: 0.85rem;">
                                 {% if u.profile.is_verified %}
                                     <i class="bi bi-x-circle me-1"></i> Revoke
                                 {% else %}
@@ -98,7 +153,7 @@
                     <tr>
                         <td colspan="7" class="text-center text-muted p-5">
                             <i class="bi bi-people display-4 d-block opacity-25 mb-2"></i>
-                            No member records found matching your search.
+                            No member records found matching your filter criteria.
                         </td>
                     </tr>
                     {% endfor %}

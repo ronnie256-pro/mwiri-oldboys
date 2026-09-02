@@ -8,8 +8,7 @@
     <!-- PAGE HEADER -->
     <div class="d-flex justify-content-between align-items-center mb-4">
         <div>
-            <h3 class="fw-bold text-white mb-1" style="color: var(--admin-gold) !important;">News & History Archives Hub</h3>
-            <p class="text-secondary small mb-0">Publish news updates, manage photo galleries, and upload downloadable PDF historical documents.</p>
+            <h3 class="fw-bold mb-1" style="color: #002147 !important;">News & History Archives Hub</h3>
         </div>
         <div class="d-flex gap-2">
             <a href="{% url 'news_add' %}" target="_blank" class="btn btn-gold rounded-pill px-3 py-2 font-size-xs">
@@ -24,12 +23,12 @@
     <!-- TABBED CONTENT SECTION -->
     <ul class="nav nav-pills mb-4" id="contentTabs" role="tablist">
         <li class="nav-item" role="presentation">
-            <button class="nav-link active fw-bold rounded-pill px-4 me-2" id="news-tab" data-bs-toggle="tab" data-bs-target="#news-pane" type="button" role="tab">
+            <button class="nav-link active fw-bold rounded-pill px-4 me-2" id="news-tab" data-bs-toggle="tab" data-bs-target="#news-pane" type="button" role="tab" style="background-color: #002147;">
                 <i class="bi bi-newspaper me-2"></i> News & Broadcasts ({{ news_items|length }})
             </button>
         </li>
         <li class="nav-item" role="presentation">
-            <button class="nav-link fw-bold rounded-pill px-4 text-white" id="history-tab" data-bs-toggle="tab" data-bs-target="#history-pane" type="button" role="tab">
+            <button class="nav-link fw-bold rounded-pill px-4 text-dark border bg-light" id="history-tab" data-bs-toggle="tab" data-bs-target="#history-pane" type="button" role="tab">
                 <i class="bi bi-file-earmark-pdf-fill me-2 text-danger"></i> PDF History Archives ({{ history_items|length }})
             </button>
         </li>
@@ -41,9 +40,9 @@
         <div class="tab-pane fade show active" id="news-pane" role="tabpanel">
             <div class="admin-card p-4">
                 <div class="table-responsive">
-                    <table class="table table-dark table-hover align-middle mb-0">
+                    <table class="table table-hover align-middle mb-0">
                         <thead>
-                            <tr class="text-secondary font-size-xs text-uppercase border-bottom border-secondary border-opacity-25">
+                            <tr class="text-secondary font-size-xs text-uppercase border-bottom">
                                 <th>Article Title</th>
                                 <th>Category</th>
                                 <th>Author</th>
@@ -56,28 +55,28 @@
                             <tr>
                                 <td>
                                     <div class="d-flex align-items-center gap-3">
-                                        <div class="rounded-3 overflow-hidden bg-secondary d-flex align-items-center justify-content-center flex-shrink-0" style="width: 50px; height: 50px;">
+                                        <div class="rounded-3 overflow-hidden bg-light border d-flex align-items-center justify-content-center flex-shrink-0" style="width: 50px; height: 50px;">
                                             {% if n.hero_image %}
                                                 <img src="{{ n.hero_image.url }}" class="w-100 h-100 object-fit-cover" alt="{{ n.title }}">
                                             {% else %}
-                                                <i class="bi bi-newspaper text-white-50"></i>
+                                                <i class="bi bi-newspaper text-secondary"></i>
                                             {% endif %}
                                         </div>
                                         <div>
-                                            <span class="fw-bold text-white font-size-xs d-block">{{ n.title }}</span>
+                                            <span class="fw-bold text-dark font-size-xs d-block">{{ n.title }}</span>
                                             <small class="text-secondary font-size-xs">{{ n.content|striptags|truncatewords:8 }}</small>
                                         </div>
                                     </div>
                                 </td>
                                 <td>
-                                    <span class="badge bg-primary bg-opacity-25 text-primary rounded-pill px-3 py-1 font-size-xs">
+                                    <span class="badge bg-light text-primary border rounded-pill px-3 py-1 font-size-xs">
                                         {{ n.category.name|default:"General" }}
                                     </span>
                                 </td>
-                                <td class="font-size-xs text-white-50">{{ n.author.username|default:"Admin" }}</td>
+                                <td class="font-size-xs text-secondary">{{ n.author.username|default:"Admin" }}</td>
                                 <td class="font-size-xs text-secondary">{{ n.created_at|date:"M j, Y" }}</td>
                                 <td class="text-end">
-                                    <a href="{% url 'news_detail' pk=n.pk %}" target="_blank" class="btn btn-sm btn-outline-info rounded-pill px-3 font-size-xs py-1">
+                                    <a href="{% url 'news_detail' pk=n.pk %}" target="_blank" class="btn btn-sm btn-outline-primary rounded-pill px-3 font-size-xs py-1">
                                         View Story <i class="bi bi-arrow-up-right ms-1"></i>
                                     </a>
                                 </td>
@@ -95,9 +94,9 @@
         <div class="tab-pane fade" id="history-pane" role="tabpanel">
             <div class="admin-card p-4">
                 <div class="table-responsive">
-                    <table class="table table-dark table-hover align-middle mb-0">
+                    <table class="table table-hover align-middle mb-0">
                         <thead>
-                            <tr class="text-secondary font-size-xs text-uppercase border-bottom border-secondary border-opacity-25">
+                            <tr class="text-secondary font-size-xs text-uppercase border-bottom">
                                 <th>Archive Title</th>
                                 <th>Category</th>
                                 <th>PDF Attachment</th>
@@ -118,13 +117,13 @@
                                             {% endif %}
                                         </div>
                                         <div>
-                                            <span class="fw-bold text-white font-size-xs d-block">{{ h.title }}</span>
+                                            <span class="fw-bold text-dark font-size-xs d-block">{{ h.title }}</span>
                                             <small class="text-secondary font-size-xs">{{ h.content|truncatewords:8 }}</small>
                                         </div>
                                     </div>
                                 </td>
                                 <td>
-                                    <span class="badge bg-secondary rounded-pill px-3 py-1 font-size-xs">
+                                    <span class="badge bg-light text-dark border rounded-pill px-3 py-1 font-size-xs">
                                         {{ h.category.name|default:"Archives" }}
                                     </span>
                                 </td>
