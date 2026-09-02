@@ -1,107 +1,203 @@
 {% extends "base.html" %}
 
 {% block content %}
-<div class="container-fluid py-5 px-lg-5" style="background-color: #f8fafc; min-height: 100vh;">
+<div class="container-fluid py-5 px-3 px-lg-5" style="background-color: #f8fafc; min-height: 100vh;">
     
-    <div class="text-center mb-5">
-        <h1 class="fw-bold display-4">OB <span class="text-primary">Connect</span></h1>
+    <!-- PAGE TITLE HEADER -->
+    <div class="d-flex align-items-center justify-content-between mb-4">
+        <h1 class="fw-bold display-5 mb-0" style="color: var(--mwiiri-navy, #002147);">
+            OB <span style="color: var(--mwiiri-gold, #C5A021);">Connect</span>
+        </h1>
+        <span class="badge bg-white text-dark border rounded-pill px-3 py-2 shadow-sm font-size-sm">
+            <i class="bi bi-people-fill me-1 text-primary"></i> {{ users.paginator.count }} Alumni
+        </span>
     </div>
 
-    <div class="card shadow-lg border-0 rounded-5 mb-5 overflow-hidden">
-        <div class="card-body p-0 p-md-5 bg-white">
-            <div class="accordion accordion-flush" id="filterAccordion">
-                <div class="accordion-item border-0">
-                    <!-- Mobile Accordion Header -->
-                    <h2 class="accordion-header" id="filterHeading">
-                        <button class="accordion-button collapsed fw-bold py-3 px-4 premium-accordion-btn" type="button" data-bs-toggle="collapse" data-bs-target="#filterCollapse" aria-expanded="false" aria-controls="filterCollapse">
-                            <i class="bi bi-funnel-fill text-gold me-2 fs-5"></i> 
-                            <span class="text-uppercase tracking-wider">Filter</span>
-                        </button>
-                    </h2>
-                    <!-- Collapse container -->
-                    <div id="filterCollapse" class="accordion-collapse collapse" aria-labelledby="filterHeading" data-bs-parent="#filterAccordion">
-                        <div class="accordion-body p-4 p-md-4 bg-light border-bottom border-3" style="border-color: #C5A021 !important;">
-                            <form method="get" class="row g-3 align-items-end">
-                                <div class="col-md-3">
-                                    <label for="name" class="form-label small fw-bold text-uppercase text-navy">Search Name</label>
-                                    <div class="input-group shadow-sm">
-                                        <span class="input-group-text bg-white border-0 text-navy"><i class="bi bi-search"></i></span>
-                                        <input type="text" name="name" id="name" class="form-control bg-white border-0 fw-bold" placeholder="e.g. Muyinda Ronnie" value="{{ request.GET.name }}">
+    <!-- MAIN TWO-COLUMN GRID LAYOUT -->
+    <div class="row g-4">
+        
+        <!-- LEFT SIDEBAR FILTER (DESKTOP & MOBILE ACCORDION) -->
+        <div class="col-lg-3">
+            
+            <!-- MOBILE ACCORDION FILTER (Visible only on mobile/tablet screens < lg) -->
+            <div class="d-lg-none card shadow-sm border-0 rounded-4 mb-4 overflow-hidden">
+                <div class="accordion accordion-flush" id="filterAccordion">
+                    <div class="accordion-item border-0">
+                        <h2 class="accordion-header" id="filterHeading">
+                            <button class="accordion-button collapsed fw-bold py-3 px-4 premium-accordion-btn" type="button" data-bs-toggle="collapse" data-bs-target="#filterCollapse" aria-expanded="false" aria-controls="filterCollapse">
+                                <i class="bi bi-funnel-fill text-gold me-2 fs-5"></i> 
+                                <span class="text-uppercase tracking-wider">Filter Alumni</span>
+                            </button>
+                        </h2>
+                        <div id="filterCollapse" class="accordion-collapse collapse" aria-labelledby="filterHeading" data-bs-parent="#filterAccordion">
+                            <div class="accordion-body p-4 bg-white border-top">
+                                <form method="get" class="row g-3">
+                                    <div class="col-12">
+                                        <label for="name_mob" class="form-label small fw-bold text-uppercase text-navy">Search Name</label>
+                                        <div class="input-group shadow-sm">
+                                            <span class="input-group-text bg-white border-0 text-navy"><i class="bi bi-search"></i></span>
+                                            <input type="text" name="name" id="name_mob" class="form-control bg-white border-0 fw-bold" placeholder="e.g. Muyinda Ronnie" value="{{ request.GET.name }}">
+                                        </div>
                                     </div>
-                                </div>
-                                <div class="col-md-2">
-                                    <label for="cohort" class="form-label small fw-bold text-uppercase text-navy">Cohort</label>
-                                    <select name="cohort" id="cohort" class="form-select bg-white border-0 shadow-sm fw-bold">
-                                        <option value="">All Years</option>
-                                        {% for cohort in cohorts %}
-                                            <option value="{{ cohort.id }}" {% if request.GET.cohort == cohort.id|stringformat:"i" %}selected{% endif %}>{{ cohort.name }}</option>
-                                        {% endfor %}
-                                    </select>
-                                </div>
-                                <div class="col-md-2">
-                                    <label for="profession" class="form-label small fw-bold text-uppercase text-navy">Profession</label>
-                                    <select name="profession" id="profession" class="form-select bg-white border-0 shadow-sm fw-bold">
-                                        <option value="">All Careers</option>
-                                        {% for profession in professions %}
-                                            <option value="{{ profession.id }}" {% if request.GET.profession == profession.id|stringformat:"i" %}selected{% endif %}>{{ profession.name }}</option>
-                                        {% endfor %}
-                                    </select>
-                                </div>
-                                <div class="col-md-2">
-                                    <label for="house" class="form-label small fw-bold text-uppercase text-navy">House</label>
-                                    <select name="house" id="house" class="form-select bg-white border-0 shadow-sm fw-bold">
-                                        <option value="">All Houses</option>
-                                        {% for house in houses %}
-                                            <option value="{{ house.id }}" {% if request.GET.house == house.id|stringformat:"i" %}selected{% endif %}>{{ house.name }}</option>
-                                        {% endfor %}
-                                    </select>
-                                </div>
-                                <div class="col-md-3">
-                                    <label class="form-label small fw-bold text-uppercase text-navy">Years at Mwiri</label>
-                                    <div class="input-group shadow-sm">
-                                        <input type="number" name="year_from" class="form-control bg-white border-0 text-center px-1 fw-bold" placeholder="From" value="{{ request.GET.year_from }}" min="1900" max="2030">
-                                        <span class="input-group-text bg-white border-0 px-2 fw-bold text-gold">-</span>
-                                        <input type="number" name="year_to" class="form-control bg-white border-0 text-center px-1 fw-bold" placeholder="To" value="{{ request.GET.year_to }}" min="1900" max="2030">
+                                    <div class="col-6">
+                                        <label for="cohort_mob" class="form-label small fw-bold text-uppercase text-navy">Cohort</label>
+                                        <select name="cohort" id="cohort_mob" class="form-select bg-white border-0 shadow-sm fw-bold">
+                                            <option value="">All Years</option>
+                                            {% for cohort in cohorts %}
+                                                <option value="{{ cohort.id }}" {% if request.GET.cohort == cohort.id|stringformat:"i" %}selected{% endif %}>{{ cohort.name }}</option>
+                                            {% endfor %}
+                                        </select>
                                     </div>
-                                </div>
-                                <div class="col-md-2">
-                                    <label class="form-label small fw-bold text-uppercase text-navy">S4 Year</label>
-                                    <input type="number" name="s4_year" class="form-control bg-white border-0 text-center px-1 shadow-sm fw-bold" placeholder="e.g. 2008" value="{{ request.GET.s4_year }}" min="1900" max="2030">
-                                </div>
-                                <div class="col-md-2">
-                                    <label class="form-label small fw-bold text-uppercase text-navy">S6 Year</label>
-                                    <input type="number" name="s6_year" class="form-control bg-white border-0 text-center px-1 shadow-sm fw-bold" placeholder="e.g. 2010" value="{{ request.GET.s6_year }}" min="1900" max="2030">
-                                </div>
-                                <div class="col-12 mt-4 text-end">
-                                    <a href="?" class="btn btn-link text-navy me-3 text-decoration-none fw-bold">Clear Filters</a>
-                                    <button type="submit" class="btn btn-gold rounded-pill px-5 py-2 shadow-sm">
-                                        Apply Filters
-                                    </button>
-                                </div>
-                            </form>
+                                    <div class="col-6">
+                                        <label for="profession_mob" class="form-label small fw-bold text-uppercase text-navy">Profession</label>
+                                        <select name="profession" id="profession_mob" class="form-select bg-white border-0 shadow-sm fw-bold">
+                                            <option value="">All Careers</option>
+                                            {% for profession in professions %}
+                                                <option value="{{ profession.id }}" {% if request.GET.profession == profession.id|stringformat:"i" %}selected{% endif %}>{{ profession.name }}</option>
+                                            {% endfor %}
+                                        </select>
+                                    </div>
+                                    <div class="col-6">
+                                        <label for="house_mob" class="form-label small fw-bold text-uppercase text-navy">House</label>
+                                        <select name="house" id="house_mob" class="form-select bg-white border-0 shadow-sm fw-bold">
+                                            <option value="">All Houses</option>
+                                            {% for house in houses %}
+                                                <option value="{{ house.id }}" {% if request.GET.house == house.id|stringformat:"i" %}selected{% endif %}>{{ house.name }}</option>
+                                            {% endfor %}
+                                        </select>
+                                    </div>
+                                    <div class="col-6">
+                                        <label class="form-label small fw-bold text-uppercase text-navy">Years at Mwiri</label>
+                                        <div class="input-group shadow-sm">
+                                            <input type="number" name="year_from" class="form-control bg-white border-0 text-center px-1 fw-bold" placeholder="From" value="{{ request.GET.year_from }}" min="1900" max="2030">
+                                            <input type="number" name="year_to" class="form-control bg-white border-0 text-center px-1 fw-bold" placeholder="To" value="{{ request.GET.year_to }}" min="1900" max="2030">
+                                        </div>
+                                    </div>
+                                    <div class="col-6">
+                                        <label class="form-label small fw-bold text-uppercase text-navy">S4 Year</label>
+                                        <input type="number" name="s4_year" class="form-control bg-white border-0 text-center px-1 shadow-sm fw-bold" placeholder="2008" value="{{ request.GET.s4_year }}" min="1900" max="2030">
+                                    </div>
+                                    <div class="col-6">
+                                        <label class="form-label small fw-bold text-uppercase text-navy">S6 Year</label>
+                                        <input type="number" name="s6_year" class="form-control bg-white border-0 text-center px-1 shadow-sm fw-bold" placeholder="2010" value="{{ request.GET.s6_year }}" min="1900" max="2030">
+                                    </div>
+                                    <div class="col-12 mt-3 text-end">
+                                        <a href="?" class="btn btn-link text-navy me-3 text-decoration-none fw-bold">Clear Filters</a>
+                                        <button type="submit" class="btn btn-gold rounded-pill px-4 py-2 shadow-sm">
+                                            Apply Filters
+                                        </button>
+                                    </div>
+                                </form>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
-    </div>
 
-    <div class="row justify-content-center">
-        <div class="col-xl-10">
+            <!-- DESKTOP STICKY LEFT SIDEBAR FILTER (Visible on lg screens and above) -->
+            <div class="d-none d-lg-block sticky-top" style="top: 90px; z-index: 10;">
+                <div class="card border border-1 border-light-subtle shadow-sm rounded-4 bg-white overflow-hidden p-4">
+                    <div class="d-flex align-items-center justify-content-between mb-3 pb-2 border-bottom">
+                        <h5 class="fw-bold mb-0 text-dark d-flex align-items-center gap-2" style="color: var(--mwiiri-navy, #002147);">
+                            <i class="bi bi-funnel-fill text-primary"></i> Filter Alumni
+                        </h5>
+                        {% if request.GET.name or request.GET.cohort or request.GET.profession or request.GET.house or request.GET.year_from or request.GET.year_to or request.GET.s4_year or request.GET.s6_year %}
+                        <a href="?" class="small text-danger fw-bold text-decoration-none">Clear All</a>
+                        {% endif %}
+                    </div>
+
+                    <form method="get" class="d-flex flex-column gap-3">
+                        <!-- Search Name -->
+                        <div>
+                            <label for="name" class="form-label small fw-bold text-uppercase text-muted font-size-xs">Search Name</label>
+                            <div class="input-group input-group-sm">
+                                <span class="input-group-text bg-light border-end-0 text-muted"><i class="bi bi-search"></i></span>
+                                <input type="text" name="name" id="name" class="form-control form-control-sm bg-light border-start-0" placeholder="e.g. Muyinda Ronnie" value="{{ request.GET.name }}">
+                            </div>
+                        </div>
+
+                        <!-- Cohort -->
+                        <div>
+                            <label for="cohort" class="form-label small fw-bold text-uppercase text-muted font-size-xs">Cohort</label>
+                            <select name="cohort" id="cohort" class="form-select form-select-sm bg-light">
+                                <option value="">All Years</option>
+                                {% for cohort in cohorts %}
+                                    <option value="{{ cohort.id }}" {% if request.GET.cohort == cohort.id|stringformat:"i" %}selected{% endif %}>{{ cohort.name }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+
+                        <!-- Profession -->
+                        <div>
+                            <label for="profession" class="form-label small fw-bold text-uppercase text-muted font-size-xs">Profession</label>
+                            <select name="profession" id="profession" class="form-select form-select-sm bg-light">
+                                <option value="">All Careers</option>
+                                {% for profession in professions %}
+                                    <option value="{{ profession.id }}" {% if request.GET.profession == profession.id|stringformat:"i" %}selected{% endif %}>{{ profession.name }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+
+                        <!-- House -->
+                        <div>
+                            <label for="house" class="form-label small fw-bold text-uppercase text-muted font-size-xs">House</label>
+                            <select name="house" id="house" class="form-select form-select-sm bg-light">
+                                <option value="">All Houses</option>
+                                {% for house in houses %}
+                                    <option value="{{ house.id }}" {% if request.GET.house == house.id|stringformat:"i" %}selected{% endif %}>{{ house.name }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+
+                        <!-- Years at Mwiri -->
+                        <div>
+                            <label class="form-label small fw-bold text-uppercase text-muted font-size-xs">Years at Mwiri</label>
+                            <div class="input-group input-group-sm">
+                                <input type="number" name="year_from" class="form-control form-control-sm bg-light text-center px-1" placeholder="From" value="{{ request.GET.year_from }}" min="1900" max="2030">
+                                <span class="input-group-text bg-light border-0 px-2 font-size-xs">-</span>
+                                <input type="number" name="year_to" class="form-control form-control-sm bg-light text-center px-1" placeholder="To" value="{{ request.GET.year_to }}" min="1900" max="2030">
+                            </div>
+                        </div>
+
+                        <!-- S4 & S6 Years -->
+                        <div class="row g-2">
+                            <div class="col-6">
+                                <label class="form-label small fw-bold text-uppercase text-muted font-size-xs">S4 Year</label>
+                                <input type="number" name="s4_year" class="form-control form-control-sm bg-light text-center px-1" placeholder="2008" value="{{ request.GET.s4_year }}" min="1900" max="2030">
+                            </div>
+                            <div class="col-6">
+                                <label class="form-label small fw-bold text-uppercase text-muted font-size-xs">S6 Year</label>
+                                <input type="number" name="s6_year" class="form-control form-control-sm bg-light text-center px-1" placeholder="2010" value="{{ request.GET.s6_year }}" min="1900" max="2030">
+                            </div>
+                        </div>
+
+                        <div class="pt-2">
+                            <button type="submit" class="btn btn-navy-gold rounded-pill w-100 py-2 fw-bold shadow-sm">
+                                Apply Filters
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- RIGHT MAIN ALUMNI CARDS LIST COLUMN -->
+        <div class="col-lg-9">
             <div class="list-group gap-3">
                 {% for user in users %}
-                <a href="{% url 'view_ob' user.id %}" class="list-group-item list-group-item-action border-0 shadow-sm rounded-4 alumni-list-item p-3 mb-2 text-decoration-none">
+                <a href="{% url 'view_ob' user.id %}" class="list-group-item list-group-item-action border-1 border-light-subtle shadow-sm rounded-4 alumni-list-item p-3 mb-2 text-decoration-none bg-white">
                     <div class="row align-items-center">
                         <div class="col-auto">
                             <div class="position-relative">
-                                <img src="{% if user.profile.profile_picture %}{{ user.profile.profile_picture.url }}{% else %}https://ui-avatars.com/api/?name={{ user.username }}&background=4f46e5&color=fff&size=100{% endif %}" 
+                                <img src="{% if user.profile.profile_picture %}{{ user.profile.profile_picture.url }}{% else %}https://ui-avatars.com/api/?name={{ user.username }}&background=002147&color=fff&size=100{% endif %}" 
                                      class="rounded-circle border border-3 border-white shadow-sm" width="65" height="65" alt="Avatar">
                                 <div class="house-indicator-sm bg-primary" title="House: {{ user.house.name }}">{{ user.house.name|slice:":1" }}</div>
                             </div>
                         </div>
 
                         <div class="col">
-                            <h5 class="fw-bold mb-0 text-dark">{{ user.get_full_name|default:user.username }}</h5>
+                            <h5 class="fw-bold mb-1 text-dark">{{ user.get_full_name|default:user.username }}</h5>
                             <span class="text-primary small fw-bold">Class of {{ user.cohort.name|default:"N/A" }}</span>
                         </div>
 
@@ -112,7 +208,7 @@
                         </div>
 
                         <div class="col-md-2 d-none d-lg-block">
-                            <small class="text-muted d-block">House</small>
+                            <small class="text-muted d-block font-size-xs">House</small>
                             <span class="fw-bold text-dark">{{ user.house.name|default:"N/A" }}</span>
                         </div>
 
@@ -122,37 +218,46 @@
                     </div>
                 </a>
                 {% empty %}
-                <div class="text-center py-5">
+                <div class="bg-white rounded-4 shadow-sm p-5 text-center border border-light-subtle">
                     <div class="opacity-25 mb-3">
-                        <i class="bi bi-person-x display-1"></i>
+                        <i class="bi bi-person-x display-1 text-secondary"></i>
                     </div>
-                    <h4 class="text-muted">No brothers match your search criteria.</h4>
-                    <a href="?" class="btn btn-link text-primary">Clear all filters</a>
+                    <h4 class="fw-bold text-dark mb-2">No brothers match your search criteria</h4>
+                    <p class="text-secondary mb-4">Try clearing or adjusting your filter fields.</p>
+                    <a href="?" class="btn btn-navy-gold rounded-pill px-4 py-2 fw-bold">Clear All Filters</a>
                 </div>
                 {% endfor %}
             </div>
+
+            <!-- PAGINATION -->
+            {% if users.has_other_pages %}
+            <nav class="mt-4">
+                <ul class="pagination justify-content-center">
+                    {% if users.has_previous %}
+                        <li class="page-item"><a class="page-link border-0 shadow-sm mx-1 rounded-circle" href="?page={{ users.previous_page_number }}&name={{ request.GET.name|default:'' }}&cohort={{ request.GET.cohort|default:'' }}&profession={{ request.GET.profession|default:'' }}&house={{ request.GET.house|default:'' }}&year_from={{ request.GET.year_from|default:'' }}&year_to={{ request.GET.year_to|default:'' }}&s4_year={{ request.GET.s4_year|default:'' }}&s6_year={{ request.GET.s6_year|default:'' }}"><i class="bi bi-chevron-left"></i></a></li>
+                    {% endif %}
+                    
+                    <li class="page-item active"><span class="page-link border-0 shadow-sm mx-1 rounded-circle">{{ users.number }}</span></li>
+
+                    {% if users.has_next %}
+                        <li class="page-item"><a class="page-link border-0 shadow-sm mx-1 rounded-circle" href="?page={{ users.next_page_number }}&name={{ request.GET.name|default:'' }}&cohort={{ request.GET.cohort|default:'' }}&profession={{ request.GET.profession|default:'' }}&house={{ request.GET.house|default:'' }}&year_from={{ request.GET.year_from|default:'' }}&year_to={{ request.GET.year_to|default:'' }}&s4_year={{ request.GET.s4_year|default:'' }}&s6_year={{ request.GET.s6_year|default:'' }}"><i class="bi bi-chevron-right"></i></a></li>
+                    {% endif %}
+                </ul>
+            </nav>
+            {% endif %}
+
         </div>
     </div>
-
-    {% if users.has_other_pages %}
-    <nav class="mt-5">
-        <ul class="pagination justify-content-center">
-            {% if users.has_previous %}
-                <li class="page-item"><a class="page-link border-0 shadow-sm mx-1 rounded-circle" href="?page={{ users.previous_page_number }}&name={{ request.GET.name|default:'' }}&cohort={{ request.GET.cohort|default:'' }}&profession={{ request.GET.profession|default:'' }}&house={{ request.GET.house|default:'' }}&year_from={{ request.GET.year_from|default:'' }}&year_to={{ request.GET.year_to|default:'' }}&s4_year={{ request.GET.s4_year|default:'' }}&s6_year={{ request.GET.s6_year|default:'' }}"><i class="bi bi-chevron-left"></i></a></li>
-            {% endif %}
-            
-            <li class="page-item active"><span class="page-link border-0 shadow-sm mx-1 rounded-circle">{{ users.number }}</span></li>
-
-            {% if users.has_next %}
-                <li class="page-item"><a class="page-link border-0 shadow-sm mx-1 rounded-circle" href="?page={{ users.next_page_number }}&name={{ request.GET.name|default:'' }}&cohort={{ request.GET.cohort|default:'' }}&profession={{ request.GET.profession|default:'' }}&house={{ request.GET.house|default:'' }}&year_from={{ request.GET.year_from|default:'' }}&year_to={{ request.GET.year_to|default:'' }}&s4_year={{ request.GET.s4_year|default:'' }}&s6_year={{ request.GET.s6_year|default:'' }}"><i class="bi bi-chevron-right"></i></a></li>
-            {% endif %}
-        </ul>
-    </nav>
-    {% endif %}
 </div>
 
 <style>
-    /* Premium Filter Styling */
+    .font-size-xs {
+        font-size: 0.75rem;
+    }
+    .font-size-sm {
+        font-size: 0.85rem;
+    }
+
     .bg-navy { background-color: #002147 !important; }
     .text-navy { color: #002147 !important; }
     .text-gold { color: #C5A021 !important; }
@@ -169,7 +274,17 @@
     .btn-gold:hover {
         background-color: #002147;
         color: #C5A021;
-        box-shadow: 0 5px 15px rgba(0,33,71,0.2) !important;
+    }
+
+    .btn-navy-gold {
+        background-color: var(--mwiiri-navy, #002147);
+        color: #ffffff;
+        border: none;
+        transition: all 0.2s ease;
+    }
+    .btn-navy-gold:hover {
+        background-color: #001630;
+        color: var(--mwiiri-gold, #C5A021);
     }
 
     .premium-accordion-btn {
@@ -181,22 +296,17 @@
     .premium-accordion-btn::after {
         filter: invert(1) brightness(200%);
     }
-    .premium-accordion-btn:not(.collapsed) {
-        color: #C5A021 !important;
-        background-color: #001630 !important;
-    }
 
     .alumni-list-item {
         background: #ffffff;
         transition: all 0.2s ease-in-out;
-        border: 1px solid transparent !important;
+        border: 1px solid rgba(0, 33, 71, 0.08) !important;
     }
 
     .alumni-list-item:hover {
-        transform: scale(1.01);
-        box-shadow: 0 10px 25px rgba(0,0,0,0.05) !important;
-        border-color: rgba(79, 70, 229, 0.1) !important;
-        background: #fff;
+        transform: translateY(-2px);
+        box-shadow: 0 10px 25px rgba(0, 33, 71, 0.08) !important;
+        border-color: rgba(0, 33, 71, 0.2) !important;
     }
 
     .house-indicator-sm {
@@ -215,12 +325,6 @@
         border: 2px solid white;
     }
 
-    .form-control:focus, .form-select:focus {
-        background-color: white !important;
-        border: 1px solid #4f46e5 !important;
-        box-shadow: 0 0 0 4px rgba(79, 70, 229, 0.1);
-    }
-
     .page-link {
         width: 45px;
         height: 45px;
@@ -232,7 +336,7 @@
     }
 
     .page-item.active .page-link {
-        background-color: #4f46e5;
+        background-color: var(--mwiiri-navy, #002147);
         color: white;
     }
 </style>

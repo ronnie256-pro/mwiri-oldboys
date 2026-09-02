@@ -13,13 +13,9 @@
                 </ol>
             </nav>
 
-            <div class="card shadow-lg border-0 rounded-5 overflow-hidden">
-                <div class="profile-header-bg"
-                    style="height: 180px; background: linear-gradient(135deg, #002147 0%, #2563eb 100%); position: relative;">
-                </div>
-
-                <div class="card-body p-4 p-md-5 pt-0">
-                    <div class="text-center position-relative" style="margin-top: -90px;">
+            <div class="card shadow-lg border-0 rounded-5 overflow-hidden bg-white">
+                <div class="card-body p-4 p-md-5">
+                    <div class="text-center position-relative">
                         <div class="d-inline-block position-relative profile-img-wrapper">
                             <a href="#" data-bs-toggle="modal" data-bs-target="#imageModal" class="profile-img-link">
                                 <img src="{% if user.profile.profile_picture %}{{ user.profile.profile_picture.url }}{% else %}https://ui-avatars.com/api/?name={{ user.username }}&background=002147&color=fff&size=180{% endif %}"
