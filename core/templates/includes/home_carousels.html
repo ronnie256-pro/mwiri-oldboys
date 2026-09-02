@@ -1,147 +1,315 @@
+{% load humanize %}
 <style>
-    /* Premium Navy Hub Cards - Image Focused */
-    .hub-card {
-        background: var(--mwiiri-navy-deep);
-        border: 1px solid rgba(197, 160, 33, 0.15);
-        border-radius: 24px; /* Slightly more rounded for elegance */
-        transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
-        position: relative;
+    :root {
+        --mwiiri-navy: #002147;
+        --mwiiri-gold: #C5A021;
+        --mwiiri-navy-deep: #001630;
+    }
+
+    /* Common Hover & Transition Utilities */
+    .hover-gold:hover {
+        color: var(--mwiiri-gold) !important;
+    }
+    
+    .hover-bg-gray {
+        transition: background-color 0.2s ease, transform 0.2s ease;
+    }
+    .hover-bg-gray:hover {
+        background-color: rgba(0, 33, 71, 0.04);
+        transform: translateX(4px);
+    }
+
+    .text-truncate-2 {
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
         overflow: hidden;
-        box-shadow: 0 12px 35px rgba(0, 10, 25, 0.5); 
     }
 
-    .hub-card:hover {
-        transform: translateY(-10px);
-        box-shadow: 0 25px 50px rgba(0, 5, 15, 0.7) !important;
-        border-color: var(--mwiiri-gold);
-    }
-
-    /* Increased Image Area */
-    .hub-image-container {
-        position: relative;
-        overflow: hidden;
-        height: 260px; /* Increased from 200px */
-    }
-
-    .hub-card img {
-        transition: transform 0.8s ease;
-        opacity: 0.95;
-    }
-
-    .hub-card:hover img {
-        transform: scale(1.08);
-    }
-
-    /* Tightened Text Section */
-    .hub-text-section {
-        padding: 1.25rem; /* Reduced padding to make blue section smaller */
-    }
-
-    /* Modern White-to-Gold Button */
-    .btn-modern-pro {
-        background: #ffffff;
-        color: var(--mwiiri-navy) !important;
-        border: none;
-        padding: 8px 20px; /* More compact button */
-        border-radius: 10px;
-        font-weight: 700;
-        font-size: 0.8rem;
-        transition: all 0.3s ease;
-        display: inline-flex;
+    /* --- MEMORABILIA SECTION (BORDERLESS CIRCULAR AVATARS) --- */
+    .store-avatar-container {
+        width: 175px;
+        height: 175px;
+        max-width: 100%;
+        margin: 0 auto;
+        border-radius: 50%;
+        background-color: transparent;
+        display: flex;
         align-items: center;
-        gap: 6px;
-        text-decoration: none;
+        justify-content: center;
+        overflow: hidden;
+        padding: 0;
+        transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        border: none;
+        box-shadow: none;
+        position: relative;
     }
 
-    .btn-modern-pro:hover {
-        background: var(--mwiiri-gold);
+    .store-avatar-item:hover .store-avatar-container {
+        transform: translateY(-6px) scale(1.06);
+    }
+
+    .store-avatar-container img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        border-radius: 50%;
+        box-shadow: 0 6px 18px rgba(0, 33, 71, 0.12);
+    }
+
+    /* --- NEWS SECTION (IMAGE 1 STYLE - TIGHT VERTICAL STACK) --- */
+    .news-featured-card {
+        background: #ffffff;
+        border-radius: 20px;
+        overflow: hidden;
+        transition: all 0.3s ease;
+    }
+
+    .news-featured-img-container {
+        position: relative;
+        height: 460px;
+        border-radius: 20px;
+        overflow: hidden;
+    }
+    
+    .news-featured-img-container img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        transition: transform 0.6s ease;
+    }
+
+    .news-featured-card:hover .news-featured-img-container img {
         transform: scale(1.05);
-        box-shadow: 0 4px 12px rgba(197, 160, 33, 0.3);
     }
 
-    .hub-badge-dark {
+    .news-badge-overlay {
         position: absolute;
-        top: 15px;
-        left: 15px; /* Moved to left for a fresh look */
-        background: rgba(0, 33, 71, 0.85);
-        backdrop-filter: blur(8px);
-        color: #fff;
-        padding: 5px 14px;
-        border-radius: 50px;
-        font-size: 0.6rem;
-        font-weight: 800;
+        bottom: 20px;
+        left: 20px;
+        right: 20px;
+        display: flex;
+        align-items: center;
+        justify-content: flex-end;
         z-index: 2;
-        border: 1px solid var(--mwiiri-gold);
-        text-transform: uppercase;
-        letter-spacing: 1px;
+    }
+
+    .news-side-thumb {
+        width: 155px;
+        height: 105px;
+        border-radius: 14px;
+        object-fit: cover;
+        flex-shrink: 0;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+    }
+
+    /* --- SPOTLIGHT SECTION (SQUARE CARDS) --- */
+    .spotlight-square-card {
+        aspect-ratio: 1 / 1;
+        border-radius: 20px;
+        position: relative;
+        overflow: hidden;
+        box-shadow: 0 8px 22px rgba(0, 33, 71, 0.12);
+        transition: all 0.3s ease;
+        background-color: var(--mwiiri-navy-deep);
+    }
+
+    .spotlight-square-card:hover {
+        transform: translateY(-6px);
+        box-shadow: 0 16px 36px rgba(0, 33, 71, 0.25);
+    }
+
+    .spotlight-square-card img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        transition: transform 0.6s ease;
+    }
+
+    .spotlight-square-card:hover img {
+        transform: scale(1.1);
+    }
+
+    .spotlight-overlay {
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(to top, rgba(0, 22, 48, 0.95) 0%, rgba(0, 22, 48, 0.25) 55%, transparent 100%);
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        padding: 14px;
+        z-index: 2;
+    }
+
+    .btn-outline-navy {
+        border: 2px solid var(--mwiiri-navy);
+        color: var(--mwiiri-navy);
+    }
+    .btn-outline-navy:hover {
+        background: var(--mwiiri-navy);
+        color: #ffffff;
     }
 </style>
 
-<div class="col-md-4">
-    <div id="newsCarousel" class="carousel slide h-100" data-bs-ride="carousel" data-bs-interval="3500">
-        <div class="carousel-inner h-100">
-            {% for news_item in latest_news %}
-            <div class="carousel-item h-100 {% if forloop.first %}active{% endif %}">
-                <div class="hub-card h-100">
-                    <div class="hub-image-container">
-                        <span class="hub-badge-dark">News</span>
-                        <img src="{{ news_item.hero_image.url }}" class="w-100 h-100" alt="{{ news_item.title }}" style="object-fit: cover;">
-                    </div>
-                    <div class="hub-text-section text-center">
-                        <h6 class="fw-bold mb-3 text-white opacity-90 text-truncate" style="font-size: 0.95rem;">{{ news_item.title }}</h6>
-                        <a href="{% url 'news_detail' pk=news_item.pk %}" class="btn-modern-pro">
-                            Explore <i class="bi bi-arrow-right"></i>
-                        </a>
-                    </div>
-                </div>
-            </div>
-            {% endfor %}
-        </div>
-    </div>
-</div>
+<div class="highlights-vertical-wrapper w-100">
 
-<div class="col-md-4">
-    <div id="productCarousel" class="carousel slide h-100" data-bs-ride="carousel" data-bs-interval="3800">
-        <div class="carousel-inner h-100">
+    <!-- ================= 1. MEMORABILIA SECTION (FIRST AFTER SLIDER) ================= -->
+    <div class="store-highlight-block mb-5">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <div>
+                <h4 class="fw-bold m-0 fs-3" style="color: var(--mwiiri-navy);">Memorabilia <span style="color: var(--mwiiri-gold);">.</span></h4>
+            </div>
+            <a href="{% url 'products' %}" class="btn btn-sm btn-outline-navy fw-bold rounded-pill px-3 py-2">Explore Store</a>
+        </div>
+
+        <div class="row g-3 justify-content-center text-center">
             {% for product in latest_products %}
-            <div class="carousel-item h-100 {% if forloop.first %}active{% endif %}">
-                <div class="hub-card h-100">
-                    <div class="hub-image-container">
-                        <span class="hub-badge-dark" style="border-color: #28a745;">Store</span>
-                        <img src="{{ product.hero_image.url }}" class="w-100 h-100" alt="{{ product.name }}" style="object-fit: cover;">
+            <div class="col-4 col-sm-3 col-md-2 store-avatar-item">
+                <a href="{% url 'product_detail' product.id %}" class="text-decoration-none text-dark d-block">
+                    <div class="store-avatar-container">
+                        {% if product.hero_image %}
+                            <img src="{{ product.hero_image.url }}" alt="{{ product.name }}">
+                        {% else %}
+                            <div class="w-100 h-100 bg-secondary rounded-circle d-flex align-items-center justify-content-center text-white small">Item</div>
+                        {% endif %}
                     </div>
-                    <div class="hub-text-section text-center">
-                        <h6 class="fw-bold mb-3 text-white opacity-90 text-truncate" style="font-size: 0.95rem;">{{ product.name }}</h6>
-                        <a href="{% url 'product_detail' product.id %}" class="btn-modern-pro">
-                            Shop Now <i class="bi bi-cart3"></i>
-                        </a>
-                    </div>
-                </div>
+                </a>
+            </div>
+            {% empty %}
+            <div class="col-12 p-4 bg-light rounded-4 text-center text-muted">
+                No memorabilia items available in the store right now.
             </div>
             {% endfor %}
         </div>
     </div>
-</div>
 
-<div class="col-md-4">
-    <div id="manOfTheHourCarousel" class="carousel slide h-100" data-bs-ride="carousel" data-bs-interval="4100">
-        <div class="carousel-inner h-100">
-            {% for item in man_of_the_hour %}
-            <div class="carousel-item h-100 {% if forloop.first %}active{% endif %}">
-                <div class="hub-card h-100">
-                    <div class="hub-image-container">
-                        <span class="hub-badge-dark" style="border-color: #dc3545;">Spotlight</span>
-                        <img src="{{ item.hero_image.url }}" class="w-100 h-100" alt="{{ item.title }}" style="object-fit: cover;">
-                    </div>
-                    <div class="hub-text-section text-center">
-                        <h6 class="fw-bold mb-3 text-white opacity-90 text-truncate" style="font-size: 0.95rem;">{{ item.title }}</h6>
-                        <a href="{{ item.youtube_link }}" class="btn-modern-pro" target="_blank">
-                            Watch <i class="bi bi-play-circle"></i>
-                        </a>
+    <hr class="my-5 opacity-10">
+
+    <!-- ================= 2. LATEST NEWS SECTION (SECOND AFTER MEMORABILIA) ================= -->
+    <div class="news-highlight-block mb-5">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <div>
+                <h4 class="fw-bold m-0 fs-3" style="color: var(--mwiiri-navy);">Latest News <span style="color: var(--mwiiri-gold);">.</span></h4>
+            </div>
+            <a href="{% url 'news' %}" class="btn btn-sm btn-outline-navy fw-bold rounded-pill px-3 py-2">View All News</a>
+        </div>
+
+        {% if latest_news %}
+            <div class="row g-4">
+                <!-- MAIN FEATURED ARTICLE (LEFT) -->
+                {% with main_article=latest_news.0 %}
+                <div class="col-lg-7">
+                    <div class="news-featured-card h-100">
+                        <div class="news-featured-img-container">
+                            <a href="{% url 'news_detail' pk=main_article.pk %}">
+                                {% if main_article.hero_image %}
+                                    <img src="{{ main_article.hero_image.url }}" alt="{{ main_article.title }}">
+                                {% else %}
+                                    <div class="w-100 h-100 bg-secondary d-flex align-items-center justify-content-center text-white">No Image</div>
+                                {% endif %}
+                            </a>
+                            <div class="news-badge-overlay">
+                                <span class="text-white small fw-medium" style="text-shadow: 0 1px 4px rgba(0,0,0,0.8);">
+                                    <i class="bi bi-clock me-1"></i> {{ main_article.created_at|timesince }} ago
+                                </span>
+                            </div>
+                        </div>
+                        <div class="pt-3">
+                            <h3 class="fw-bold text-dark lh-sm mb-2">
+                                <a href="{% url 'news_detail' pk=main_article.pk %}" class="text-decoration-none text-dark hover-gold">
+                                    {{ main_article.title }}
+                                </a>
+                            </h3>
+                            <p class="text-secondary small mb-0 lh-relaxed">
+                                {{ main_article.content|striptags|truncatewords:28 }}
+                            </p>
+                        </div>
                     </div>
                 </div>
+                {% endwith %}
+
+                <!-- SIDE NEWS LIST (RIGHT - BALANCED 4 ARTICLES STACK) -->
+                <div class="col-lg-5 d-flex flex-column justify-content-between h-100 gap-3">
+                    {% for item in latest_news|slice:"1:5" %}
+                    <div class="d-flex align-items-center gap-3 p-3 rounded-4 hover-bg-gray bg-white shadow-sm">
+                        <a href="{% url 'news_detail' pk=item.pk %}" class="flex-shrink-0">
+                            {% if item.hero_image %}
+                                <img src="{{ item.hero_image.url }}" class="news-side-thumb" alt="{{ item.title }}">
+                            {% else %}
+                                <div class="news-side-thumb bg-secondary d-flex align-items-center justify-content-center text-white small">No Image</div>
+                            {% endif %}
+                        </a>
+                        <div class="flex-grow-1 min-w-0">
+                            <h6 class="fw-bold text-dark mb-2 lh-sm">
+                                <a href="{% url 'news_detail' pk=item.pk %}" class="text-decoration-none text-dark hover-gold text-truncate-2">
+                                    {{ item.title }}
+                                </a>
+                            </h6>
+                            <p class="small text-secondary mb-2 lh-sm text-truncate-2" style="font-size: 0.85rem;">
+                                {{ item.content|striptags|truncatewords:14 }}
+                            </p>
+                            <div class="small text-muted d-flex align-items-center" style="font-size: 0.78rem;">
+                                <i class="bi bi-clock me-1"></i> {{ item.created_at|timesince }} ago
+                            </div>
+                        </div>
+                    </div>
+                    {% empty %}
+                    <div class="p-4 bg-light rounded-4 text-center text-muted">
+                        No additional news stories available at the moment.
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        {% else %}
+            <div class="p-5 text-center bg-light rounded-4 text-muted">No news updates available.</div>
+        {% endif %}
+    </div>
+
+    <hr class="my-5 opacity-10">
+
+    <!-- ================= 3. SPOTLIGHT SECTION (THIRD) ================= -->
+    <div class="spotlight-highlight-block mb-4">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <div>
+                <h4 class="fw-bold m-0 fs-3" style="color: var(--mwiiri-navy);">Spotlight <span style="color: var(--mwiiri-gold);">.</span></h4>
+            </div>
+            <a href="{% url 'news' %}" class="btn btn-sm btn-outline-navy fw-bold rounded-pill px-3 py-2">View All Media</a>
+        </div>
+
+        <div class="row g-3 row-cols-2 row-cols-sm-3 row-cols-lg-6">
+            {% for item in man_of_the_hour %}
+            <div class="col">
+                <div class="spotlight-square-card">
+                    {% if item.hero_image %}
+                        <img src="{{ item.hero_image.url }}" alt="{{ item.title }}">
+                    {% else %}
+                        <div class="w-100 h-100 bg-secondary d-flex align-items-center justify-content-center text-white small">Spotlight</div>
+                    {% endif %}
+                    <div class="spotlight-overlay">
+                        <span class="badge bg-gold text-white rounded-pill px-2 py-1 align-self-start fw-bold" style="font-size: 0.62rem; letter-spacing: 0.5px; background-color: var(--mwiiri-gold);">SPOTLIGHT</span>
+                        <div>
+                            <h6 class="fw-bold text-white mb-2 text-truncate-2" style="font-size: 0.82rem; line-height: 1.2;" title="{{ item.title }}">
+                                {{ item.title }}
+                            </h6>
+                            {% if item.youtube_link %}
+                                <a href="{{ item.youtube_link }}" target="_blank" class="btn btn-sm btn-gold rounded-pill w-100 fw-bold py-1 text-white shadow-sm" style="font-size: 0.75rem; background-color: var(--mwiiri-gold); border: none;">
+                                    Watch <i class="bi bi-play-circle-fill ms-1"></i>
+                                </a>
+                            {% else %}
+                                <span class="btn btn-sm btn-gold rounded-pill w-100 fw-bold py-1 text-white disabled" style="font-size: 0.75rem; background-color: var(--mwiiri-gold); border: none;">
+                                    Featured
+                                </span>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% empty %}
+            <div class="col-12 p-4 bg-light rounded-4 text-center text-muted">
+                No spotlight entries available.
             </div>
             {% endfor %}
         </div>
     </div>
+
 </div>

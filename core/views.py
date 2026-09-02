@@ -5,12 +5,12 @@ from products.models import Product
 from .models import HeroSlider, Fixture, ManOfTheHour
 
 def home(request):
-    latest_news = News.objects.order_by('-created_at')[:3]
+    latest_news = News.objects.order_by('-created_at')[:5]
     latest_events = Event.objects.order_by('-date')[:3]
-    latest_products = Product.objects.order_by('-id')[:3]
+    latest_products = Product.objects.order_by('-id')[:6]
     hero_slides = HeroSlider.objects.all()
     fixtures = Fixture.objects.order_by('date')[:1]
-    man_of_the_hour = ManOfTheHour.objects.order_by('?')[:1]
+    man_of_the_hour = ManOfTheHour.objects.order_by('-id')[:6]
 
     context = {
         'latest_news': latest_news,
