@@ -1,12 +1,8 @@
-# Byte-compiled / optimized / DLL files
+# Python & Django Bytecode & Cache
 __pycache__/
 *.py[cod]
 *$py.class
-
-# C extensions
 *.so
-
-# Distribution / packaging
 .Python
 build/
 develop-eggs/
@@ -20,139 +16,73 @@ parts/
 sdist/
 var/
 wheels/
-share/python-wheels/
 *.egg-info/
 .installed.cfg
 *.egg
 MANIFEST
 
-# PyInstaller
-*.manifest
-*.spec
-
-# Installer logs
-pip-log.txt
-pip-delete-this-directory.txt
-
-# Unit test / coverage reports
-htmlcov/
-.tox/
-.nox/
-.coverage
-.coverage.*
-.cache
-nosetests.xml
-coverage.xml
-*.cover
-*.py,cover
-.hypothesis/
-.pytest_cache/
-
-# Translations
-*.mo
-*.pot
-
-# Django stuff:
-*.log
-local_settings.py
-media/
-staticfiles/
-static_root/
-
-# SQLite databases
-*.sqlite3
-
-# If using Django Debug Toolbar panels
-debug_toolbar/
-
-# Flask stuff (not used but common)
-instance/
-.webassets-cache
-
-# Scrapy stuff
-.scrapy
-
-# Sphinx documentation
-docs/_build/
-
-# Jupyter Notebook
-.ipynb_checkpoints
-
-# IPython
-profile_default/
-ipython_config.py
-
-# pyenv
-.python-version
-
-# pipenv
-Pipfile.lock
-
-# poetry
-poetry.lock
-
-# PEP 582; used by e.g. github.com/David-OConnor/pyflow
-__pypackages__/
-
-# Celery stuff
-celerybeat-schedule
-celerybeat.pid
-
-# SageMath parsed files
-*.sage.py
-
-# Environments
-.env
-.env.*
-.venv
+# Virtual Environments
 venv/
+.venv/
 ENV/
+env/
 env.bak/
 venv.bak/
 
-# mypy
-.mypy_cache/
-.dmypy.json
-compiled/
+# Django Local Data & Media
+db.sqlite3
+*.sqlite3
+media/
+staticfiles/
+static_root/
+static/
 
-# Pyre type checker
-.pyre/
-
-# VS Code
-.vscode/
-
-# System files
-.DS_Store
-Thumbs.db
-
-# Local settings or secrets
+# Local Settings & Environment Secrets
+.env
+.env.*
+local_settings.py
 secrets.*
 
-# Cache / temp
+# IDEs & Editor Configuration
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# AI Assistant & Tool Caches
+.agents/
+.qodo/
+.gemini/
+
+# System & OS Files
+.DS_Store
+Thumbs.db
+Desktop.ini
+
+# Logs & Database Dumps
+*.log
+*.sql
+*.dump
+pip-log.txt
+pip-delete-this-directory.txt
+
+# Temporary & Backup Files
 *.tmp
 *.temp
-
-# Backup files
 *~
 *.bak
 
-# Django collectstatic output (if different)
-static/
+# Testing & Coverage
+.coverage
+.coverage.*
+.cache
+.pytest_cache/
+.tox/
+htmlcov/
+nosetests.xml
+coverage.xml
 
-# Log and dump files
-*.sql
-*.dump
-*.log
-
-# Coverage DB
-coverage.sqlite
-
-# Old media fixtures (if large and not for repo)
+# Static assets / Fixtures
 fixture_images/
-
-# Ignore generated hero slider images if large
 hero_slider/
-
-# Ignore compiled assets (if any)
-**/*.min.js
-**/*.min.css
+committee/

@@ -51,7 +51,6 @@ INSTALLED_APPS = [
 
 INSTALLED_APPS += [
     'payments',
-    'updates',
     'gallery',
     'elections',
 ]
