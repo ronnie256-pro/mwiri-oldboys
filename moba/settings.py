@@ -1,32 +1,40 @@
 import os
 from pathlib import Path
+from dotenv import load_dotenv
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-# --- THE PRODUCTION SWITCH ---
-# Keep this as True while working on your laptop.
-# IMPORTANT: Change this to False before you commit and push to GitHub!
-IS_LOCAL = False
+# --- LOAD ENVIRONMENT VARIABLES FROM .ENV ---
+load_dotenv(BASE_DIR / ".env")
 
-# Quick-start development settings - unsuitable for production
-SECRET_KEY = 'django-insecure-b0mep2c1(5s6jofrphgxx2mw0sd9ckgg3nj=1v6da54)gs41=)'
+# --- AUTOMATED ENVIRONMENT & DEBUG SWITCH ---
+IS_LOCAL = os.environ.get("IS_LOCAL", "True").lower() in ("true", "1", "t")
+DEBUG = os.environ.get("DEBUG", str(IS_LOCAL)).lower() in ("true", "1", "t")
+
+# Secret key loaded dynamically from environment
+SECRET_KEY = os.environ.get("SECRET_KEY", "django-insecure-b0mep2c1(5s6jofrphgxx2mw0sd9ckgg3nj=1v6da54)gs41=)")
 
 if IS_LOCAL:
-    DEBUG = True
-    ALLOWED_HOSTS = ['*']
-    CSRF_TRUSTED_ORIGINS = ['http://127.0.0.1:8000', 'http://localhost:8000']
+    ALLOWED_HOSTS = ["*"]
+    CSRF_TRUSTED_ORIGINS = ["http://127.0.0.1:8000", "http://localhost:8000"]
 else:
-    DEBUG = False
-    ALLOWED_HOSTS = ['mwirioldboys.com', 'www.mwirioldboys.com', '187.7.19.28', '187.77.176.70', 'localhost', '127.0.0.1']
-    CSRF_TRUSTED_ORIGINS = [
-        'https://mwirioldboys.com', 
-        'https://www.mwirioldboys.com', 
-        'http://mwirioldboys.com', 
-        'http://www.mwirioldboys.com', 
-        'http://187.7.19.28', 
-        'http://187.77.176.70'
-    ]
+    allowed_hosts_env = os.environ.get("ALLOWED_HOSTS", "mwirioldboys.com,www.mwirioldboys.com,187.7.19.28,187.77.176.70,localhost,127.0.0.1")
+    ALLOWED_HOSTS = [h.strip() for h in allowed_hosts_env.split(",") if h.strip()]
+
+    csrf_origins_env = os.environ.get("CSRF_TRUSTED_ORIGINS", "https://mwirioldboys.com,https://www.mwirioldboys.com,http://mwirioldboys.com,http://www.mwirioldboys.com,http://187.7.19.28,http://187.77.176.70")
+    CSRF_TRUSTED_ORIGINS = [o.strip() for o in csrf_origins_env.split(",") if o.strip()]
+
+    # Production Hardening Security Flags
+    SESSION_COOKIE_SECURE = True
+    CSRF_COOKIE_SECURE = True
+    SECURE_SSL_REDIRECT = True
+    SECURE_HSTS_SECONDS = 31536000
+    SECURE_HSTS_INCLUDE_SUBDOMAINS = True
+    SECURE_HSTS_PRELOAD = True
+    SECURE_CONTENT_TYPE_NOSNIFF = True
+    X_FRAME_OPTIONS = "DENY"
+    SECURE_REFERRER_POLICY = "strict-origin-when-cross-origin"
 
 
 # Application definition
@@ -48,18 +56,15 @@ INSTALLED_APPS = [
     'users.apps.UsersConfig',
     'pages.apps.PagesConfig',
     'connect.apps.ConnectConfig',
-    'content.apps.ContentConfig',
-    'products.apps.ProductsConfig',
-    'custom_admin.apps.CustomAdminConfig',
-    'teaser.apps.TeaserConfig',
     'organisation.apps.OrganisationConfig',
+    'content.apps.ContentConfig',
+    'gallery.apps.GalleryConfig',
+    'products.apps.ProductsConfig',
     'alumni_sos.apps.AlumniSosConfig',
-]
-
-INSTALLED_APPS += [
-    'payments',
-    'gallery',
-    'elections',
+    'elections.apps.ElectionsConfig',
+    'teaser.apps.TeaserConfig',
+    'custom_admin.apps.CustomAdminConfig',
+    'payments.apps.PaymentsConfig',
 ]
 
 MIDDLEWARE = [
@@ -78,7 +83,7 @@ ROOT_URLCONF = 'moba.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [BASE_DIR / 'core/templates'],
+        'DIRS': [],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -99,26 +104,27 @@ if IS_LOCAL:
     # LAPTOP: SQLite
     DATABASES = {
         'default': {
-            'ENGINE': 'django.db.backends.sqlite3',
-            'NAME': BASE_DIR / 'db.sqlite3',
+            'ENGINE': os.environ.get("DB_ENGINE", "django.db.backends.sqlite3"),
+            'NAME': BASE_DIR / "db.sqlite3",
         }
     }
 else:
     # VPS: PostgreSQL
     DATABASES = {
         'default': {
-            'ENGINE': 'django.db.backends.postgresql',
-            'NAME': 'moba_db',
-            'USER': 'moba_user',
-            'PASSWORD': '*@oldboys2026#',
-            'HOST': 'localhost',
-            'PORT': '5432',
+            'ENGINE': os.environ.get("DB_ENGINE", "django.db.backends.postgresql"),
+            'NAME': os.environ.get("DATABASE_NAME", "moba_db"),
+            'USER': os.environ.get("DATABASE_USER", "moba_user"),
+            'PASSWORD': os.environ.get("DATABASE_PASSWORD", "*@oldboys2026#"),
+            'HOST': os.environ.get("DATABASE_HOST", "localhost"),
+            'PORT': os.environ.get("DATABASE_PORT", "5432"),
         }
     }
 
 
-# Password validation
+# Password validation & Reset Timeout
 AUTH_PASSWORD_VALIDATORS = []
+PASSWORD_RESET_TIMEOUT = 900  # 15 minutes token expiration
 
 # Internationalization
 LANGUAGE_CODE = 'en-us'
@@ -130,23 +136,20 @@ USE_TZ = True
 # --- STATIC & MEDIA FILES ---
 STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')
-
-# Add this line to ensure WhiteNoise handles compression and caching
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
-# Upload size limits (20MB)
-DATA_UPLOAD_MAX_MEMORY_SIZE = 20971520  # 20MB
-FILE_UPLOAD_MAX_MEMORY_SIZE = 20971520  # 20MB
+
+# Upload size limits (120MB)
+DATA_UPLOAD_MAX_MEMORY_SIZE = 125829120  # 120MB
+FILE_UPLOAD_MAX_MEMORY_SIZE = 125829120  # 120MB
 
 CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap5"
 CRISPY_TEMPLATE_PACK = "bootstrap5"
 
-# Custom User Model
+# Custom User Model & Auth Backends
 AUTH_USER_MODEL = 'users.User'
-
-# Use case-insensitive authentication backend
 AUTHENTICATION_BACKENDS = [
     'users.backends.CaseInsensitiveModelBackend',
 ]
@@ -155,9 +158,10 @@ LOGIN_URL = 'login'
 LOGIN_REDIRECT_URL = 'my_account'
 
 DEFAULT_CURRENCY = 'UGX'
-# Admin 2FA Google Authenticator secret key for user 'admin'
+# Admin 2FA Google Authenticator secret key
 ADMIN_2FA_SECRET_KEY = os.environ.get('ADMIN_2FA_SECRET_KEY', 'R4R2DVFXBJOCK74JVSK5EBQPIU2MWTYX')
-# Flutterwave settings placeholders - set these via environment variables
-FLW_SECRET_KEY = None
-FLW_PUBLIC_KEY = None
-FLW_BASE_URL = 'https://api.flutterwave.com/v3'
+
+# Payment Settings Placeholders (Ready for integration)
+FLW_SECRET_KEY = os.environ.get('FLW_SECRET_KEY', None)
+FLW_PUBLIC_KEY = os.environ.get('FLW_PUBLIC_KEY', None)
+FLW_BASE_URL = os.environ.get('FLW_BASE_URL', 'https://api.flutterwave.com/v3')

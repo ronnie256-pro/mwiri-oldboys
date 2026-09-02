@@ -40,6 +40,12 @@ class Profile(models.Model):
     is_verified = models.BooleanField(default=False)
     totp_secret = models.CharField(max_length=64, blank=True, null=True)
 
+    def save(self, *args, **kwargs):
+        if self.profile_picture:
+            from core.image_utils import convert_to_webp
+            convert_to_webp(self.profile_picture)
+        super().save(*args, **kwargs)
+
     def __str__(self):
         return self.user.username
 

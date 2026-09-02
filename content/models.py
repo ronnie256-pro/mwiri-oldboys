@@ -20,12 +20,24 @@ class News(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
+    def save(self, *args, **kwargs):
+        if self.hero_image:
+            from core.image_utils import convert_to_webp
+            convert_to_webp(self.hero_image)
+        super().save(*args, **kwargs)
+
     def __str__(self):
         return self.title
 
 class NewsImage(models.Model):
     news = models.ForeignKey(News, on_delete=models.CASCADE, related_name='extra_images')
     image = models.ImageField(upload_to='news_images/')
+
+    def save(self, *args, **kwargs):
+        if self.image:
+            from core.image_utils import convert_to_webp
+            convert_to_webp(self.image)
+        super().save(*args, **kwargs)
 
     def __str__(self):
         return self.news.title
@@ -61,6 +73,12 @@ class Gallery(models.Model):
     category = models.ForeignKey(Category, on_delete=models.SET_NULL, null=True, blank=True, related_name='gallery_images')
     created_at = models.DateTimeField(auto_now_add=True)
 
+    def save(self, *args, **kwargs):
+        if self.image:
+            from core.image_utils import convert_to_webp
+            convert_to_webp(self.image)
+        super().save(*args, **kwargs)
+
     def __str__(self):
         return self.title
 
@@ -72,6 +90,12 @@ class History(models.Model):
     author = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, null=True, blank=True)
     category = models.ForeignKey(Category, on_delete=models.SET_NULL, null=True, blank=True, related_name='history_entries')
     created_at = models.DateTimeField(auto_now_add=True)
+
+    def save(self, *args, **kwargs):
+        if self.hero_image:
+            from core.image_utils import convert_to_webp
+            convert_to_webp(self.hero_image)
+        super().save(*args, **kwargs)
 
     @property
     def filename(self):
@@ -86,6 +110,12 @@ class History(models.Model):
 class HistoryImage(models.Model):
     history = models.ForeignKey(History, on_delete=models.CASCADE, related_name='extra_images')
     image = models.ImageField(upload_to='history_images/')
+
+    def save(self, *args, **kwargs):
+        if self.image:
+            from core.image_utils import convert_to_webp
+            convert_to_webp(self.image)
+        super().save(*args, **kwargs)
 
     def __str__(self):
         return self.history.title
