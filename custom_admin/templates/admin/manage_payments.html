@@ -1,0 +1,63 @@
+{% extends "admin/admin_base.html" %}
+
+{% block title %}Payments & Transactions{% endblock %}
+
+{% block content %}
+<div class="container-fluid p-0">
+
+    <!-- PAGE HEADER -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h3 class="fw-bold text-white mb-1" style="color: var(--admin-gold) !important;">Payments & Transactions Ledger</h3>
+            <p class="text-secondary small mb-0">Monitor order transactions, Flutterwave payment gateway references, and payment statuses.</p>
+        </div>
+    </div>
+
+    <!-- PAYMENTS TABLE CARD -->
+    <div class="admin-card p-4">
+        <div class="table-responsive">
+            <table class="table table-dark table-hover align-middle mb-0">
+                <thead>
+                    <tr class="text-secondary font-size-xs text-uppercase border-bottom border-secondary border-opacity-25">
+                        <th>Order ID</th>
+                        <th>User</th>
+                        <th>Amount (UGX)</th>
+                        <th>Payment Status</th>
+                        <th>Created Date</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for o in orders %}
+                    <tr>
+                        <td class="fw-bold text-info font-size-xs">#{{ o.id }}</td>
+                        <td>
+                            <span class="fw-bold text-white font-size-xs d-block">{{ o.user.get_full_name|default:o.user.username }}</span>
+                            <small class="text-secondary font-size-xs">@{{ o.user.username }}</small>
+                        </td>
+                        <td class="fw-bold text-warning font-size-xs">{{ o.total_amount|floatformat:0 }} UGX</td>
+                        <td>
+                            {% if o.status == 'COMPLETED' or o.status == 'SUCCESS' %}
+                                <span class="badge bg-success rounded-pill px-3 py-1 font-size-xs"><i class="bi bi-check-circle-fill me-1"></i> COMPLETED</span>
+                            {% elif o.status == 'FAILED' %}
+                                <span class="badge bg-danger rounded-pill px-3 py-1 font-size-xs"><i class="bi bi-x-circle-fill me-1"></i> FAILED</span>
+                            {% else %}
+                                <span class="badge bg-warning text-dark rounded-pill px-3 py-1 font-size-xs"><i class="bi bi-clock-history me-1"></i> PENDING</span>
+                            {% endif %}
+                        </td>
+                        <td class="font-size-xs text-secondary">{{ o.created_at|date:"M j, Y H:i" }}</td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="5" class="text-center text-muted p-5">
+                            <i class="bi bi-credit-card display-4 d-block opacity-25 mb-2"></i>
+                            No transaction or order records found in system ledger.
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+</div>
+{% endblock %}

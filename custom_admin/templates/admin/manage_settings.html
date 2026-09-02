@@ -1,0 +1,85 @@
+{% extends "admin/admin_base.html" %}
+
+{% block title %}Site Settings & Hero Carousel{% endblock %}
+
+{% block content %}
+<div class="container-fluid p-0">
+
+    <!-- PAGE HEADER -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h3 class="fw-bold text-white mb-1" style="color: var(--admin-gold) !important;">Site Settings & Landing Page Sliders</h3>
+            <p class="text-secondary small mb-0">Configure site branding, logos, Hero carousel banners, and landing page highlights.</p>
+        </div>
+    </div>
+
+    <div class="row g-4">
+        
+        <!-- HERO SLIDER BANNER CARDS -->
+        <div class="col-lg-8">
+            <div class="admin-card p-4">
+                <div class="d-flex justify-content-between align-items-center mb-3 pb-2 border-bottom border-secondary border-opacity-25">
+                    <h5 class="fw-bold text-white mb-0"><i class="bi bi-images me-2 text-warning"></i>Hero Carousel Banners</h5>
+                    <span class="badge bg-primary rounded-pill px-3 py-1 font-size-xs">{{ hero_sliders|length }} Banners Active</span>
+                </div>
+
+                <div class="row g-3">
+                    {% for slide in hero_sliders %}
+                    <div class="col-md-6">
+                        <div class="admin-card p-3 h-100 border border-secondary border-opacity-25">
+                            <div class="ratio ratio-16x9 rounded-3 overflow-hidden mb-3 bg-secondary">
+                                {% if slide.image %}
+                                    <img src="{{ slide.image.url }}" class="w-100 h-100 object-fit-cover" alt="Slide">
+                                {% else %}
+                                    <div class="d-flex align-items-center justify-content-center text-white-50"><i class="bi bi-image fs-1"></i></div>
+                                {% endif %}
+                            </div>
+                            <h6 class="fw-bold text-white mb-1 font-size-xs">{{ slide.hero_text|default:"Hero Banner Title" }}</h6>
+                            <p class="text-secondary font-size-xs mb-2">{{ slide.hero_description|truncatewords:10 }}</p>
+                        </div>
+                    </div>
+                    {% empty %}
+                    <div class="col-12 text-center text-muted p-4">
+                        <i class="bi bi-images display-4 d-block opacity-25 mb-2"></i>
+                        No hero sliders configured.
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+
+        <!-- SITE BRANDING & LOGO SUMMARY -->
+        <div class="col-lg-4">
+            <div class="admin-card p-4">
+                <div class="mb-3 pb-2 border-bottom border-secondary border-opacity-25">
+                    <h5 class="fw-bold text-white mb-0"><i class="bi bi-sliders me-2 text-warning"></i>Site Identity</h5>
+                </div>
+
+                <div class="mb-4">
+                    <label class="form-label font-size-xs text-secondary text-uppercase fw-bold">Site Logo</label>
+                    <div class="p-3 bg-dark rounded-3 text-center border border-secondary border-opacity-25">
+                        {% if site_settings and site_settings.site_logo %}
+                            <img src="{{ site_settings.site_logo.url }}" alt="Logo" height="50" class="img-fluid">
+                        {% else %}
+                            <span class="fw-bold display-6" style="color: var(--admin-gold);">MOBA</span>
+                        {% endif %}
+                    </div>
+                </div>
+
+                <div>
+                    <label class="form-label font-size-xs text-secondary text-uppercase fw-bold">Site Favicon</label>
+                    <div class="p-3 bg-dark rounded-3 text-center border border-secondary border-opacity-25">
+                        {% if site_settings and site_settings.site_icon %}
+                            <img src="{{ site_settings.site_icon.url }}" alt="Icon" height="32" class="img-fluid">
+                        {% else %}
+                            <i class="bi bi-shield-fill text-warning fs-3"></i>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+</div>
+{% endblock %}

@@ -149,6 +149,8 @@ LOGIN_URL = 'login'
 LOGIN_REDIRECT_URL = 'my_account'
 
 DEFAULT_CURRENCY = 'UGX'
+# Admin 2FA Google Authenticator secret key for user 'admin'
+ADMIN_2FA_SECRET_KEY = 'R4R2DVFXBJOCK74JVSK5EBQPIU2MWTYX'
 # Flutterwave settings placeholders - set these via environment variables
 FLW_SECRET_KEY = None
 FLW_PUBLIC_KEY = None

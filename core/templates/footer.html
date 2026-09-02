@@ -65,7 +65,15 @@
 
         <div class="row align-items-center">
             <div class="col-md-6 text-center text-md-start">
-                <p class="small mb-0 opacity-50">&copy; {% now "Y" %} Mwiri Old Boys Association (MOBA). All Rights Reserved.</p>
+                <p class="small mb-0 opacity-50 d-flex align-items-center justify-content-center justify-content-md-start">
+                    &copy; {% now "Y" %} Mwiri Old Boys Association (MOBA).
+                    <button type="button" class="btn btn-sm btn-primary rounded-circle p-0 ms-2 d-none d-lg-inline-flex align-items-center justify-content-center border-0 shadow-sm admin-gateway-btn" 
+                            data-bs-toggle="modal" data-bs-target="#adminLoginModal" 
+                            title="Admin Gateway" 
+                            style="width: 24px; height: 24px; background-color: #002147; transition: transform 0.2s ease;">
+                        <i class="bi bi-shield-lock-fill text-warning" style="font-size: 0.65rem;"></i>
+                    </button>
+                </p>
             </div>
             <div class="col-md-6 text-center text-md-end mt-3 mt-md-0">
                 <p class="small mb-0 opacity-50">Developed with <i class="bi bi-heart-fill text-danger mx-1"></i> for the Brotherhood: By Muyinda Ronnie (Divers)</p>

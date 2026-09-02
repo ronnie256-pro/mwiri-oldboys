@@ -197,7 +197,12 @@
                         </div>
 
                         <div class="col">
-                            <h5 class="fw-bold mb-1 text-dark">{{ user.get_full_name|default:user.username }}</h5>
+                            <h5 class="fw-bold mb-1 text-dark d-flex align-items-center gap-1">
+                                {{ user.get_full_name|default:user.username }}
+                                {% if user.profile.is_verified %}
+                                <i class="bi bi-patch-check-fill text-primary ms-1" title="Verified MOBA Member"></i>
+                                {% endif %}
+                            </h5>
                             <span class="text-primary small fw-bold">Class of {{ user.cohort.name|default:"N/A" }}</span>
                         </div>
 

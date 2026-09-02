@@ -1,0 +1,93 @@
+{% extends "admin/admin_base.html" %}
+
+{% block title %}Elections & Candidate Approvals{% endblock %}
+
+{% block content %}
+<div class="container-fluid p-0">
+
+    <!-- PAGE HEADER -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h3 class="fw-bold text-white mb-1" style="color: var(--admin-gold) !important;">Elections & Candidates Desk</h3>
+            <p class="text-secondary small mb-0">Review candidate nominations, grant approvals, reject invalid entries, and configure voting positions.</p>
+        </div>
+        <a href="{% url 'elections' %}" target="_blank" class="btn btn-gold rounded-pill px-4 py-2 shadow-sm font-size-xs">
+            <i class="bi bi-box-arrow-up-right me-1"></i> View Live Elections
+        </a>
+    </div>
+
+    <!-- CANDIDATES MANAGEMENT TABLE -->
+    <div class="admin-card p-4">
+        <div class="d-flex justify-content-between align-items-center mb-3 pb-2 border-bottom border-secondary border-opacity-25">
+            <h5 class="fw-bold text-white mb-0"><i class="bi bi-person-check me-2 text-warning"></i>Candidate Nominations Review</h5>
+            <span class="badge bg-primary rounded-pill px-3 py-1 font-size-xs">{{ candidates|length }} Total Nominees</span>
+        </div>
+
+        <div class="table-responsive">
+            <table class="table table-dark table-hover align-middle mb-0">
+                <thead>
+                    <tr class="text-secondary font-size-xs text-uppercase border-bottom border-secondary border-opacity-25">
+                        <th>Candidate Name</th>
+                        <th>Position Applied</th>
+                        <th>Manifesto Summary</th>
+                        <th>Status</th>
+                        <th class="text-end">Approval Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for c in candidates %}
+                    <tr>
+                        <td>
+                            <div class="d-flex align-items-center gap-3">
+                                <div class="rounded-circle bg-primary text-white fw-bold d-flex align-items-center justify-content-center flex-shrink-0" style="width: 40px; height: 40px; font-size: 0.9rem;">
+                                    {{ c.user.username|slice:":1"|upper }}
+                                </div>
+                                <div>
+                                    <span class="fw-bold text-white d-block font-size-xs">{{ c.user.get_full_name|default:c.user.username }}</span>
+                                    <small class="text-secondary font-size-xs">@{{ c.user.username }}</small>
+                                </div>
+                            </div>
+                        </td>
+                        <td>
+                            <span class="badge bg-warning bg-opacity-10 text-warning rounded-pill px-3 py-1 font-size-xs border border-warning border-opacity-25">
+                                {{ c.position.title|default:"Executive Position" }}
+                            </span>
+                        </td>
+                        <td class="font-size-xs text-white-50" style="max-width: 250px;">
+                            {{ c.manifesto|striptags|truncatewords:10|default:"No manifesto submitted" }}
+                        </td>
+                        <td>
+                            {% if c.status == 'APPROVED' %}
+                                <span class="badge bg-success rounded-pill px-3 py-1 font-size-xs"><i class="bi bi-check-circle-fill me-1"></i> APPROVED</span>
+                            {% elif c.status == 'DENIED' or c.status == 'REJECTED' %}
+                                <span class="badge bg-danger rounded-pill px-3 py-1 font-size-xs"><i class="bi bi-x-circle-fill me-1"></i> DENIED</span>
+                            {% else %}
+                                <span class="badge bg-warning text-dark rounded-pill px-3 py-1 font-size-xs"><i class="bi bi-clock-history me-1"></i> PENDING</span>
+                            {% endif %}
+                        </td>
+                        <td class="text-end">
+                            <div class="d-flex justify-content-end gap-2">
+                                <a href="{% url 'admin_candidate_action' candidate_id=c.id action='approve' %}" class="btn btn-sm btn-success rounded-pill px-3 font-size-xs py-1">
+                                    <i class="bi bi-check-lg me-1"></i> Approve
+                                </a>
+                                <a href="{% url 'admin_candidate_action' candidate_id=c.id action='reject' %}" class="btn btn-sm btn-outline-danger rounded-pill px-3 font-size-xs py-1">
+                                    <i class="bi bi-x-lg me-1"></i> Reject
+                                </a>
+                            </div>
+                        </td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="5" class="text-center text-muted p-5">
+                            <i class="bi bi-check2-square display-4 d-block opacity-25 mb-2"></i>
+                            No candidate nominations currently pending review.
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+</div>
+{% endblock %}
