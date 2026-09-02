@@ -26,7 +26,7 @@ class NewsAdmin(admin.ModelAdmin):
 
 @admin.register(History)
 class HistoryAdmin(admin.ModelAdmin):
-    list_display = ('title', 'category', 'created_at')
+    list_display = ('title', 'category', 'pdf_file', 'created_at')
     list_filter = ('category',)
     search_fields = ('title', 'content')
     inlines = [HistoryImageInline]

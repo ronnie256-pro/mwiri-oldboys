@@ -1,21 +1,194 @@
-
 {% extends "base.html" %}
 
 {% block content %}
-    <div class="container">
-        <h1 class="my-4">History</h1>
-        <div class="row">
-            {% for item in history %}
-                <div class="col-md-6 mb-4">
-                    <div class="card">
-                        <div class="card-body">
-                            <h5 class="card-title">{{ item.title }}</h5>
-                            <p class="card-text">{{ item.content|truncatewords:30 }}</p>
-                            <a href="{% url 'history_detail' pk=item.pk %}" class="btn btn-primary">Read More</a>
-                        </div>
+<div class="history-wrapper py-5 px-3 px-lg-5" style="background-color: var(--mwiiri-powder-skyblue, #EBF4FA); min-height: 100vh;">
+    <div class="container-fluid max-w-1400">
+
+        <!-- TOP HEADER & FILTER BAR -->
+        <div class="bg-white rounded-4 shadow-sm p-3 px-lg-4 mb-4 border border-1 border-light-subtle">
+            <div class="row align-items-center g-3">
+                <div class="col-lg-4">
+                    <div class="d-flex align-items-center gap-2">
+                        <h3 class="fw-bold text-dark mb-0 fs-4" style="color: var(--mwiiri-navy, #002147);">History & Archives</h3>
+                        <span class="badge bg-light text-secondary border rounded-pill px-3 py-1 font-size-xs ms-1">
+                            {{ total_count }} Document{% if total_count != 1 %}s{% endif %}
+                        </span>
                     </div>
                 </div>
+
+                <div class="col-lg-8">
+                    <form method="GET" action="{% url 'history' %}" class="d-flex flex-wrap align-items-center justify-content-lg-end gap-2">
+                        
+                        <!-- CATEGORY FILTER DROPDOWN -->
+                        <select name="category" class="form-select form-select-sm rounded-pill border-light-subtle shadow-none text-dark fw-medium" style="width: auto;" onchange="this.form.submit()">
+                            <option value="">All Categories</option>
+                            {% for cat in categories %}
+                            <option value="{{ cat.id }}" {% if selected_category == cat.id|stringformat:"s" %}selected{% endif %}>{{ cat.name }}</option>
+                            {% endfor %}
+                        </select>
+
+                        <!-- SEARCH INPUT -->
+                        <div class="input-group search-input-group" style="max-width: 280px;">
+                            <input type="text" name="q" class="form-control form-control-sm rounded-start-3 border-end-0 ps-3" placeholder="Search archive files..." value="{{ search_query }}">
+                            <button type="submit" class="btn btn-sm btn-primary rounded-end-3 px-3">
+                                <i class="bi bi-search"></i>
+                            </button>
+                        </div>
+
+                        {% if search_query or selected_category %}
+                        <a href="{% url 'history' %}" class="btn btn-sm btn-light border text-danger rounded-pill px-3 py-1 fw-bold">
+                            <i class="bi bi-x-circle me-1"></i> Clear
+                        </a>
+                        {% endif %}
+
+                        {% if user.is_authenticated %}
+                        <a href="{% url 'history_add' %}" class="btn btn-sm btn-navy-gold rounded-pill px-3 py-1 fw-bold text-nowrap shadow-sm d-inline-flex align-items-center gap-1">
+                            <i class="bi bi-plus-lg"></i> Upload PDF
+                        </a>
+                        {% endif %}
+
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- 6 CARDS PER ROW ARCHIVE GRID -->
+        <div class="row g-3 g-lg-3 mb-5">
+            {% for item in history %}
+            <div class="col-6 col-sm-4 col-md-3 col-xl-2">
+                <div class="card border border-1 border-light-subtle rounded-4 shadow-sm-hover h-100 bg-white overflow-hidden p-2 d-flex flex-column justify-content-between">
+                    <div>
+                        <!-- HERO IMAGE / PDF COVER THUMBNAIL -->
+                        <div class="rounded-3 overflow-hidden mb-2 bg-light position-relative d-flex align-items-center justify-content-center" style="height: 140px;">
+                            {% if item.hero_image %}
+                                <a href="{% url 'history_detail' pk=item.pk %}" class="w-100 h-100 d-block">
+                                    <img src="{{ item.hero_image.url }}" class="w-100 h-100 object-fit-cover product-img" alt="{{ item.title }}">
+                                </a>
+                            {% else %}
+                                <div class="w-100 h-100 bg-danger bg-opacity-10 d-flex flex-column align-items-center justify-content-center text-danger p-2 text-center">
+                                    <i class="bi bi-file-earmark-pdf display-6 mb-1"></i>
+                                    <span class="font-size-xs fw-bold">PDF ARCHIVE</span>
+                                </div>
+                            {% endif %}
+
+                            {% if item.category %}
+                            <span class="badge bg-dark bg-opacity-75 text-white rounded-pill px-2 py-1 position-absolute top-0 start-0 m-2 font-size-xs fw-normal">
+                                {{ item.category.name }}
+                            </span>
+                            {% endif %}
+                        </div>
+
+                        <!-- TITLE -->
+                        <h6 class="fw-bold mb-1 lh-sm history-card-title">
+                            <a href="{% url 'history_detail' pk=item.pk %}" class="text-decoration-none text-dark hover-gold text-truncate-2" title="{{ item.title }}">
+                                {{ item.title }}
+                            </a>
+                        </h6>
+
+                        <!-- FILE NAME DISPLAY -->
+                        {% if item.pdf_file %}
+                        <div class="mb-2">
+                            <small class="text-muted text-truncate d-block font-size-xs" title="{{ item.filename|default:item.pdf_file.name }}">
+                                <i class="bi bi-file-earmark-pdf-fill text-danger me-1"></i> {{ item.filename|default:item.pdf_file.name }}
+                            </small>
+                        </div>
+                        {% endif %}
+                    </div>
+
+                    <!-- DOWNLOAD ACTION BUTTON -->
+                    <div class="mt-2">
+                        {% if item.pdf_file %}
+                            <a href="{{ item.pdf_file.url }}" download class="btn btn-sm btn-danger rounded-pill w-100 fw-bold py-1 shadow-sm d-flex align-items-center justify-content-center gap-1 font-size-xs">
+                                <i class="bi bi-download"></i> Download PDF
+                            </a>
+                        {% else %}
+                            <a href="{% url 'history_detail' pk=item.pk %}" class="btn btn-sm btn-outline-navy rounded-pill w-100 fw-bold py-1 font-size-xs">
+                                View Entry
+                            </a>
+                        {% endif %}
+                    </div>
+
+                </div>
+            </div>
+            {% empty %}
+            <!-- EMPTY FALLBACK STATE -->
+            <div class="col-12 text-center py-5 bg-white rounded-4 shadow-sm border border-light-subtle">
+                <div class="opacity-50 mb-3">
+                    <i class="bi bi-journal-album display-3 text-secondary"></i>
+                </div>
+                <h4 class="fw-bold text-dark mb-2">No Data yet</h4>
+                <p class="text-secondary mb-4">No historical documents or PDF archives have been uploaded yet.</p>
+                {% if user.is_authenticated %}
+                <a href="{% url 'history_add' %}" class="btn btn-navy-gold rounded-pill px-4 py-2 fw-bold">
+                    Upload First Document
+                </a>
+                {% endif %}
+            </div>
             {% endfor %}
         </div>
+
     </div>
+</div>
+
+<style>
+    .max-w-1400 {
+        max-width: 1440px;
+        margin: 0 auto;
+    }
+
+    .font-size-xs {
+        font-size: 0.75rem;
+    }
+
+    .hover-gold:hover {
+        color: var(--mwiiri-gold, #C5A021) !important;
+    }
+
+    .shadow-sm-hover {
+        transition: all 0.25s ease;
+    }
+    .shadow-sm-hover:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 12px 24px rgba(0, 33, 71, 0.1) !important;
+        border-color: rgba(0, 33, 71, 0.25) !important;
+    }
+
+    .product-img {
+        transition: transform 0.5s ease;
+    }
+
+    .shadow-sm-hover:hover .product-img {
+        transform: scale(1.05);
+    }
+
+    .text-truncate-2 {
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+        height: 2.4em;
+    }
+
+    .btn-navy-gold {
+        background-color: var(--mwiiri-navy, #002147);
+        color: #ffffff;
+        border: none;
+        transition: all 0.2s ease;
+    }
+
+    .btn-navy-gold:hover {
+        background-color: #001630;
+        color: var(--mwiiri-gold, #C5A021);
+    }
+
+    .btn-outline-navy {
+        border: 1px solid var(--mwiiri-navy, #002147);
+        color: var(--mwiiri-navy, #002147);
+    }
+
+    .btn-outline-navy:hover {
+        background-color: var(--mwiiri-navy, #002147);
+        color: #ffffff;
+    }
+</style>
 {% endblock %}

@@ -1,7 +1,7 @@
 
 from django.shortcuts import render, redirect
 from django.views.generic import TemplateView
-from .models import News, NewsImage, History, HistoryImage
+from .models import Category, News, NewsImage, History, HistoryImage
 from .forms import NewsForm, HistoryForm
 
 def news_list(request):
@@ -41,8 +41,22 @@ def history_form(request):
     return render(request, 'content/history_form.html', {'form': form, 'extra_images': True})
 
 def history_list(request):
-    history = History.objects.all().order_by('-created_at')
-    return render(request, 'content/history_list.html', {'history': history})
+    q = request.GET.get('q', '').strip()
+    category_id = request.GET.get('category', '').strip()
+    queryset = History.objects.select_related('category', 'author').filter(pdf_file__isnull=False).exclude(pdf_file='').order_by('-created_at')
+    if q:
+        queryset = queryset.filter(title__icontains=q)
+    if category_id and category_id.isdigit():
+        queryset = queryset.filter(category_id=category_id)
+
+    categories = Category.objects.all()
+    return render(request, 'content/history_list.html', {
+        'history': queryset,
+        'categories': categories,
+        'search_query': q,
+        'selected_category': category_id,
+        'total_count': queryset.count(),
+    })
 
 from django.shortcuts import get_object_or_404
 

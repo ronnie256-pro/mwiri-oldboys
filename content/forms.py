@@ -9,4 +9,4 @@ class NewsForm(forms.ModelForm):
 class HistoryForm(forms.ModelForm):
     class Meta:
         model = History
-        fields = ['title', 'content', 'hero_image', 'category']
+        fields = ['title', 'content', 'hero_image', 'pdf_file', 'category']
