@@ -47,7 +47,6 @@ INSTALLED_APPS = [
     'teaser.apps.TeaserConfig',
     'organisation.apps.OrganisationConfig',
     'alumni_sos.apps.AlumniSosConfig',
-    'stories.apps.StoriesConfig',
 ]
 
 INSTALLED_APPS += [

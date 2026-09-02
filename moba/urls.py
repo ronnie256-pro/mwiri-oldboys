@@ -30,7 +30,6 @@ urlpatterns = [
     path('', include('products.urls')),
     path('', include('custom_admin.urls')),
     path('', include('alumni_sos.urls')),
-    path('', include('stories.urls')),
     path('payments/', include('payments.urls', namespace='payments')),
     path('gallery/', include('gallery.urls', namespace='gallery')),
     path('elections/', include('elections.urls')),

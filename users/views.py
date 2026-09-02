@@ -10,7 +10,6 @@ from alumni_sos.forms import SOSRequestForm
 from teaser.forms import TeaserQuestionForm
 from .models import User, Profile, SideHustle
 from teaser.models import TeaserQuestion
-from stories.forms import StoryForm
 
 from django.http import JsonResponse
 from django.urls import reverse
@@ -73,13 +72,11 @@ class MyAccountView(View):
         if request.user.is_authenticated:
             form = ProfileForm(instance=request.user)
             sos_form = SOSRequestForm()
-            story_form = StoryForm()
             side_hustle_form = SideHustleForm()
             side_hustles = request.user.side_hustles.all()
         else:
             form = None
             sos_form = None
-            story_form = None
             side_hustle_form = None
             side_hustles = None
         
@@ -88,7 +85,6 @@ class MyAccountView(View):
             'form': form, 
             'sos_form': sos_form, 
             'content_types': content_types, 
-            'story_form': story_form,
             'side_hustle_form': side_hustle_form,
             'side_hustles': side_hustles
         })
@@ -152,15 +148,6 @@ class MyAccountView(View):
         if 'submit_sos' in request.POST:
             return redirect('alumni_sos')
 
-        if 'add_story' in request.POST:
-            story_form = StoryForm(request.POST, request.FILES)
-            if story_form.is_valid():
-                story = story_form.save(commit=False)
-                story.author = request.user
-                story.save()
-                messages.success(request, 'Story submitted successfully!')
-                return redirect('our_stories')
-
         if 'add_side_hustle' in request.POST:
             if request.user.side_hustles.count() >= 2:
                 messages.error(request, 'You can only have a maximum of 2 side hustles.')
@@ -177,14 +164,12 @@ class MyAccountView(View):
                 messages.error(request, 'Error adding side hustle. Please check the form.')
 
         content_types = ["Products", "Services", "News", "History"]
-        story_form = StoryForm()
         side_hustle_form = SideHustleForm()
         side_hustles = request.user.side_hustles.all()
         return render(request, self.template_name, {
             'form': form, 
             'sos_form': sos_form, 
             'content_types': content_types, 
-            'story_form': story_form,
             'side_hustle_form': side_hustle_form,
             'side_hustles': side_hustles
         })
