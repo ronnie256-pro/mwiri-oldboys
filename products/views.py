@@ -98,10 +98,17 @@ def product_form(request):
 def product_detail(request, product_id):
     product = get_object_or_404(Product, pk=product_id)
 
-    # provide other products for 'You may also like' section
-    other_products = Product.objects.exclude(pk=product.pk).order_by('?')[:3]
+    # provide other products in the same category for 'More Items in Our Owino' section (up to 4)
+    other_products = list(Product.objects.filter(category=product.category).exclude(pk=product.pk).order_by('?')[:4])
 
-    return render(request, 'products/product_detail.html', {'product': product, 'other_products': other_products})
+    # Ensure context has missing_count for blank fallback cards
+    missing_count = max(0, 4 - len(other_products))
+
+    return render(request, 'products/product_detail.html', {
+        'product': product,
+        'other_products': other_products,
+        'missing_range': range(missing_count)
+    })
 
 def service_form(request):
     if request.method == 'POST':

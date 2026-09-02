@@ -1,149 +1,291 @@
 {% extends "base.html" %}
+{% load humanize %}
 
 {% block content %}
-<div class="container-fluid py-5 px-lg-5" style="background: #f8fafc; min-height: auto; padding-bottom: 2rem;">
-    
-    <nav aria-label="breadcrumb" class="mb-4">
-        <ol class="breadcrumb">
-            <li class="breadcrumb-item"><a href="{% url 'products' %}" class="text-decoration-none text-muted small">Marketplace</a></li>
-            <li class="breadcrumb-item active small text-primary fw-bold" aria-current="page">{{ product.name }}</li>
-        </ol>
-    </nav>
+<div class="product-detail-wrapper py-5 px-3 px-lg-5" style="background-color: var(--mwiiri-powder-skyblue, #EBF4FA); min-height: 100vh;">
+    <div class="container-fluid max-w-1400">
 
-    <!--This is the selected product section-->
-    <div class="row g-5">
-        <div class="col-lg-7">
-            <div class="card border-0 shadow-sm rounded-5 overflow-hidden mb-3">
-                <img src="{{ product.hero_image.url }}" class="img-fluid w-100" alt="{{ product.name }}" style="max-height: 500px; object-fit: cover;">
+        <!-- BREADCRUMB & BACK BUTTON -->
+        <div class="d-flex align-items-center justify-content-between mb-4">
+            <a href="{% url 'products' %}" class="btn btn-sm btn-white rounded-pill px-3 py-2 border shadow-sm text-dark fw-bold hover-lift">
+                <i class="bi bi-arrow-left me-2 text-primary"></i> Back to Our Owino
+            </a>
+            <nav aria-label="breadcrumb" class="d-none d-md-block">
+                <ol class="breadcrumb m-0 small">
+                    <li class="breadcrumb-item"><a href="{% url 'products' %}" class="text-decoration-none text-secondary">Our Owino</a></li>
+                    <li class="breadcrumb-item text-secondary">{{ product.category.name }}</li>
+                    <li class="breadcrumb-item active text-dark fw-semibold" aria-current="page">{{ product.name|truncatewords:4 }}</li>
+                </ol>
+            </nav>
+        </div>
+
+        <!-- MAIN PRODUCT DETAIL CONTENT (WHITE BACKGROUND FOR EASY READABILITY) -->
+        <div class="bg-white rounded-4 shadow-sm p-4 p-lg-5 border border-light-subtle mb-5">
+            <div class="row g-4 g-lg-5 align-items-start">
+                
+                <!-- LEFT COLUMN: IMAGE GALLERY -->
+                <div class="col-lg-6">
+                    <div class="position-relative bg-light rounded-4 overflow-hidden mb-3 border border-light-subtle d-flex align-items-center justify-content-center p-0" style="height: 400px;">
+                        <img id="mainProductImage" src="{{ product.hero_image.url }}" class="w-100 h-100 object-fit-cover transition-fade" alt="{{ product.name }}">
+                    </div>
+
+                    <!-- THUMBNAILS ROW -->
+                    {% if product.images.all %}
+                    <div class="row g-2 gallery-thumbnails">
+                        <!-- Hero Image Thumbnail -->
+                        <div class="col-3">
+                            <div class="thumb-box rounded-3 overflow-hidden border active-thumb cursor-pointer bg-white" onclick="switchMainImage('{{ product.hero_image.url }}', this)">
+                                <img src="{{ product.hero_image.url }}" class="w-100 h-100 object-fit-cover" alt="Main View" style="height: 80px;">
+                            </div>
+                        </div>
+                        <!-- Additional Images -->
+                        {% for image in product.images.all %}
+                        <div class="col-3">
+                            <div class="thumb-box rounded-3 overflow-hidden border cursor-pointer opacity-75 hover-opacity-100 bg-white" onclick="switchMainImage('{{ image.image.url }}', this)">
+                                <img src="{{ image.image.url }}" class="w-100 h-100 object-fit-cover" alt="Product view {{ forloop.counter }}" style="height: 80px;">
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                    {% endif %}
+                </div>
+
+                <!-- RIGHT COLUMN: PRODUCT INFO & PURCHASE -->
+                <div class="col-lg-6">
+                    <div class="ps-lg-3">
+                        
+                        <!-- Product Title (Dark Navy Blue) -->
+                        <h1 class="fw-bold mb-3 lh-sm display-6 fs-2" style="color: var(--mwiiri-navy, #002147);">{{ product.name }}</h1>
+
+                        <!-- Price Display (Numerical Figure first, UGX Suffix after) -->
+                        <div class="mb-4">
+                            <h2 class="fw-bold mb-0 fs-1 font-amazon-price" style="color: var(--mwiiri-navy, #002147);">
+                                {% if product.price %}
+                                    {{ product.price|floatformat:0|intcomma }} <small class="fs-6 text-muted fw-normal ms-1">UGX</small>
+                                {% else %}
+                                    Contact for Price
+                                {% endif %}
+                            </h2>
+                        </div>
+
+                        <!-- Details Description -->
+                        <div class="mb-4">
+                            <h6 class="fw-bold text-dark mb-2 text-uppercase font-size-xs text-secondary" style="letter-spacing: 0.5px;">Details</h6>
+                            <div class="text-secondary lh-relaxed font-size-sm">
+                                {{ product.description|linebreaks }}
+                            </div>
+                        </div>
+
+                        <!-- ADD TO CART FORM (SMALLER BUTTON WITHOUT CART ICON) -->
+                        <form method="post" action="{% url 'payments:add_to_cart' %}" id="add-to-cart-form" class="mt-4">
+                            {% csrf_token %}
+                            <input type="hidden" name="product_id" value="{{ product.id }}">
+                            <input type="hidden" name="name" value="{{ product.name }}">
+                            <input type="hidden" name="price" value="{{ product.price }}">
+
+                            <div>
+                                <button type="submit" id="add-to-cart" class="btn btn-amazon-gold rounded-pill px-4 py-2 fw-bold shadow-sm border-0 small">
+                                    Add to Cart
+                                </button>
+                            </div>
+                        </form>
+
+                    </div>
+                </div>
+
             </div>
-            
-            <div class="row g-3">
-                {% for image in product.images.all %}
-                <div class="col-3">
-                    <div class="card border-0 shadow-sm rounded-4 overflow-hidden gallery-thumb">
-                        <img src="{{ image.image.url }}" class="img-fluid w-100" alt="{{ product.name }}" style="height: 100px; object-fit: cover; cursor: pointer;">
+        </div>
+
+        <!-- MORE ITEMS IN OUR OWINO (DISPLAY 4 CARDS WITH BLANK FALLBACK) -->
+        <div class="related-products-section mt-5 pt-3">
+            <div class="d-flex align-items-center justify-content-between mb-4">
+                <h4 class="fw-bold m-0 fs-4" style="color: var(--mwiiri-navy, #002147);">
+                    More Items in Our Owino <span style="color: var(--mwiiri-gold, #C5A021);">.</span>
+                </h4>
+                <a href="{% url 'products' %}" class="btn btn-sm btn-outline-navy rounded-pill px-3 py-2 fw-bold">
+                    Back to Owino
+                </a>
+            </div>
+
+            <div class="row g-3 g-lg-4">
+                <!-- REAL PRODUCT CARDS -->
+                {% for p in other_products %}
+                <div class="col-12 col-sm-6 col-md-3">
+                    <div class="card border border-1 border-light-subtle rounded-4 shadow-sm-hover h-100 bg-white overflow-hidden p-3 d-flex flex-column justify-content-between">
+                        <div>
+                            <div class="rounded-3 overflow-hidden mb-3 bg-light position-relative d-flex align-items-center justify-content-center" style="height: 170px;">
+                                {% if p.hero_image %}
+                                    <a href="{% url 'product_detail' p.id %}" class="w-100 h-100 d-block">
+                                        <img src="{{ p.hero_image.url }}" class="w-100 h-100 object-fit-cover product-img" alt="{{ p.name }}">
+                                    </a>
+                                {% else %}
+                                    <div class="text-muted small">No Image</div>
+                                {% endif %}
+                            </div>
+
+                            <h6 class="fw-bold mb-2 lh-sm">
+                                <a href="{% url 'product_detail' p.id %}" class="text-decoration-none text-dark hover-blue text-truncate-2" title="{{ p.name }}">
+                                    {{ p.name }}
+                                </a>
+                            </h6>
+
+                            <div class="mb-3">
+                                <span class="fs-6 fw-bold text-dark">
+                                    {% if p.price %}
+                                        {{ p.price|floatformat:0|intcomma }} <small class="text-muted fw-normal ms-1">UGX</small>
+                                    {% else %}
+                                        Contact for Price
+                                    {% endif %}
+                                </span>
+                            </div>
+                        </div>
+
+                        <div>
+                            <a href="{% url 'product_detail' p.id %}" class="btn btn-sm btn-outline-primary rounded-pill w-100 fw-bold py-2">
+                                View Details <i class="bi bi-chevron-right ms-1"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+
+                <!-- BLANK FALLBACK CARDS IF LESS THAN 4 ITEMS -->
+                {% for _ in missing_range %}
+                <div class="col-12 col-sm-6 col-md-3">
+                    <div class="card border border-1 border-dashed border-light-subtle rounded-4 h-100 bg-white opacity-75 p-3 d-flex flex-column justify-content-center align-items-center text-center" style="min-height: 280px; border-style: dashed !important;">
+                        <div class="text-muted opacity-50 mb-2">
+                            <i class="bi bi-box-seam fs-1"></i>
+                        </div>
+                        <span class="text-muted small fw-medium">No Item Available</span>
                     </div>
                 </div>
                 {% endfor %}
             </div>
         </div>
 
-        <div class="col-lg-5">
-            <div class="ps-lg-4">
-                <div class="mb-3">
-                    <span class="badge bg-primary-soft text-primary rounded-pill px-3 py-2 fw-bold small text-uppercase tracking-wider">
-                        {{ product.category.name }}
-                    </span>
-                </div>
-                
-                <h1 class="fw-bold display-5 mb-2 text-dark">{{ product.name }}</h1>
-                
-                <div class="d-flex align-items-center mb-4">
-                    <h2 class="fw-bold text-primary mb-0">UGX {{ product.price|floatformat:0 }}</h2>
-                </div>
-
-                <!--Add to cart button (works with and without JS) -->
-                <div class="d-grid gap-3">
-                    <form method="post" action="{% url 'payments:add_to_cart' %}" id="add-to-cart-form">
-                        {% csrf_token %}
-                        <input type="hidden" name="product_id" value="{{ product.id }}">
-                        <input type="hidden" name="name" value="{{ product.name }}">
-                        <input type="hidden" name="price" value="{{ product.price }}">
-                        <button type="submit" id="add-to-cart" 
-                           class="btn btn-success btn-lg rounded-pill fw-bold py-3 shadow-sm d-flex align-items-center justify-content-center transition-lift">
-                 Add to Cart
-                        </button>
-                    </form>
-                </div>
-        
-            </div>
-        </div>
     </div>
 </div>
-
-<!--This is the you may also like section-->
-{% if other_products %}
-<div class="container py-4 mt-4">
-  <h3 class="fw-bold mb-4">You may also like</h3>
-  <div class="row g-4">
-    {% for p in other_products|slice:":3" %}
-    <div class="col-md-4">
-      <div class="card border-0 shadow-sm h-100 product-card overflow-hidden">
-        <a href="{% url 'product_detail' p.id %}" class="text-decoration-none text-dark">
-          <div class="position-relative" style="height:180px; overflow:hidden;">
-            <img src="{{ p.hero_image.url }}" class="w-100 h-100" style="object-fit:cover;" alt="{{ p.name }}">
-          </div>
-          <div class="p-3">
-            <h6 class="fw-bold mb-1 text-truncate">{{ p.name }}</h6>
-            <p class="mb-0 text-primary fw-bold">UGX {{ p.price|floatformat:0 }}</p>
-          </div>
-        </a>
-      </div>
-    </div>
-    {% endfor %}
-  </div>
-</div>
-{% endif %}
 
 <style>
-    .bg-primary-soft { background-color: #eef2ff; color: #4f46e5; }
-    
-    .gallery-thumb {
-        transition: all 0.2s ease;
-        opacity: 0.8;
-    }
-    
-    .gallery-thumb:hover {
-        opacity: 1;
-        transform: scale(1.05);
+    .max-w-1400 {
+        max-width: 1440px;
+        margin: 0 auto;
     }
 
-    .transition-lift {
+    .hover-lift {
         transition: transform 0.2s ease, box-shadow 0.2s ease;
     }
-    
-    .transition-lift:hover {
-        transform: translateY(-3px);
-        box-shadow: 0 10px 20px rgba(25, 135, 84, 0.2) !important;
+    .hover-lift:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 15px rgba(0,0,0,0.08) !important;
     }
 
-    .tracking-wider {
-        letter-spacing: 0.05em;
+    .font-size-xs {
+        font-size: 0.78rem;
+    }
+    .font-size-sm {
+        font-size: 0.88rem;
+    }
+
+    /* Thumbnail Styles */
+    .thumb-box {
+        transition: all 0.2s ease;
+        border-color: #e2e8f0 !important;
+    }
+    .thumb-box:hover {
+        border-color: var(--mwiiri-gold, #C5A021) !important;
+        transform: scale(1.03);
+    }
+    .active-thumb {
+        border: 2px solid var(--mwiiri-navy, #002147) !important;
+        opacity: 1 !important;
+    }
+
+    /* Amazon Gold Button */
+    .btn-amazon-gold {
+        background: linear-gradient(180deg, #FFD814 0%, #F7CA00 100%);
+        color: #0F1111;
+        box-shadow: 0 4px 14px rgba(247, 202, 0, 0.35);
+        transition: all 0.25s ease;
+    }
+    .btn-amazon-gold:hover {
+        background: linear-gradient(180deg, #F7CA00 0%, #F0B800 100%);
+        color: #000000;
+        transform: translateY(-2px);
+        box-shadow: 0 8px 20px rgba(247, 202, 0, 0.45);
+    }
+
+    .btn-outline-navy {
+        border: 2px solid var(--mwiiri-navy, #002147);
+        color: var(--mwiiri-navy, #002147);
+    }
+    .btn-outline-navy:hover {
+        background-color: var(--mwiiri-navy, #002147);
+        color: #ffffff;
+    }
+
+    .shadow-sm-hover {
+        transition: all 0.25s ease;
+    }
+    .shadow-sm-hover:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 12px 24px rgba(0, 33, 71, 0.1) !important;
+    }
+
+    .text-truncate-2 {
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
     }
 </style>
 
 <script>
-const form = document.getElementById('add-to-cart-form');
-form.addEventListener('submit', function(e){
-    // progressive enhancement: AJAX submit and redirect to cart on success
-    e.preventDefault();
-    const formData = new FormData(form);
-    const payload = {
-        product_id: formData.get('product_id'),
-        price: formData.get('price'),
-        name: formData.get('name'),
-        quantity: 1
-    };
+function switchMainImage(imageUrl, element) {
+    const mainImg = document.getElementById('mainProductImage');
+    mainImg.style.opacity = '0.3';
+    setTimeout(() => {
+        mainImg.src = imageUrl;
+        mainImg.style.opacity = '1';
+    }, 150);
 
-    fetch(form.action, {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-            'X-CSRFToken': '{{ csrf_token }}'
-        },
-        body: JSON.stringify(payload)
-    }).then(r => r.json()).then(data => {
-        if(data.status === 'ok'){
-            window.location.href = '{% url "payments:view_cart" %}';
-        } else {
-            alert('Could not add to cart');
-        }
-    }).catch(err => {
-        // fallback to normal form submit if AJAX fails
-        form.removeEventListener('submit', arguments.callee);
-        form.submit();
+    document.querySelectorAll('.thumb-box').forEach(el => {
+        el.classList.remove('active-thumb');
+        el.classList.add('opacity-75');
     });
-});
-</script>
+    element.classList.add('active-thumb');
+    element.classList.remove('opacity-75');
+}
 
+const form = document.getElementById('add-to-cart-form');
+if (form) {
+    form.addEventListener('submit', function(e){
+        e.preventDefault();
+        const formData = new FormData(form);
+        const payload = {
+            product_id: formData.get('product_id'),
+            price: formData.get('price'),
+            name: formData.get('name'),
+            quantity: 1
+        };
+
+        fetch(form.action, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': '{{ csrf_token }}'
+            },
+            body: JSON.stringify(payload)
+        }).then(r => r.json()).then(data => {
+            if(data.status === 'ok'){
+                window.location.href = '{% url "payments:view_cart" %}';
+            } else {
+                alert('Could not add to cart');
+            }
+        }).catch(err => {
+            form.submit();
+        });
+    });
+}
+</script>
 {% endblock %}
