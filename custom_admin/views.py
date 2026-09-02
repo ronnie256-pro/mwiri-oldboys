@@ -151,6 +151,22 @@ def manage_content(request):
     history_items = History.objects.select_related('category', 'author').all().order_by('-created_at')
     return render(request, 'admin/manage_content.html', {'news_items': news_items, 'history_items': history_items})
 
+@admin_dashboard_required
+def delete_news(request, news_id):
+    news_item = get_object_or_404(News, pk=news_id)
+    title = news_item.title
+    news_item.delete()
+    messages.success(request, f"News article '{title}' has been successfully deleted.")
+    return redirect('admin_content')
+
+@admin_dashboard_required
+def delete_history(request, history_id):
+    history_item = get_object_or_404(History, pk=history_id)
+    title = history_item.title
+    history_item.delete()
+    messages.success(request, f"History archive '{title}' has been successfully deleted.")
+    return redirect('admin_content')
+
 # Manage Elections & Candidate Status Toggle
 @admin_dashboard_required
 def manage_elections(request):

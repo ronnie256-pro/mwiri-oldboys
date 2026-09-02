@@ -20,15 +20,29 @@
         </div>
     </div>
 
+    <style>
+        .custom-tab-btn {
+            background-color: #f1f5f9 !important;
+            color: #002147 !important;
+            border: 1px solid #cbd5e1 !important;
+            transition: all 0.2s ease-in-out;
+        }
+        .custom-tab-btn.active {
+            background-color: #002147 !important;
+            color: #ffffff !important;
+            border-color: #002147 !important;
+        }
+    </style>
+
     <!-- TABBED CONTENT SECTION -->
     <ul class="nav nav-pills mb-4" id="contentTabs" role="tablist">
         <li class="nav-item" role="presentation">
-            <button class="nav-link active fw-bold rounded-pill px-4 me-2" id="news-tab" data-bs-toggle="tab" data-bs-target="#news-pane" type="button" role="tab" style="background-color: #002147;">
+            <button class="nav-link custom-tab-btn active fw-bold rounded-pill px-4 me-2" id="news-tab" data-bs-toggle="tab" data-bs-target="#news-pane" type="button" role="tab">
                 <i class="bi bi-newspaper me-2"></i> News & Broadcasts ({{ news_items|length }})
             </button>
         </li>
         <li class="nav-item" role="presentation">
-            <button class="nav-link fw-bold rounded-pill px-4 text-dark border bg-light" id="history-tab" data-bs-toggle="tab" data-bs-target="#history-pane" type="button" role="tab">
+            <button class="nav-link custom-tab-btn fw-bold rounded-pill px-4" id="history-tab" data-bs-toggle="tab" data-bs-target="#history-pane" type="button" role="tab">
                 <i class="bi bi-file-earmark-pdf-fill me-2 text-danger"></i> PDF History Archives ({{ history_items|length }})
             </button>
         </li>
@@ -40,9 +54,9 @@
         <div class="tab-pane fade show active" id="news-pane" role="tabpanel">
             <div class="admin-card p-4">
                 <div class="table-responsive">
-                    <table class="table table-hover align-middle mb-0">
+                    <table class="table table-hover align-middle mb-0" style="font-size: 0.95rem;">
                         <thead>
-                            <tr class="text-secondary font-size-xs text-uppercase border-bottom">
+                            <tr class="text-secondary text-uppercase border-bottom" style="font-size: 0.85rem; letter-spacing: 0.5px;">
                                 <th>Article Title</th>
                                 <th>Category</th>
                                 <th>Author</th>
@@ -55,30 +69,32 @@
                             <tr>
                                 <td>
                                     <div class="d-flex align-items-center gap-3">
-                                        <div class="rounded-3 overflow-hidden bg-light border d-flex align-items-center justify-content-center flex-shrink-0" style="width: 50px; height: 50px;">
+                                        <div class="rounded-3 overflow-hidden bg-light border d-flex align-items-center justify-content-center flex-shrink-0" style="width: 48px; height: 48px;">
                                             {% if n.hero_image %}
                                                 <img src="{{ n.hero_image.url }}" class="w-100 h-100 object-fit-cover" alt="{{ n.title }}">
                                             {% else %}
-                                                <i class="bi bi-newspaper text-secondary"></i>
+                                                <i class="bi bi-newspaper text-secondary fs-4"></i>
                                             {% endif %}
                                         </div>
                                         <div>
-                                            <span class="fw-bold text-dark font-size-xs d-block">{{ n.title }}</span>
-                                            <small class="text-secondary font-size-xs">{{ n.content|striptags|truncatewords:8 }}</small>
+                                            <span class="fw-bold text-dark d-block" style="font-size: 1rem;">{{ n.title }}</span>
                                         </div>
                                     </div>
                                 </td>
                                 <td>
-                                    <span class="badge bg-light text-primary border rounded-pill px-3 py-1 font-size-xs">
+                                    <span class="badge bg-light text-primary border rounded-pill px-3 py-1.5" style="font-size: 0.85rem;">
                                         {{ n.category.name|default:"General" }}
                                     </span>
                                 </td>
-                                <td class="font-size-xs text-secondary">{{ n.author.username|default:"Admin" }}</td>
-                                <td class="font-size-xs text-secondary">{{ n.created_at|date:"M j, Y" }}</td>
+                                <td class="fw-medium text-dark">{{ n.author.username|default:"Admin" }}</td>
+                                <td class="text-secondary">{{ n.created_at|date:"M j, Y" }}</td>
                                 <td class="text-end">
-                                    <a href="{% url 'news_detail' pk=n.pk %}" target="_blank" class="btn btn-sm btn-outline-primary rounded-pill px-3 font-size-xs py-1">
-                                        View Story <i class="bi bi-arrow-up-right ms-1"></i>
-                                    </a>
+                                    <form method="POST" action="{% url 'admin_delete_news' n.id %}" onsubmit="return confirm('Are you sure you want to delete news article \'{{ n.title|escapejs }}\'?');" class="d-inline">
+                                        {% csrf_token %}
+                                        <button type="submit" class="btn btn-sm btn-outline-danger rounded-pill px-3 py-1.5 fw-bold" style="font-size: 0.85rem;">
+                                            <i class="bi bi-trash3-fill me-1"></i> Delete
+                                        </button>
+                                    </form>
                                 </td>
                             </tr>
                             {% empty %}
@@ -94,14 +110,14 @@
         <div class="tab-pane fade" id="history-pane" role="tabpanel">
             <div class="admin-card p-4">
                 <div class="table-responsive">
-                    <table class="table table-hover align-middle mb-0">
+                    <table class="table table-hover align-middle mb-0" style="font-size: 0.95rem;">
                         <thead>
-                            <tr class="text-secondary font-size-xs text-uppercase border-bottom">
+                            <tr class="text-secondary text-uppercase border-bottom" style="font-size: 0.85rem; letter-spacing: 0.5px;">
                                 <th>Archive Title</th>
                                 <th>Category</th>
                                 <th>PDF Attachment</th>
                                 <th>Uploaded Date</th>
-                                <th class="text-end">Download</th>
+                                <th class="text-end">Actions</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -109,7 +125,7 @@
                             <tr>
                                 <td>
                                     <div class="d-flex align-items-center gap-3">
-                                        <div class="rounded-3 overflow-hidden bg-danger bg-opacity-10 d-flex align-items-center justify-content-center text-danger flex-shrink-0" style="width: 50px; height: 50px;">
+                                        <div class="rounded-3 overflow-hidden bg-danger bg-opacity-10 d-flex align-items-center justify-content-center text-danger flex-shrink-0" style="width: 48px; height: 48px;">
                                             {% if h.hero_image %}
                                                 <img src="{{ h.hero_image.url }}" class="w-100 h-100 object-fit-cover" alt="{{ h.title }}">
                                             {% else %}
@@ -117,34 +133,32 @@
                                             {% endif %}
                                         </div>
                                         <div>
-                                            <span class="fw-bold text-dark font-size-xs d-block">{{ h.title }}</span>
-                                            <small class="text-secondary font-size-xs">{{ h.content|truncatewords:8 }}</small>
+                                            <span class="fw-bold text-dark d-block" style="font-size: 1rem;">{{ h.title }}</span>
                                         </div>
                                     </div>
                                 </td>
                                 <td>
-                                    <span class="badge bg-light text-dark border rounded-pill px-3 py-1 font-size-xs">
+                                    <span class="badge bg-light text-dark border rounded-pill px-3 py-1.5" style="font-size: 0.85rem;">
                                         {{ h.category.name|default:"Archives" }}
                                     </span>
                                 </td>
                                 <td>
                                     {% if h.pdf_file %}
-                                        <small class="text-danger font-size-xs fw-bold">
+                                        <small class="text-danger fw-bold" style="font-size: 0.85rem;">
                                             <i class="bi bi-file-earmark-pdf-fill me-1"></i> {{ h.filename|default:h.pdf_file.name }}
                                         </small>
                                     {% else %}
-                                        <small class="text-muted font-size-xs">No PDF attached</small>
+                                        <small class="text-muted" style="font-size: 0.85rem;">No PDF attached</small>
                                     {% endif %}
                                 </td>
-                                <td class="font-size-xs text-secondary">{{ h.created_at|date:"M j, Y" }}</td>
+                                <td class="text-secondary">{{ h.created_at|date:"M j, Y" }}</td>
                                 <td class="text-end">
-                                    {% if h.pdf_file %}
-                                        <a href="{{ h.pdf_file.url }}" download class="btn btn-sm btn-danger rounded-pill px-3 font-size-xs py-1">
-                                            <i class="bi bi-download me-1"></i> Download PDF
-                                        </a>
-                                    {% else %}
-                                        <span class="btn btn-sm btn-outline-secondary rounded-pill px-3 font-size-xs py-1 disabled">No File</span>
-                                    {% endif %}
+                                    <form method="POST" action="{% url 'admin_delete_history' h.id %}" onsubmit="return confirm('Are you sure you want to delete history archive \'{{ h.title|escapejs }}\'?');" class="d-inline">
+                                        {% csrf_token %}
+                                        <button type="submit" class="btn btn-sm btn-outline-danger rounded-pill px-3 py-1.5 fw-bold" style="font-size: 0.85rem;">
+                                            <i class="bi bi-trash3-fill me-1"></i> Delete
+                                        </button>
+                                    </form>
                                 </td>
                             </tr>
                             {% empty %}
