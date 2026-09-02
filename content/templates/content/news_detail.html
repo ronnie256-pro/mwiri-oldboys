@@ -1,17 +1,202 @@
-
 {% extends "base.html" %}
 
 {% block content %}
-<div class="container">
-    <h1 class="my-4">{{ news.title }}</h1>
-    <img src="{{ news.hero_image.url }}" class="img-fluid" alt="{{ news.title }}">
-    <p class="mt-4">{{ news.content }}</p>
-    <div class="row">
-        {% for image in news.extra_images.all %}
-        <div class="col-md-4 mb-4">
-            <img src="{{ image.image.url }}" class="img-fluid" alt="{{ news.title }}">
+<div class="news-detail-wrapper py-5 px-3 px-lg-5" style="background-color: var(--mwiiri-powder-skyblue, #EBF4FA); min-height: 100vh;">
+    <div class="container-fluid max-w-1200">
+
+        <!-- TOP BAR: BACK BUTTON & BREADCRUMBS -->
+        <div class="d-flex align-items-center justify-content-between mb-4">
+            <a href="{% url 'news' %}" class="btn btn-sm btn-white rounded-pill px-4 py-2 border shadow-sm text-dark fw-bold hover-lift bg-white">
+                <i class="bi bi-arrow-left me-2 text-primary"></i> Back to Updates
+            </a>
+            <nav aria-label="breadcrumb" class="d-none d-md-block">
+                <ol class="breadcrumb m-0 small">
+                    <li class="breadcrumb-item"><a href="{% url 'news' %}" class="text-decoration-none text-secondary">Updates</a></li>
+                    <li class="breadcrumb-item active text-dark fw-semibold" aria-current="page">{{ news.title|truncatewords:4 }}</li>
+                </ol>
+            </nav>
         </div>
-        {% endfor %}
+
+        <!-- MAIN ARTICLE CARD -->
+        <article class="bg-white rounded-4 shadow-sm p-4 p-lg-5 border border-light-subtle mb-5">
+            
+            <!-- META DATA HEADER -->
+            <div class="d-flex flex-wrap align-items-center gap-3 mb-3 text-muted small">
+                {% if news.category %}
+                <span class="badge bg-primary bg-opacity-10 text-primary rounded-pill px-3 py-2 fw-semibold">
+                    {{ news.category.name }}
+                </span>
+                {% endif %}
+                <span><i class="bi bi-clock me-1"></i> Published {{ news.created_at|date:"F j, Y" }}</span>
+                <span>&bull;</span>
+                <span><i class="bi bi-person me-1"></i> By {{ news.author.get_full_name|default:news.author.username }}</span>
+            </div>
+
+            <!-- ARTICLE TITLE -->
+            <h1 class="fw-bold text-dark display-5 mb-4 lh-sm" style="color: var(--mwiiri-navy, #002147);">
+                {{ news.title }}
+            </h1>
+
+            <!-- HERO IMAGE (CLICKABLE TO EXPAND) -->
+            {% if news.hero_image %}
+            <div class="rounded-4 overflow-hidden mb-4 border border-light-subtle bg-light shadow-sm cursor-pointer position-relative zoom-overlay-wrapper" 
+                 onclick="openImageLightbox('{{ news.hero_image.url }}', '{{ news.title|escapejs }}')" 
+                 style="max-height: 480px;">
+                <img src="{{ news.hero_image.url }}" class="w-100 h-100 object-fit-cover transition-zoom" alt="{{ news.title }}">
+            </div>
+            {% endif %}
+
+            <!-- ARTICLE CONTENT BODY WITH INLINE 3-CARD IMAGES -->
+            <div class="article-body text-secondary lh-relaxed fs-5 mb-4">
+                
+                {% for paragraph in content_paragraphs %}
+                    <p class="mb-4">{{ paragraph }}</p>
+
+                    <!-- INSERT 3 EXTRA IMAGE CARDS AFTER PARAGRAPH 2 -->
+                    {% if forloop.counter == 2 or forloop.last and forloop.counter < 2 %}
+                    <div class="inline-extra-images-section my-4 py-3 border-top border-bottom border-light-subtle bg-light bg-opacity-50 rounded-4 px-3">
+                        <div class="row g-3">
+                            <!-- REAL EXTRA IMAGES -->
+                            {% for img in extra_images %}
+                            <div class="col-12 col-md-4">
+                                <div class="card border border-light-subtle rounded-3 overflow-hidden shadow-sm cursor-pointer zoom-overlay-wrapper bg-white" 
+                                     onclick="openImageLightbox('{{ img.image.url }}', '{{ news.title|escapejs }}')">
+                                    <img src="{{ img.image.url }}" class="w-100 object-fit-cover transition-zoom" style="height: 180px;" alt="{{ news.title }}">
+                                </div>
+                            </div>
+                            {% endfor %}
+
+                            <!-- FALLBACK CARDS ("No Images attached") -->
+                            {% for _ in missing_range %}
+                            <div class="col-12 col-md-4">
+                                <div class="card border border-dashed rounded-3 p-3 text-center text-muted bg-white opacity-75 d-flex flex-column align-items-center justify-content-center" style="min-height: 180px; border-style: dashed !important;">
+                                    <i class="bi bi-image text-secondary opacity-40 display-6 mb-2"></i>
+                                    <span class="small font-size-xs fw-medium text-secondary">No Images attached</span>
+                                </div>
+                            </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                    {% endif %}
+
+                {% empty %}
+                    <p>{{ news.content }}</p>
+                {% endfor %}
+
+            </div>
+
+            <!-- BOTTOM BACK ACTION BAR -->
+            <div class="d-flex justify-content-between align-items-center pt-3 border-top">
+                <a href="{% url 'news' %}" class="btn btn-sm btn-outline-navy rounded-pill px-4 py-2 fw-bold">
+                    <i class="bi bi-arrow-left me-1"></i> Back to Updates
+                </a>
+                <span class="text-muted small"><i class="bi bi-check-circle me-1 text-success"></i> Official Article</span>
+            </div>
+
+        </article>
+
     </div>
 </div>
+
+<!-- IMAGE LIGHTBOX EXPAND MODAL -->
+<div class="modal fade" id="imageLightboxModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-xl">
+        <div class="modal-content bg-dark text-white border-0 shadow-lg rounded-4 overflow-hidden">
+            <div class="modal-header border-bottom border-secondary py-2 px-3">
+                <h6 class="modal-title small text-light text-truncate" id="lightboxTitle">Expanded Image</h6>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body p-0 d-flex align-items-center justify-content-center bg-black" style="min-height: 400px; max-height: 85vh;">
+                <img id="lightboxImage" src="" class="img-fluid w-100 h-100 object-fit-contain" alt="Expanded Photo">
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .max-w-1200 {
+        max-width: 1100px;
+        margin: 0 auto;
+    }
+
+    .cursor-pointer {
+        cursor: pointer;
+    }
+
+    .hover-lift {
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+    .hover-lift:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 15px rgba(0,0,0,0.08) !important;
+    }
+
+    .btn-outline-navy {
+        border: 2px solid var(--mwiiri-navy, #002147);
+        color: var(--mwiiri-navy, #002147);
+    }
+
+    .btn-outline-navy:hover {
+        background-color: var(--mwiiri-navy, #002147);
+        color: #ffffff;
+    }
+
+    .article-body {
+        color: #334155 !important;
+        font-size: 1.05rem !important;
+        line-height: 1.8 !important;
+    }
+
+    /* Zoom & Expand Overlay Styling */
+    .zoom-overlay-wrapper {
+        position: relative;
+    }
+
+    .transition-zoom {
+        transition: transform 0.4s ease, filter 0.3s ease;
+    }
+
+    .zoom-overlay-wrapper:hover .transition-zoom {
+        transform: scale(1.03);
+        filter: brightness(0.95);
+    }
+
+    .expand-icon-badge {
+        position: absolute;
+        bottom: 12px;
+        right: 12px;
+        background: rgba(0, 33, 71, 0.75);
+        color: #ffffff;
+        padding: 4px 12px;
+        border-radius: 50px;
+        font-size: 0.75rem;
+        backdrop-filter: blur(4px);
+        pointer-events: none;
+        transition: background-color 0.2s ease;
+    }
+
+    .zoom-overlay-wrapper:hover .expand-icon-badge {
+        background: rgba(0, 33, 71, 0.95);
+    }
+</style>
+
+<script>
+function openImageLightbox(imageUrl, titleText) {
+    const modalImage = document.getElementById('lightboxImage');
+    const modalTitle = document.getElementById('lightboxTitle');
+    
+    if (modalImage) {
+        modalImage.src = imageUrl;
+    }
+    if (modalTitle) {
+        modalTitle.textContent = titleText || 'Expanded Photo';
+    }
+
+    const modalEl = document.getElementById('imageLightboxModal');
+    if (modalEl && typeof bootstrap !== 'undefined') {
+        const modalInstance = bootstrap.Modal.getOrCreateInstance(modalEl);
+        modalInstance.show();
+    }
+}
+</script>
 {% endblock %}

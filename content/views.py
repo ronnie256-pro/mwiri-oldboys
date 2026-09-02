@@ -48,7 +48,19 @@ from django.shortcuts import get_object_or_404
 
 def news_detail(request, pk):
     news = get_object_or_404(News, pk=pk)
-    return render(request, 'content/news_detail.html', {'news': news})
+    # Split content into paragraphs for inline image insertion
+    content_paragraphs = [p.strip() for p in news.content.split('\n') if p.strip()]
+
+    # Up to 3 extra images and fallback missing count
+    extra_images = list(news.extra_images.all()[:3])
+    missing_count = max(0, 3 - len(extra_images))
+
+    return render(request, 'content/news_detail.html', {
+        'news': news,
+        'content_paragraphs': content_paragraphs,
+        'extra_images': extra_images,
+        'missing_range': range(missing_count),
+    })
 
 def history_detail(request, pk):
     history = get_object_or_404(History, pk=pk)
