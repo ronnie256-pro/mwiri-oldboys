@@ -5,6 +5,7 @@ from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.conf import settings
 from django.contrib.auth import get_user_model
+from django.utils.text import slugify
 
 from users.models import Profile
 from products.models import Product, Service
@@ -133,7 +134,7 @@ def toggle_user_verification(request, user_id):
 @admin_dashboard_required
 def manage_products(request):
     products = Product.objects.select_related('category', 'owner').all().order_by('-id')
-    categories = Category.objects.all()
+    categories = Category.objects.filter(category_type=Category.CATEGORY_MARKETPLACE).order_by('name')
     return render(request, 'admin/manage_products.html', {'products': products, 'categories': categories})
 
 @admin_dashboard_required
@@ -149,7 +150,14 @@ def delete_product(request, product_id):
 def manage_content(request):
     news_items = News.objects.select_related('category', 'author').all().order_by('-created_at')
     history_items = History.objects.select_related('category', 'author').all().order_by('-created_at')
-    return render(request, 'admin/manage_content.html', {'news_items': news_items, 'history_items': history_items})
+    news_categories = Category.objects.filter(category_type=Category.CATEGORY_NEWS).order_by('name')
+    history_categories = Category.objects.filter(category_type=Category.CATEGORY_HISTORY).order_by('name')
+    return render(request, 'admin/manage_content.html', {
+        'news_items': news_items,
+        'history_items': history_items,
+        'news_categories': news_categories,
+        'history_categories': history_categories,
+    })
 
 @admin_dashboard_required
 def delete_news(request, news_id):
@@ -166,6 +174,49 @@ def delete_history(request, history_id):
     history_item.delete()
     messages.success(request, f"History archive '{title}' has been successfully deleted.")
     return redirect('admin_content')
+
+# Dynamic Domain Category Creation & Deletion
+@admin_dashboard_required
+def add_admin_category(request):
+    if request.method == 'POST':
+        name = request.POST.get('name', '').strip()
+        category_type = request.POST.get('category_type', '').strip()
+        redirect_to = request.POST.get('redirect_to', 'admin_products')
+        
+        valid_types = [Category.CATEGORY_MARKETPLACE, Category.CATEGORY_NEWS, Category.CATEGORY_HISTORY]
+        if not name or category_type not in valid_types:
+            messages.error(request, "Invalid category name or category domain type.")
+            return redirect(redirect_to)
+
+        slug = slugify(name)
+        if not slug:
+            messages.error(request, "Please enter a valid category name.")
+            return redirect(redirect_to)
+
+        if Category.objects.filter(slug=slug).exists():
+            messages.error(request, f"Category with name '{name}' already exists.")
+            return redirect(redirect_to)
+
+        Category.objects.create(
+            name=name,
+            slug=slug,
+            category_type=category_type
+        )
+        messages.success(request, f"Category '{name}' created successfully.")
+        return redirect(redirect_to)
+    return redirect('admin_dashboard_home')
+
+@admin_dashboard_required
+def delete_admin_category(request, category_id):
+    if request.method == 'POST':
+        category = get_object_or_404(Category, pk=category_id)
+        redirect_to = request.POST.get('redirect_to', 'admin_products')
+        cat_name = category.name
+        category.delete()
+        messages.success(request, f"Category '{cat_name}' deleted successfully.")
+        return redirect(redirect_to)
+    return redirect('admin_dashboard_home')
+
 
 # Manage Elections & Candidate Status Toggle
 @admin_dashboard_required

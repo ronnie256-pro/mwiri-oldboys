@@ -16,4 +16,6 @@ urlpatterns = [
     path("elections/candidate/<int:candidate_id>/<str:action>/", views.toggle_candidate_status, name="admin_candidate_action"),
     path("payments/", views.manage_payments, name="admin_payments"),
     path("settings/", views.manage_settings, name="admin_settings"),
+    path("categories/add/", views.add_admin_category, name="admin_add_category"),
+    path("categories/delete/<int:category_id>/", views.delete_admin_category, name="admin_delete_category"),
 ]

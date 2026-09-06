@@ -49,7 +49,7 @@ def history_list(request):
     if category_id and category_id.isdigit():
         queryset = queryset.filter(category_id=category_id)
 
-    categories = Category.objects.all()
+    categories = Category.objects.filter(category_type=Category.CATEGORY_HISTORY)
     return render(request, 'content/history_list.html', {
         'history': queryset,
         'categories': categories,

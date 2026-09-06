@@ -13,7 +13,9 @@ class HistoryImageInline(admin.TabularInline):
 
 @admin.register(Category)
 class CategoryAdmin(admin.ModelAdmin):
-    list_display = ('name', 'slug')
+    list_display = ('name', 'category_type', 'slug')
+    list_filter = ('category_type',)
+    search_fields = ('name',)
     prepopulated_fields = {'slug': ('name',)}
 
 @admin.register(News)

@@ -10,9 +10,61 @@
         <div>
             <h3 class="fw-bold mb-1" style="color: #002147 !important;">Marketplace Products (Our Owino)</h3>
         </div>
-        <a href="{% url 'product_add' %}" target="_blank" class="btn btn-gold rounded-pill px-4 py-2 shadow-sm font-size-xs">
-            <i class="bi bi-plus-lg me-1"></i> Add Product
-        </a>
+        <div class="d-flex gap-2">
+            <button class="btn btn-outline-dark rounded-pill px-3 py-2 font-size-xs shadow-sm" data-bs-toggle="modal" data-bs-target="#marketplaceCategoriesModal">
+                <i class="bi bi-tags-fill me-1"></i> Manage Categories ({{ categories|length }})
+            </button>
+            <a href="{% url 'product_add' %}" target="_blank" class="btn btn-gold rounded-pill px-4 py-2 shadow-sm font-size-xs">
+                <i class="bi bi-plus-lg me-1"></i> Add Product
+            </a>
+        </div>
+    </div>
+
+    <!-- MARKETPLACE CATEGORIES MODAL -->
+    <div class="modal fade" id="marketplaceCategoriesModal" tabindex="-1" aria-labelledby="marketplaceCategoriesModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content rounded-4 shadow border-0">
+                <div class="modal-header border-bottom px-4 py-3">
+                    <h5 class="modal-title fw-bold text-dark" id="marketplaceCategoriesModalLabel">
+                        <i class="bi bi-tags-fill text-gold me-2"></i>Marketplace Categories
+                    </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body p-4">
+                    <!-- ADD NEW CATEGORY FORM -->
+                    <form method="POST" action="{% url 'admin_add_category' %}" class="mb-4">
+                        {% csrf_token %}
+                        <input type="hidden" name="category_type" value="MARKETPLACE">
+                        <input type="hidden" name="redirect_to" value="admin_products">
+                        <label class="form-label fw-bold small text-secondary">Add New Marketplace Category</label>
+                        <div class="input-group">
+                            <input type="text" name="name" class="form-control rounded-start-pill ps-3" placeholder="e.g. Electronics, Clothing..." required>
+                            <button type="submit" class="btn btn-primary rounded-end-pill px-4 fw-bold">
+                                <i class="bi bi-plus-lg me-1"></i> Add
+                            </button>
+                        </div>
+                    </form>
+
+                    <h6 class="fw-bold text-secondary mb-3 small text-uppercase" style="letter-spacing: 0.5px;">Existing Categories</h6>
+                    <div class="list-group list-group-flush rounded-3 border" style="max-height: 250px; overflow-y: auto;">
+                        {% for cat in categories %}
+                        <div class="list-group-item d-flex justify-content-between align-items-center py-2 px-3">
+                            <span class="fw-medium text-dark">{{ cat.name }}</span>
+                            <form method="POST" action="{% url 'admin_delete_category' cat.id %}" onsubmit="return confirm('Delete category \'{{ cat.name|escapejs }}\'? Existing products in this category will become uncategorized.');" class="m-0">
+                                {% csrf_token %}
+                                <input type="hidden" name="redirect_to" value="admin_products">
+                                <button type="submit" class="btn btn-sm btn-link text-danger p-0 border-0 shadow-none">
+                                    <i class="bi bi-trash3"></i>
+                                </button>
+                            </form>
+                        </div>
+                        {% empty %}
+                        <div class="p-3 text-center text-muted small">No Marketplace categories created yet.</div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 
     <!-- PRODUCTS TABLE CARD -->

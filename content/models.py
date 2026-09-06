@@ -3,11 +3,29 @@ from django.db import models
 from django.conf import settings
 
 class Category(models.Model):
+    CATEGORY_MARKETPLACE = 'MARKETPLACE'
+    CATEGORY_NEWS = 'NEWS'
+    CATEGORY_HISTORY = 'HISTORY'
+
+    CATEGORY_TYPE_CHOICES = [
+        (CATEGORY_MARKETPLACE, 'Marketplace'),
+        (CATEGORY_NEWS, 'News'),
+        (CATEGORY_HISTORY, 'History'),
+    ]
+
     name = models.CharField(max_length=100)
     slug = models.SlugField(unique=True)
+    category_type = models.CharField(
+        max_length=20,
+        choices=CATEGORY_TYPE_CHOICES,
+        default=CATEGORY_NEWS
+    )
+
+    class Meta:
+        verbose_name_plural = "Categories"
 
     def __str__(self):
-        return self.name
+        return f"{self.name} ({self.get_category_type_display()})"
 
 class News(models.Model):
     title = models.CharField(max_length=200)
