@@ -17,11 +17,12 @@ def news_form(request):
         form = NewsForm(request.POST, request.FILES)
         if form.is_valid():
             news = form.save(commit=False)
-            news.author = request.user
+            if request.user.is_authenticated:
+                news.author = request.user
             news.save()
             for image in request.FILES.getlist('extra_images'):
                 NewsImage.objects.create(news=news, image=image)
-            return redirect('news_list')
+            return redirect('news')
     else:
         form = NewsForm()
     return render(request, 'content/news_form.html', {'form': form, 'extra_images': True})
@@ -31,11 +32,12 @@ def history_form(request):
         form = HistoryForm(request.POST, request.FILES)
         if form.is_valid():
             history = form.save(commit=False)
-            history.author = request.user
+            if request.user.is_authenticated:
+                history.author = request.user
             history.save()
             for image in request.FILES.getlist('extra_images'):
                 HistoryImage.objects.create(history=history, image=image)
-            return redirect('history_list')
+            return redirect('history')
     else:
         form = HistoryForm()
     return render(request, 'content/history_form.html', {'form': form, 'extra_images': True})

@@ -39,6 +39,16 @@ class News(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
 
     def save(self, *args, **kwargs):
+        if not self.slug:
+            from django.utils.text import slugify
+            base_slug = slugify(self.title) or "news"
+            slug = base_slug
+            counter = 1
+            while News.objects.filter(slug=slug).exclude(pk=self.pk).exists():
+                slug = f"{base_slug}-{counter}"
+                counter += 1
+            self.slug = slug
+
         if self.hero_image:
             from core.image_utils import convert_to_webp
             convert_to_webp(self.hero_image)
