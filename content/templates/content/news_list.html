@@ -82,15 +82,15 @@
             </div>
             {% endwith %}
 
-            <!-- REMAINING STORIES GRID (4 CARDS PER ROW) -->
+            <!-- REMAINING STORIES GRID (2 CARDS PER ROW ON MOBILE, 4 ON DESKTOP) -->
             {% if news|length > 1 %}
-            <div class="row g-4 mb-5">
+            <div class="row g-2 g-sm-3 g-lg-4 mb-5">
                 {% for item in news|slice:"1:" %}
-                <div class="col-12 col-sm-6 col-md-4 col-xl-3">
+                <div class="col-6 col-md-4 col-xl-3">
                     <div class="card border border-1 border-light-subtle rounded-4 shadow-sm-hover h-100 bg-white overflow-hidden d-flex flex-column justify-content-between">
                         <div>
                             <!-- Image -->
-                            <div class="overflow-hidden bg-light position-relative" style="height: 220px;">
+                            <div class="overflow-hidden bg-light position-relative news-img-box">
                                 {% if item.hero_image %}
                                     <a href="{% url 'news_detail' pk=item.pk %}" class="w-100 h-100 d-block">
                                         <img src="{{ item.hero_image.url }}" class="w-100 h-100 object-fit-cover product-img" alt="{{ item.title }}">
@@ -99,34 +99,34 @@
                                     <div class="w-100 h-100 bg-secondary d-flex align-items-center justify-content-center text-white small">No Image</div>
                                 {% endif %}
                                 {% if item.category %}
-                                <span class="badge bg-dark bg-opacity-75 text-white rounded-pill px-3 py-1 position-absolute top-0 start-0 m-3 font-size-xs">
+                                <span class="badge bg-dark bg-opacity-75 text-white rounded-pill px-2 px-sm-3 py-1 position-absolute top-0 start-0 m-2 m-sm-3 font-size-xs">
                                     {{ item.category.name }}
                                 </span>
                                 {% endif %}
                             </div>
 
                             <!-- Body -->
-                            <div class="p-4">
-                                <div class="text-muted font-size-xs mb-2 d-flex align-items-center gap-1">
+                            <div class="p-2 p-sm-3 p-lg-4">
+                                <div class="text-muted font-size-xs mb-1 mb-sm-2 d-flex align-items-center gap-1">
                                     <i class="bi bi-clock"></i> {{ item.created_at|timesince }} ago
                                 </div>
-                                <h5 class="fw-bold text-dark mb-2 lh-sm">
+                                <h5 class="fw-bold text-dark mb-1 mb-sm-2 lh-sm font-size-card-title">
                                     <a href="{% url 'news_detail' pk=item.pk %}" class="text-decoration-none text-dark hover-gold text-truncate-2" title="{{ item.title }}">
                                         {{ item.title }}
                                     </a>
                                 </h5>
-                                <p class="text-secondary small mb-0 lh-relaxed text-truncate-3">
-                                    {{ item.content|striptags|truncatewords:20 }}
+                                <p class="text-secondary small mb-0 lh-relaxed text-truncate-2 d-none d-sm-block">
+                                    {{ item.content|striptags|truncatewords:15 }}
                                 </p>
                             </div>
                         </div>
 
                         <!-- Footer -->
-                        <div class="px-4 pb-4 pt-0 border-0 bg-transparent d-flex align-items-center justify-content-between">
-                            <span class="text-muted font-size-xs">
+                        <div class="px-2 px-sm-3 px-lg-4 pb-2 pb-sm-3 pb-lg-4 pt-0 border-0 bg-transparent d-flex align-items-center justify-content-between">
+                            <span class="text-muted font-size-xs text-truncate me-1">
                                 <i class="bi bi-person me-1"></i> {{ item.author.get_full_name|default:item.author.username }}
                             </span>
-                            <a href="{% url 'news_detail' pk=item.pk %}" class="btn btn-sm btn-link text-decoration-none fw-bold p-0 text-primary">
+                            <a href="{% url 'news_detail' pk=item.pk %}" class="btn btn-sm btn-link text-decoration-none fw-bold p-0 text-primary font-size-xs text-nowrap">
                                 Read <i class="bi bi-chevron-right ms-1"></i>
                             </a>
                         </div>
@@ -161,6 +161,38 @@
 
     .font-size-xs {
         font-size: 0.78rem;
+    }
+
+    .news-img-box {
+        height: 135px;
+    }
+
+    @media (min-width: 576px) {
+        .news-img-box {
+            height: 180px;
+        }
+    }
+
+    @media (min-width: 992px) {
+        .news-img-box {
+            height: 220px;
+        }
+    }
+
+    .font-size-card-title {
+        font-size: 0.85rem;
+    }
+
+    @media (min-width: 576px) {
+        .font-size-card-title {
+            font-size: 0.95rem;
+        }
+    }
+
+    @media (min-width: 992px) {
+        .font-size-card-title {
+            font-size: 1.1rem;
+        }
     }
 
     .rounded-pill-start {
