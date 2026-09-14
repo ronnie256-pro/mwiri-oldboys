@@ -163,24 +163,42 @@
     }
 
     .btn-outline-navy {
+        background-color: var(--mwiiri-navy);
         border: 2px solid var(--mwiiri-navy);
-        color: var(--mwiiri-navy);
+        color: #ffffff !important;
+        font-weight: 700;
+        border-radius: 50px;
+        transition: all 0.3s ease;
+        font-size: clamp(0.7rem, 2.2vw, 0.85rem);
+        padding: 5px 14px;
+        box-shadow: 0 4px 12px rgba(0, 33, 71, 0.15);
     }
     .btn-outline-navy:hover {
-        background: var(--mwiiri-navy);
-        color: #ffffff;
+        background-color: var(--mwiiri-gold);
+        border-color: var(--mwiiri-gold);
+        color: #002147 !important;
+        box-shadow: 0 6px 16px rgba(197, 160, 33, 0.35);
+        transform: translateY(-2px);
+    }
+
+    .section-header-title {
+        font-size: clamp(1.15rem, 3vw, 1.6rem);
+        font-weight: 800;
+        color: var(--mwiiri-navy);
+        letter-spacing: -0.3px;
+        margin: 0;
     }
 </style>
 
 <div class="highlights-vertical-wrapper">
 
     <!-- ================= 1. MEMORABILIA SECTION (FIRST AFTER SLIDER) ================= -->
-    <div class="store-highlight-block mb-5">
-        <div class="d-flex justify-content-between align-items-center mb-4">
+    <div class="store-highlight-block mb-3 mb-md-5">
+        <div class="d-flex justify-content-between align-items-center mb-2 mb-md-3">
             <div>
-                <h4 class="fw-bold m-0 fs-3" style="color: var(--mwiiri-navy);">Memorabilia <span style="color: var(--mwiiri-gold);">.</span></h4>
+                <h4 class="section-header-title">Memorabilia <span style="color: var(--mwiiri-gold);">.</span></h4>
             </div>
-            <a href="{% url 'products' %}" class="btn btn-sm btn-outline-navy fw-bold rounded-pill px-3 py-2">Explore Store</a>
+            <a href="{% url 'products' %}" class="btn btn-outline-navy">Explore Store</a>
         </div>
 
         <div class="row row-cols-6 g-1 g-sm-2 g-md-4 align-items-start justify-content-center text-center">
@@ -211,19 +229,19 @@
         </div>
     </div>
 
-    <hr class="my-5 opacity-10">
+    <hr class="my-3 my-md-5 opacity-10">
 
     <!-- ================= 2. LATEST NEWS SECTION (SECOND AFTER MEMORABILIA) ================= -->
-    <div class="news-highlight-block mb-5">
-        <div class="d-flex justify-content-between align-items-center mb-4">
+    <div class="news-highlight-block mb-3 mb-md-5">
+        <div class="d-flex justify-content-between align-items-center mb-2 mb-md-3">
             <div>
-                <h4 class="fw-bold m-0 fs-3" style="color: var(--mwiiri-navy);">Latest News <span style="color: var(--mwiiri-gold);">.</span></h4>
+                <h4 class="section-header-title">Latest News <span style="color: var(--mwiiri-gold);">.</span></h4>
             </div>
-            <a href="{% url 'news' %}" class="btn btn-sm btn-outline-navy fw-bold rounded-pill px-3 py-2">View All News</a>
+            <a href="{% url 'news' %}" class="btn btn-outline-navy">View All News</a>
         </div>
 
         {% if latest_news %}
-            <div class="row g-4">
+            <div class="row g-3 g-md-4">
                 <!-- MAIN FEATURED ARTICLE (LEFT) -->
                 {% with main_article=latest_news.0 %}
                 <div class="col-lg-7">
@@ -298,15 +316,15 @@
         {% endif %}
     </div>
 
-    <hr class="my-5 opacity-10">
+    <hr class="my-3 my-md-5 opacity-10">
 
     <!-- ================= 3. SPOTLIGHT SECTION (THIRD) ================= -->
-    <div class="spotlight-highlight-block mb-4">
-        <div class="d-flex justify-content-between align-items-center mb-4">
+    <div class="spotlight-highlight-block mb-3 mb-md-4">
+        <div class="d-flex justify-content-between align-items-center mb-2 mb-md-3">
             <div>
-                <h4 class="fw-bold m-0 fs-3" style="color: var(--mwiiri-navy);">Spotlight <span style="color: var(--mwiiri-gold);">.</span></h4>
+                <h4 class="section-header-title">Spotlight <span style="color: var(--mwiiri-gold);">.</span></h4>
             </div>
-            <a href="{% url 'news' %}" class="btn btn-sm btn-outline-navy fw-bold rounded-pill px-3 py-2">View All Media</a>
+            <a href="{% url 'news' %}" class="btn btn-outline-navy">View All Media</a>
         </div>
 
         <div class="row g-3 row-cols-2 row-cols-sm-3 row-cols-lg-6">
