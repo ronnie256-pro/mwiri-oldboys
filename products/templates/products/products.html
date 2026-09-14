@@ -6,22 +6,22 @@
     <div class="container-fluid max-w-1400">
 
         <!-- STORE TOP BAR & HEADER -->
-        <div class="bg-white rounded-4 shadow-sm p-4 mb-4 border border-1 border-light-subtle">
-            <div class="row align-items-center g-3">
-                <div class="col-md-5">
+        <div class="bg-white rounded-4 shadow-sm p-3 p-md-4 mb-4 border border-1 border-light-subtle">
+            <div class="row align-items-center g-2 g-md-3">
+                <div class="col-6 col-md-5">
                     <div>
                         <h3 class="fw-bold text-dark mb-0 fs-4" style="color: var(--mwiiri-navy);">Our Owino</h3>
                     </div>
                 </div>
 
-                <div class="col-md-7">
-                    <div class="d-flex flex-wrap align-items-center justify-content-md-end gap-3">
-                        <div class="badge bg-light text-secondary border px-3 py-2 rounded-pill fs-7 fw-normal">
-                            <i class="bi bi-box-seam me-1 text-primary"></i> {{ total_count }} Product{% if total_count != 1 %}s{% endif %} Available
+                <div class="col-6 col-md-7">
+                    <div class="d-flex flex-wrap align-items-center justify-content-end gap-2 gap-md-3">
+                        <div class="badge bg-light text-secondary border px-2 px-md-3 py-2 rounded-pill font-size-xs fw-normal">
+                            <i class="bi bi-box-seam me-1 text-primary"></i> {{ total_count }} Product{% if total_count != 1 %}s{% endif %}
                         </div>
 
                         {% if user.is_authenticated %}
-                        <a href="{% url 'product_add' %}" class="btn btn-navy-gold rounded-pill px-4 py-2 fw-bold shadow-sm">
+                        <a href="{% url 'product_add' %}" class="btn btn-navy-gold rounded-pill px-3 px-md-4 py-1.5 py-md-2 fw-bold shadow-sm font-size-xs font-size-sm-base">
                             <i class="bi bi-plus-lg me-1"></i> Sell Product
                         </a>
                         {% endif %}
@@ -30,97 +30,110 @@
             </div>
         </div>
 
-        <div class="row g-4">
+        <div class="row g-3 g-lg-4">
 
-            <!-- ================= LEFT SIDEBAR FILTER (AMAZON STYLE) ================= -->
+            <!-- ================= LEFT SIDEBAR FILTER (ACCORDION ON MOBILE) ================= -->
             <div class="col-lg-3 col-xl-3">
-                <div class="card border-0 shadow-sm rounded-4 sticky-filter-card">
-                    <div class="card-header bg-white border-bottom border-light p-3 d-flex justify-content-between align-items-center">
+                <div class="card border-0 shadow-sm rounded-4 sticky-filter-card mb-2 mb-lg-0">
+                    <div class="card-header bg-white border-bottom border-light p-3 d-flex justify-content-between align-items-center cursor-pointer-mobile"
+                         data-bs-toggle="collapse" 
+                         data-bs-target="#filterCollapse" 
+                         role="button" 
+                         aria-expanded="{% if search_query or selected_category or min_price or max_price %}true{% else %}false{% endif %}" 
+                         aria-controls="filterCollapse">
                         <h6 class="fw-bold m-0 text-dark d-flex align-items-center gap-2">
                             <i class="bi bi-funnel-fill text-primary"></i> Filters
+                            {% if search_query or selected_category or min_price or max_price %}
+                            <span class="badge bg-primary rounded-pill font-size-xs fw-normal ms-1">Active</span>
+                            {% endif %}
                         </h6>
-                        {% if search_query or selected_category or min_price or max_price %}
-                        <a href="{% url 'products' %}" class="text-danger small fw-bold text-decoration-none hover-underline">
-                            <i class="bi bi-x-circle me-1"></i> Clear All
-                        </a>
-                        {% endif %}
+                        <div class="d-flex align-items-center gap-2">
+                            {% if search_query or selected_category or min_price or max_price %}
+                            <a href="{% url 'products' %}" class="text-danger small fw-bold text-decoration-none hover-underline me-1" onclick="event.stopPropagation();">
+                                <i class="bi bi-x-circle me-1"></i> Clear All
+                            </a>
+                            {% endif %}
+                            <i class="bi bi-chevron-down d-lg-none filter-chevron text-secondary"></i>
+                        </div>
                     </div>
 
-                    <div class="card-body p-3">
-                        <form method="GET" action="{% url 'products' %}" id="filterForm">
+                    <div class="collapse {% if search_query or selected_category or min_price or max_price %}show{% endif %} d-lg-block" id="filterCollapse">
+                        <div class="card-body p-3">
+                            <form method="GET" action="{% url 'products' %}" id="filterForm">
 
-                            <!-- 1. SEARCH INPUT -->
-                            <div class="filter-group mb-4">
-                                <label class="fw-bold small text-secondary text-uppercase mb-2" style="letter-spacing: 0.5px;">Search Keywords</label>
-                                <div class="input-group search-input-group">
-                                    <input type="text" name="q" class="form-control form-control-sm rounded-start-3 border-end-0" placeholder="Search products..." value="{{ search_query }}">
-                                    <button class="btn btn-sm btn-primary rounded-end-3 px-3" type="submit">
-                                        <i class="bi bi-search"></i>
+                                <!-- 1. SEARCH INPUT -->
+                                <div class="filter-group mb-4">
+                                    <label class="fw-bold small text-secondary text-uppercase mb-2" style="letter-spacing: 0.5px;">Search Keywords</label>
+                                    <div class="input-group search-input-group">
+                                        <input type="text" name="q" class="form-control form-control-sm rounded-start-3 border-end-0" placeholder="Search products..." value="{{ search_query }}">
+                                        <button class="btn btn-sm btn-primary rounded-end-3 px-3" type="submit">
+                                            <i class="bi bi-search"></i>
+                                        </button>
+                                    </div>
+                                </div>
+
+                                <hr class="my-3 opacity-10">
+
+                                <!-- 2. CATEGORIES FILTER -->
+                                <div class="filter-group mb-4">
+                                    <label class="fw-bold small text-secondary text-uppercase mb-2 d-flex justify-content-between" style="letter-spacing: 0.5px;">
+                                        <span>Category</span>
+                                    </label>
+
+                                    <div class="d-flex flex-column gap-1 category-filter-list">
+                                        <div class="form-check category-item py-1 px-2 rounded-2">
+                                            <input class="form-check-input" type="radio" name="category" value="" id="cat_all" {% if not selected_category %}checked{% endif %} onchange="this.form.submit()">
+                                            <label class="form-check-label small text-dark fw-medium w-100 cursor-pointer" for="cat_all">
+                                                All Categories
+                                            </label>
+                                        </div>
+                                        {% for cat in categories %}
+                                        <div class="form-check category-item py-1 px-2 rounded-2">
+                                            <input class="form-check-input" type="radio" name="category" value="{{ cat.id }}" id="cat_{{ cat.id }}" {% if selected_category == cat.id|stringformat:"s" %}checked{% endif %} onchange="this.form.submit()">
+                                            <label class="form-check-label small text-dark fw-medium w-100 cursor-pointer d-flex justify-content-between" for="cat_{{ cat.id }}">
+                                                <span>{{ cat.name }}</span>
+                                            </label>
+                                        </div>
+                                        {% endfor %}
+                                    </div>
+                                </div>
+
+                                <hr class="my-3 opacity-10">
+
+                                <!-- 3. PRICE RANGE FILTER -->
+                                <div class="filter-group mb-3">
+                                    <label class="fw-bold small text-secondary text-uppercase mb-2" style="letter-spacing: 0.5px;">Price (UGX)</label>
+                                    <div class="row g-2 align-items-center mb-2">
+                                        <div class="col-5">
+                                            <input type="number" name="min_price" class="form-control form-control-sm rounded-3" placeholder="Min" value="{{ min_price }}">
+                                        </div>
+                                        <div class="col-2 text-center text-muted small">to</div>
+                                        <div class="col-5">
+                                            <input type="number" name="max_price" class="form-control form-control-sm rounded-3" placeholder="Max" value="{{ max_price }}">
+                                        </div>
+                                    </div>
+                                    <button type="submit" class="btn btn-sm btn-outline-primary rounded-pill w-100 fw-bold py-1">
+                                        Apply Price Filter
                                     </button>
                                 </div>
-                            </div>
-
-                            <hr class="my-3 opacity-10">
-
-                            <!-- 2. CATEGORIES FILTER -->
-                            <div class="filter-group mb-4">
-                                <label class="fw-bold small text-secondary text-uppercase mb-2 d-flex justify-content-between" style="letter-spacing: 0.5px;">
-                                    <span>Category</span>
-                                </label>
-
-                                <div class="d-flex flex-column gap-1 category-filter-list">
-                                    <div class="form-check category-item py-1 px-2 rounded-2">
-                                        <input class="form-check-input" type="radio" name="category" value="" id="cat_all" {% if not selected_category %}checked{% endif %} onchange="this.form.submit()">
-                                        <label class="form-check-label small text-dark fw-medium w-100 cursor-pointer" for="cat_all">
-                                            All Categories
-                                        </label>
-                                    </div>
-                                    {% for cat in categories %}
-                                    <div class="form-check category-item py-1 px-2 rounded-2">
-                                        <input class="form-check-input" type="radio" name="category" value="{{ cat.id }}" id="cat_{{ cat.id }}" {% if selected_category == cat.id|stringformat:"s" %}checked{% endif %} onchange="this.form.submit()">
-                                        <label class="form-check-label small text-dark fw-medium w-100 cursor-pointer d-flex justify-content-between" for="cat_{{ cat.id }}">
-                                            <span>{{ cat.name }}</span>
-                                        </label>
-                                    </div>
-                                    {% endfor %}
-                                </div>
-                            </div>
-
-                            <hr class="my-3 opacity-10">
-
-                            <!-- 3. PRICE RANGE FILTER -->
-                            <div class="filter-group mb-3">
-                                <label class="fw-bold small text-secondary text-uppercase mb-2" style="letter-spacing: 0.5px;">Price (UGX)</label>
-                                <div class="row g-2 align-items-center mb-2">
-                                    <div class="col-5">
-                                        <input type="number" name="min_price" class="form-control form-control-sm rounded-3" placeholder="Min" value="{{ min_price }}">
-                                    </div>
-                                    <div class="col-2 text-center text-muted small">to</div>
-                                    <div class="col-5">
-                                        <input type="number" name="max_price" class="form-control form-control-sm rounded-3" placeholder="Max" value="{{ max_price }}">
-                                    </div>
-                                </div>
-                                <button type="submit" class="btn btn-sm btn-outline-primary rounded-pill w-100 fw-bold py-1">
-                                    Apply Price Filter
-                                </button>
-                            </div>
-                        </form>
+                            </form>
+                        </div>
                     </div>
                 </div>
             </div>
 
-            <!-- ================= RIGHT PRODUCT GRID (AMAZON STYLE CARDS) ================= -->
+            <!-- ================= RIGHT PRODUCT GRID (2 CARDS PER ROW ON MOBILE) ================= -->
             <div class="col-lg-9 col-xl-9">
 
                 <!-- PRODUCT CARDS GRID -->
-                <div class="row g-3 g-lg-4">
+                <div class="row g-2 g-sm-3 g-lg-4">
                     {% for product in products %}
-                    <div class="col-12 col-sm-6 col-md-4 col-xl-3">
-                        <div class="amazon-product-card bg-white rounded-3 p-3 h-100 d-flex flex-column justify-content-between border shadow-sm-hover position-relative">
+                    <div class="col-6 col-md-4 col-xl-3">
+                        <div class="amazon-product-card bg-white rounded-3 p-2 p-sm-3 h-100 d-flex flex-column justify-content-between border shadow-sm-hover position-relative">
                             
                             <div>
                                 <!-- Image Container -->
-                                <div class="amazon-img-box mb-3 rounded-2 overflow-hidden position-relative bg-light d-flex align-items-center justify-content-center" style="height: 200px;">
+                                <div class="amazon-img-box mb-2 mb-sm-3 rounded-2 overflow-hidden position-relative bg-light d-flex align-items-center justify-content-center product-img-box">
                                     {% if product.hero_image %}
                                         <a href="{% url 'product_detail' product.id %}" class="w-100 h-100 d-block">
                                             <img src="{{ product.hero_image.url }}" class="w-100 h-100 object-fit-cover product-img" alt="{{ product.name }}">
@@ -131,17 +144,17 @@
                                 </div>
 
                                 <!-- Product Info -->
-                                <h6 class="fw-bold mb-2 lh-sm amazon-product-title">
+                                <h6 class="fw-bold mb-1 mb-sm-2 lh-sm amazon-product-title font-size-card-title">
                                     <a href="{% url 'product_detail' product.id %}" class="text-decoration-none text-dark hover-blue text-truncate-2" title="{{ product.name }}">
                                         {{ product.name }}
                                     </a>
                                 </h6>
 
                                 <!-- Price -->
-                                <div class="mb-3">
-                                    <span class="fs-5 fw-bold text-dark font-amazon-price">
+                                <div class="mb-2 mb-sm-3">
+                                    <span class="fs-6 fs-md-5 fw-bold text-dark font-amazon-price">
                                         {% if product.price %}
-                                            <small class="fs-7 fw-normal text-muted me-1">UGX</small>{{ product.price|floatformat:0|intcomma }}
+                                            <small class="font-size-xs fw-normal text-muted me-1">UGX</small>{{ product.price|floatformat:0|intcomma }}
                                         {% else %}
                                             Contact for Price
                                         {% endif %}
@@ -152,7 +165,7 @@
                             <!-- Card Footer / Actions -->
                             <div>
                                 <div class="d-grid gap-2">
-                                    <a href="{% url 'product_detail' product.id %}" class="btn btn-sm btn-amazon-yellow rounded-pill fw-bold py-2 shadow-sm text-dark border-0">
+                                    <a href="{% url 'product_detail' product.id %}" class="btn btn-sm btn-amazon-yellow rounded-pill fw-bold py-1.5 py-sm-2 shadow-sm text-dark border-0 font-size-xs font-size-sm-base">
                                         View Details <i class="bi bi-chevron-right ms-1"></i>
                                     </a>
                                 </div>
@@ -248,8 +261,62 @@
         cursor: pointer;
     }
 
+    @media (max-width: 991.98px) {
+        .cursor-pointer-mobile {
+            cursor: pointer;
+        }
+    }
+
+    /* Accordion filter chevron toggle animation */
+    .filter-chevron {
+        transition: transform 0.25s ease;
+    }
+
+    [aria-expanded="true"] .filter-chevron {
+        transform: rotate(180deg);
+    }
+
     .category-item:hover {
         background-color: rgba(0, 33, 71, 0.04);
+    }
+
+    /* Responsive product image container */
+    .product-img-box {
+        height: 140px;
+    }
+
+    @media (min-width: 576px) {
+        .product-img-box {
+            height: 180px;
+        }
+    }
+
+    @media (min-width: 992px) {
+        .product-img-box {
+            height: 200px;
+        }
+    }
+
+    .font-size-card-title {
+        font-size: 0.86rem;
+    }
+
+    @media (min-width: 576px) {
+        .font-size-card-title {
+            font-size: 0.95rem;
+        }
+    }
+
+    @media (min-width: 768px) {
+        .font-size-card-title {
+            font-size: 1rem;
+        }
+    }
+
+    @media (min-width: 576px) {
+        .font-size-sm-base {
+            font-size: 0.9rem !important;
+        }
     }
 
     /* Amazon Style Product Cards */
