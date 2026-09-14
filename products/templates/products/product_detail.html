@@ -96,24 +96,24 @@
             </div>
         </div>
 
-        <!-- MORE ITEMS IN OUR OWINO (DISPLAY 4 CARDS WITH BLANK FALLBACK) -->
-        <div class="related-products-section mt-5 pt-3">
-            <div class="d-flex align-items-center justify-content-between mb-4">
-                <h4 class="fw-bold m-0 fs-4" style="color: var(--mwiiri-navy, #002147);">
+        <!-- MORE ITEMS IN OUR OWINO (DISPLAY 2 CARDS PER ROW ON MOBILE, 4 ON DESKTOP) -->
+        <div class="related-products-section mt-4 mt-md-5 pt-3">
+            <div class="d-flex align-items-center justify-content-between mb-3 mb-md-4">
+                <h4 class="fw-bold m-0 fs-5 fs-md-4" style="color: var(--mwiiri-navy, #002147);">
                     More Items in Our Owino <span style="color: var(--mwiiri-gold, #C5A021);">.</span>
                 </h4>
-                <a href="{% url 'products' %}" class="btn btn-sm btn-outline-navy rounded-pill px-3 py-2 fw-bold">
+                <a href="{% url 'products' %}" class="btn btn-sm btn-outline-navy rounded-pill px-3 py-1.5 py-md-2 fw-bold font-size-xs font-size-sm-base">
                     Back to Owino
                 </a>
             </div>
 
-            <div class="row g-3 g-lg-4">
+            <div class="row g-2 g-sm-3 g-lg-4">
                 <!-- REAL PRODUCT CARDS -->
                 {% for p in other_products %}
-                <div class="col-12 col-sm-6 col-md-3">
-                    <div class="card border border-1 border-light-subtle rounded-4 shadow-sm-hover h-100 bg-white overflow-hidden p-3 d-flex flex-column justify-content-between">
+                <div class="col-6 col-md-3">
+                    <div class="card border border-1 border-light-subtle rounded-4 shadow-sm-hover h-100 bg-white overflow-hidden p-2 p-sm-3 d-flex flex-column justify-content-between">
                         <div>
-                            <div class="rounded-3 overflow-hidden mb-3 bg-light position-relative d-flex align-items-center justify-content-center" style="height: 170px;">
+                            <div class="rounded-3 overflow-hidden mb-2 mb-sm-3 bg-light position-relative d-flex align-items-center justify-content-center product-img-box">
                                 {% if p.hero_image %}
                                     <a href="{% url 'product_detail' p.id %}" class="w-100 h-100 d-block">
                                         <img src="{{ p.hero_image.url }}" class="w-100 h-100 object-fit-cover product-img" alt="{{ p.name }}">
@@ -123,16 +123,16 @@
                                 {% endif %}
                             </div>
 
-                            <h6 class="fw-bold mb-2 lh-sm">
+                            <h6 class="fw-bold mb-1 mb-sm-2 lh-sm font-size-card-title">
                                 <a href="{% url 'product_detail' p.id %}" class="text-decoration-none text-dark hover-blue text-truncate-2" title="{{ p.name }}">
                                     {{ p.name }}
                                 </a>
                             </h6>
 
-                            <div class="mb-3">
-                                <span class="fs-6 fw-bold text-dark">
+                            <div class="mb-2 mb-sm-3">
+                                <span class="fs-6 fs-md-5 fw-bold text-dark font-amazon-price">
                                     {% if p.price %}
-                                        {{ p.price|floatformat:0|intcomma }} <small class="text-muted fw-normal ms-1">UGX</small>
+                                        {{ p.price|floatformat:0|intcomma }} <small class="text-muted fw-normal ms-1 font-size-xs">UGX</small>
                                     {% else %}
                                         Contact for Price
                                     {% endif %}
@@ -141,7 +141,7 @@
                         </div>
 
                         <div>
-                            <a href="{% url 'product_detail' p.id %}" class="btn btn-sm btn-outline-primary rounded-pill w-100 fw-bold py-2">
+                            <a href="{% url 'product_detail' p.id %}" class="btn btn-sm btn-amazon-yellow rounded-pill w-100 fw-bold py-1.5 py-sm-2 text-dark border-0 shadow-sm font-size-xs font-size-sm-base">
                                 View Details <i class="bi bi-chevron-right ms-1"></i>
                             </a>
                         </div>
@@ -151,12 +151,12 @@
 
                 <!-- BLANK FALLBACK CARDS IF LESS THAN 4 ITEMS -->
                 {% for _ in missing_range %}
-                <div class="col-12 col-sm-6 col-md-3">
-                    <div class="card border border-1 border-dashed border-light-subtle rounded-4 h-100 bg-white opacity-75 p-3 d-flex flex-column justify-content-center align-items-center text-center" style="min-height: 280px; border-style: dashed !important;">
+                <div class="col-6 col-md-3">
+                    <div class="card border border-1 border-dashed border-light-subtle rounded-4 h-100 bg-white opacity-75 p-2 p-sm-3 d-flex flex-column justify-content-center align-items-center text-center product-fallback-card" style="border-style: dashed !important;">
                         <div class="text-muted opacity-50 mb-2">
-                            <i class="bi bi-box-seam fs-1"></i>
+                            <i class="bi bi-box-seam fs-2 fs-md-1"></i>
                         </div>
-                        <span class="text-muted small fw-medium">No Item Available</span>
+                        <span class="text-muted small fw-medium font-size-xs">No Item Available</span>
                     </div>
                 </div>
                 {% endfor %}
@@ -199,6 +199,68 @@
     .active-thumb {
         border: 2px solid var(--mwiiri-navy, #002147) !important;
         opacity: 1 !important;
+    }
+
+    /* Responsive product image container */
+    .product-img-box {
+        height: 135px;
+    }
+
+    @media (min-width: 576px) {
+        .product-img-box {
+            height: 170px;
+        }
+    }
+
+    .product-fallback-card {
+        min-height: 180px;
+    }
+
+    @media (min-width: 576px) {
+        .product-fallback-card {
+            min-height: 260px;
+        }
+    }
+
+    .font-size-card-title {
+        font-size: 0.85rem;
+    }
+
+    @media (min-width: 576px) {
+        .font-size-card-title {
+            font-size: 0.95rem;
+        }
+    }
+
+    @media (min-width: 768px) {
+        .font-size-card-title {
+            font-size: 1rem;
+        }
+    }
+
+    @media (min-width: 576px) {
+        .font-size-sm-base {
+            font-size: 0.9rem !important;
+        }
+    }
+
+    .hover-blue:hover {
+        color: #007185 !important;
+        text-decoration: underline !important;
+    }
+
+    /* Amazon Yellow Buttons */
+    .btn-amazon-yellow {
+        background-color: var(--amazon-yellow, #FFD814);
+        border: 1px solid #FCD200;
+        color: #0F1111;
+        transition: all 0.2s ease;
+    }
+
+    .btn-amazon-yellow:hover {
+        background-color: var(--amazon-yellow-hover, #F7CA00);
+        color: #000000;
+        transform: translateY(-1px);
     }
 
     /* Amazon Gold Button */
